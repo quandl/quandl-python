@@ -11,15 +11,19 @@ Usage
 Usage is simple and mirrors the functionality found at http://www.quandl.com/api
 
 A request with a full list of options would be the following.
+```
 import Quandl
 data = Quandl.get('PRAGUESE/PX',authtoken='xxxxxx',startdate='2001-01-01',enddate='2010-01-01',frequency='annual')
-
+```
 All options beyond specifying the dataset (PRAUGESE/PX) are optional,though it is helpful to specify an authtoken at 
 least once to increase download limits, it should be cached after that.
 
 you can then view the dataframe with:
+```
 data.head()
-See pandas tutorials for a wealth of options on data manipulation.
+```
+
+See the pandas documentation for a wealth of options on data manipulation.
 
 Authtokens are saved as pickled files in the local directory so it is unnecessary to enter them more than once,
 unless you change your working directory.To replace simply save the new token or delete authtoken.p.
@@ -36,4 +40,5 @@ See the following:http://pandas.pydata.org/pandas-docs/dev/timeseries.html
 Dependencies
 ============
 Pandas https://code.google.com/p/pandas/
+
 dateutil (should be installed as part of pandas) http://labix.org/python-dateutil
