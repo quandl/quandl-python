@@ -57,11 +57,11 @@ def _download(url):
 def _getauthtoken(token):
     """If a token is specified saves to a pickle file for reuse."""
     try:
-        savedtoken = pickle.load(open('../authtoken.p', 'rb'))
+        savedtoken = pickle.load(open('authtoken.p', 'rb'))
     except IOError:
         savedtoken = False
     if token:
-        pickle.dump(token, open('../authtoken.p', 'wb'))
+        pickle.dump(token, open('authtoken.p', 'wb'))
         print 'Token %s activated and saved for later use' % token
     elif not savedtoken and not token:
         print "No authentication tokens found,usage will be limited "
