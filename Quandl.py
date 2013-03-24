@@ -10,27 +10,28 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None):
     """Returns a Pandas dataframe object from datasets at http://www.quandl.com/
     Download limits are extended if authtoken is obtained from a registered account.
 
-:param dataset: Datset codes are available on the Quandl website.
+:param dataset: Dataset codes are available on the Quandl website.
 :param authtoken: Downloads are limited to 10 unless token is specified.
-:param startdate,enddate:
+:param startdate,enddate:Dateranges specif
 :param frequency: options are daily,weekly,monthly,quarterly,annual
 :returns Pandas Dataframe indexed by date
 """
     allowedfreq = ['daily', 'weekly', 'monthly', 'quarterly', 'annual']
     token = _getauthtoken(authtoken)
-    url = 'http://www.quandl.com/api/v1/datasets/%s.csv' % dataset
+    url = 'http://www.quandl.com/api/v1/datasets/%s.csv?' % dataset
     if token:
-        url += '?auth_token=%s' % token
-    if any((startdate, enddate)) and not all((startdate, enddate)):
-        raise Exception('Date ranges incomplete. Specify both start and end dates')
-    elif all((startdate, enddate)):
+        url += 'auth_token=%s' % token
+    if startdate and not enddate:
+        startdate = _parse_dates(startdate)
+        url += '&trim_start=%s' % startdate
+    elif startdate and enddate:
         startdate, enddate = _parse_dates(startdate), _parse_dates(enddate)
-        url += '?trim_start=%s&trim_end=%s' % (startdate, enddate)
+        url += '&trim_start=%s&trim_end=%s' % (startdate, enddate)
     if frequency and frequency not in allowedfreq:
         error = 'Incorrect frequency specified. Use one of the following ' + ",".join(allowedfreq)
         raise Exception(error)
     elif frequency:
-        url += '?collapse=%s' % frequency
+        url += '&collapse=%s' % frequency
     urldata = _download(url)
     print 'Returning Dataframe for ', dataset
     return urldata
@@ -48,8 +49,9 @@ def _download(url):
     try:
         dframe = pd.read_csv(url, index_col=0, parse_dates=True)
         return dframe
-    except urllib2.HTTPError:
-        raise Exception('Error Downloading! Check if dataset name is correct')
+    except urllib2.HTTPError as e:
+        print 'url:',url
+        raise Exception('Error Downloading! %s' %e)
 
 
 def _getauthtoken(token):
