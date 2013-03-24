@@ -12,7 +12,7 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None):
 
 :param dataset: Dataset codes are available on the Quandl website.
 :param authtoken: Downloads are limited to 10 unless token is specified.
-:param startdate,enddate:Dateranges specif
+:param startdate,enddate:Optional datefilers,otherwise entire dataset is returned
 :param frequency: options are daily,weekly,monthly,quarterly,annual
 :returns Pandas Dataframe indexed by date
 """
