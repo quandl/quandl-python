@@ -2,10 +2,11 @@ import pandas as pd
 import pickle
 from dateutil import parser
 import urllib2
+from numpy import genfromtxt
 #TODO:Needs more debugging and tests,only a limited amount of testing done.
 
 
-def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None):
+def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None, transformation=None, rows = None, returns = "pandas"):
 
     """Returns a Pandas dataframe object from datasets at http://www.quandl.com/
     Download limits are extended if authtoken is obtained from a registered account.
@@ -14,9 +15,14 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None):
 :param authtoken: Downloads are limited to 10 unless token is specified.
 :param startdate,enddate:Optional datefilers,otherwise entire dataset is returned
 :param frequency: options are daily,weekly,monthly,quarterly,annual
+:param transformation: options are diff, rdiff, cumul, and normalize.
+:param rows: Number of rows which will be returned.
+:param returns: specify what format you wish your dataset returned as.
 :returns Pandas Dataframe indexed by date
 """
     allowedfreq = ['daily', 'weekly', 'monthly', 'quarterly', 'annual']
+    allowedtransform = ['rdiff','diff','cumul','normalize']
+    allowedformats = ["pandas","numpy"]
     token = _getauthtoken(authtoken)
     url = 'http://www.quandl.com/api/v1/datasets/%s.csv?' % dataset
     if token:
@@ -32,9 +38,32 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None):
         raise Exception(error)
     elif frequency:
         url += '&collapse=%s' % frequency
-    urldata = _download(url)
-    print 'Returning Dataframe for ', dataset
-    return urldata
+    #Check if transformation is acceptable and append to api call
+    if transformation and transformation not in allowedtransform:
+        error = "Incorrect transformation given. Use one of the following" +",".join(allowedtransform)
+        raise Exception(error)
+    elif transformation:
+        url += "&transformation=%s" % transformation
+    #append row restriction to API call
+    if rows:
+        url +="&rows=%s" %rows
+    #return data as numpy array if wished but checks first if it is an acceptable format to return.
+    if returns not in allowedformats:
+        error = "Incorrect format given. Use one of the following" +",".join(allowedformats)
+        raise Exception(error)
+     #Make the API call and download data as a CSV file to your python directory
+    elif returns == 'pandas':
+        urldata = _download(url)
+        print 'Returning Dataframe for ', dataset
+        return urldata
+    elif returns == 'numpy':
+        try:
+            u=urllib2.urlopen(url)
+            array = genfromtxt(u,names = True, delimiter=",",dtype=None)
+            return array
+        except urllib2.HTTPError as e:
+            print 'url:',url
+            raise Exception('Error Downloading, please check your parameters! %s' %e)
 
 
 def _parse_dates(date):
