@@ -38,7 +38,7 @@ See the following:http://pandas.pydata.org/pandas-docs/dev/timeseries.html
 
 Questions/Comments
 ==================
-Please send any questions, comments, or anything other inquires about this package to Chris@quandl.com
+Please send any questions, comments, or any other inquires about this package to Chris@quandl.com
 
 
 Dependencies

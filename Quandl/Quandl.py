@@ -18,21 +18,26 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None, tra
 :param transformation: options are diff, rdiff, cumul, and normalize.
 :param rows: Number of rows which will be returned.
 :param returns: specify what format you wish your dataset returned as.
-:returns Pandas Dataframe indexed by date
+:returns Pandas Dataframe indexed by date.
 """
+    #Lists of allowable parameters
     allowedfreq = ['daily', 'weekly', 'monthly', 'quarterly', 'annual']
     allowedtransform = ['rdiff','diff','cumul','normalize']
     allowedformats = ["pandas","numpy"]
     token = _getauthtoken(authtoken)
+    #Basic API url
     url = 'http://www.quandl.com/api/v1/datasets/%s.csv?' % dataset
+    #Deal with authorization token
     if token:
         url += 'auth_token=%s' % token
+    #parse date parameters
     if startdate and not enddate:
         startdate = _parse_dates(startdate)
         url += '&trim_start=%s' % startdate
     elif startdate and enddate:
         startdate, enddate = _parse_dates(startdate), _parse_dates(enddate)
         url += '&trim_start=%s&trim_end=%s' % (startdate, enddate)
+    #Check frequency parameter and append to call
     if frequency and frequency not in allowedfreq:
         error = 'Incorrect frequency specified. Use one of the following ' + ",".join(allowedfreq)
         raise Exception(error)
@@ -66,6 +71,7 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None, tra
             raise Exception('Error Downloading, please check your parameters! %s' %e)
 
 
+#Define helper function to parse dates
 def _parse_dates(date):
     try:
         date = parser.parse(date)
@@ -74,6 +80,7 @@ def _parse_dates(date):
     return date.strftime('%Y-%m-%d')
 
 
+#Helper function for actually making API call and downloading the file
 def _download(url):
     try:
         dframe = pd.read_csv(url, index_col=0, parse_dates=True)
