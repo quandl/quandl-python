@@ -13,7 +13,7 @@ Usage is simple and mirrors the functionality found at http://www.quandl.com/api
 A request with a full list of options would be the following.
 ```
 import Quandl
-data = Quandl.get('PRAGUESE/PX',authtoken='xxxxxx',startdate='2001-01-01',enddate='2010-01-01',frequency='annual')
+data = Quandl.get('PRAGUESE/PX',authtoken='xxxxxx',startdate='2001-01-01',enddate='2010-01-01',frequency='annual',transformation = 'rdiff',rows='4',formats='numpy')
 ```
 All options beyond specifying the dataset (PRAUGESE/PX) are optional,though it is helpful to specify an authtoken at 
 least once to increase download limits, it should be cached after that.
@@ -30,11 +30,15 @@ unless you change your working directory.To replace simply save the new token or
 
 Recommended Usage
 ================
-The IPython notebook is an excellent python environment for interactive data work.
+The IPython notebook is an excellent python environment for interactive data work. Spyder is also a superb IDE for analysis and more numerical work.
 
 I would suggest downloading the data in raw format in the highest frequency possible and preforming any data manipulation
-in pandas itself. Dateranges and frequency have  been added to the api for the sake of completeness more than necessity.
+in pandas itself.
 See the following:http://pandas.pydata.org/pandas-docs/dev/timeseries.html
+
+Questions/Comments
+==================
+Please send any questions, comments, or anything other inquires about this package to Chris@quandl.comments
 
 
 Dependencies
