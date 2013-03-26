@@ -2,4 +2,4 @@
 from Quandl import get
 __all__ =['Quandl']
 
-__author__ = 'mhartney'
+__author__ = 'mhartney & ChrisStevens'
