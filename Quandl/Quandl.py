@@ -43,14 +43,14 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None, tra
         
     #Check frequency parameter and append to call
     if frequency and frequency not in allowedfreq:
-        error = 'Incorrect frequency specified. Use one of the following' + ", ".join(allowedfreq)
+        error = 'Incorrect frequency specified. Use one of the following, ' + ",".join(allowedfreq)
         raise Exception(error)
     elif frequency:
         url += '&collapse=%s' % frequency
         
     #Check if transformation is acceptable and append to api call
     if transformation and transformation not in allowedtransform:
-        error = "Incorrect transformation given. Use one of the following" +", ".join(allowedtransform)
+        error = "Incorrect transformation given. Use one of the following, " +",".join(allowedtransform)
         raise Exception(error)
     elif transformation:
         url += "&transformation=%s" % transformation
@@ -61,7 +61,7 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None, tra
         
     #return data as numpy array if wished but checks first if it is an acceptable format to return.
     if returns not in allowedformats:
-        error = "Incorrect format given. Use one of the following" +", ".join(allowedformats)
+        error = "Incorrect format given. Use one of the following, " +",".join(allowedformats)
         raise Exception(error)
      #Make the API call and download data as a CSV file to your python directory
     elif returns == 'pandas':
@@ -81,7 +81,7 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None, tra
             raise Exception('Error Downloading! %s' %e)
 
 
-#Define helper function to parse dates
+#Helper function to parse dates
 def _parse_dates(date):
     try:
         date = parser.parse(date)
@@ -113,7 +113,8 @@ def _getauthtoken(token):
         pickle.dump(token, open('authtoken.p', 'wb'))
         print 'Token %s activated and saved for later use' % token
     elif not savedtoken and not token:
-        print "No authentication tokens found,usage will be limited "
+        print "No authentication tokens found,usage will be limited"
+        print "See www.quandl.com/api for more information"
     elif savedtoken and not token:
         token = savedtoken
         print 'Using cached token %s for authentication ' % token

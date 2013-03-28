@@ -2,7 +2,7 @@ Quandl API for Python
 =========
 See http://www.quandl.com/api
 
-Basic wrapper to return datasets from the Quandl website as Pandas dataframe objects with a timeseries index.
+Basic wrapper to return datasets from the Quandl website as Pandas dataframe objects with a timeseries index, or as a numpy array.
 This allows interactive manipulation of the results via IPython or storage of the datasets using Pandas I/O functions.
 You will need a familarity with Pandas (http://pandas.pydata.org/) to get the most out of this.
 
@@ -47,6 +47,24 @@ See the pandas documentation for a wealth of options on data manipulation.
 Authtokens are saved as pickled files in the local directory so it is unnecessary to enter them more than once,
 unless you change your working directory.To replace simply save the new token or delete authtoken.p.
 
+Complex Example
+===============
+Quarterly normalized crude oil prices since 2005, only returning first 4 values.
+
+	import Quandl
+	data = Quandl.get("IMF/POILAPSP_INDEX",frequency="quarterly",startdate="2005",transformation = "normalize",rows="4")
+	data.head()
+
+returns:
+
+	No authentication tokens found,usage will be limited 
+	Returning Dataframe for  IMF/POILAPSP_INDEX
+                   Price
+    Date                  
+    2013-02-28  212.792283
+    2012-12-31  200.073398
+    2012-09-30  210.212855
+    2012-06-30  179.322638
 
 Recommended Usage
 ================
