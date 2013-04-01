@@ -88,4 +88,4 @@ dateutil (should be installed as part of pandas) http://labix.org/python-dateuti
 License
 =======
 
-[GNU General Public License](http://www.gnu.org/licenses/gpl.html)
+[MIT License](http://opensource.org/licenses/MIT)
