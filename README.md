@@ -8,22 +8,23 @@ You will need a familarity with Pandas (http://pandas.pydata.org/) to get the mo
 
 Example
 ========
-An example of creating a pandas time series for S&P 500 data, with a weekly frequency
+An example of creating a pandas time series for IBM stock data, with a weekly frequency
 
     import Quandl
-    data = Quandl.get("YAHOO/INDEX_GSPC",frequency="weekly")
+    data = Quandl.get("GOOG/NYSE_IBM",frequency="weekly")
     data.head()
 will output
 
     No authentication tokens found,usage will be limited 
-    Returning Dataframe for  YAHOO/INDEX_GSPC
-               Open     High      Low    Close      Volume  Adjusted Close
-    Date                                                                      
-    2013-03-25  1556.89  1564.91  1546.22  1551.69  3178170000         1551.69
-    2013-03-15  1563.21  1563.62  1555.74  1560.70  5175850000         1560.70
-    2013-03-08  1544.26  1552.48  1542.94  1551.18  3652260000         1551.18
-    2013-03-01  1514.68  1519.99  1501.48  1518.20  3695610000         1518.20
-    2013-02-22  1502.42  1515.64  1502.42  1515.60  3419320000         1515.60
+    Returning Dataframe for  GOOG/NYSE_IBM
+              Open    High     Low   Close   Volume
+	Date                                               
+	2013-03-28  209.83  213.44  209.74  213.30  3752999
+	2013-03-15  215.38  215.90  213.41  214.92  7937244
+	2013-03-08  209.85  210.74  209.43  210.38  3700986
+	2013-03-01  200.65  202.94  199.36  202.91  3309434
+	2013-02-22  199.23  201.09  198.84  201.09  3107976
+
 
 Usage
 =====
@@ -77,7 +78,6 @@ See the following:http://pandas.pydata.org/pandas-docs/dev/timeseries.html
 Questions/Comments
 ==================
 Please send any questions, comments, or any other inquires about this package to Chris@quandl.com
-
 
 Dependencies
 ============
