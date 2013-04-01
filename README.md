@@ -84,3 +84,8 @@ Dependencies
 Pandas https://code.google.com/p/pandas/
 
 dateutil (should be installed as part of pandas) http://labix.org/python-dateutil
+
+License
+=======
+
+[GNU General Public License](http://www.gnu.org/licenses/gpl.html)
