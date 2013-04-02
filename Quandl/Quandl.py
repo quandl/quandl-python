@@ -83,6 +83,11 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None, tra
 
 #Helper function to parse dates
 def _parse_dates(date):
+    #Check if datetime object
+    if isinstance(date,datetime.datetime):
+        return date.date().isoformat()
+    if isinstance(date,datetime.date):
+        return date.isoformat()
     try:
         date = parser.parse(date)
     except ValueError:
