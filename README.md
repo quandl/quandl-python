@@ -33,7 +33,7 @@ Usage is simple and mirrors the functionality found at http://www.quandl.com/api
 A request with a full list of options would be the following.
 ```
 import Quandl
-data = Quandl.get('PRAGUESE/PX',authtoken='xxxxxx',startdate='2001-01-01',enddate='2010-01-01',frequency='annual',transformation = 'rdiff',rows='4',formats='numpy')
+data = Quandl.get('PRAGUESE/PX',authtoken='xxxxxx',startdate='2001-01-01',enddate='2010-01-01',frequency='annual',transformation = 'rdiff',rows= 4,formats='numpy')
 ```
 All options beyond specifying the dataset (PRAUGESE/PX) are optional,though it is helpful to specify an authtoken at 
 least once to increase download limits, it should be cached after that.
