@@ -79,6 +79,75 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None, tra
         except urllib2.HTTPError as e:
             print 'url:',url
             raise Exception('Error Downloading! %s' %e)
+        
+        
+        
+#Upload your own datasets to Quandl        
+def push(data, code, name, authtoken='', desc='', override = False):
+    
+    """Upload a dataset, a Pandas Dataframe object, to Quandl
+    returns link to your dataset.
+    
+:param authtoken: Required to upload data
+:param data: Required, pandas ts or numpy array
+:param name: Dataset name, must consist of only capital letters, numbers, and underscores
+:param desc: Description of dataset
+:param overide: whether to overide dataset of same name
+:returns link to uploaded data
+"""    
+    
+    override = str(override).lower()
+    token = _getauthtoken(authtoken)
+    if token == '':
+        error= "You need an API token to upload your data to Quandl, please see www.quandl.com/API for more"
+        raise Exception(error)
+    #check that code is correctly formated
+    
+    _pushcodetest(code)
+    datestr=''
+    
+    #Format the data for upload.
+    #check format of data
+    #check if Pandas dataframe
+    if isinstance(data,pd.core.frame.DataFrame):
+        #check if indexed by date
+
+        data_interm = data.to_records()
+        index = data_interm.dtype.names
+        datestr += ','.join(index) + '\n'
+        
+        for i in data_interm:
+            if isinstance(i[0], datetime.datetime):
+                datestr += i[0].date().isoformat()
+            else:
+                #Check if index is a date
+                try :
+                    datestr += _parse_dates(str(i[0]))
+                except:
+                    error=  "Please check your indices, one of them is not a recognizable date"
+                    raise Exception(error)
+            for n in i:
+                if isinstance(n, float) or isinstance(n,int):
+                    datestr += ',' + str(n)
+            datestr += '\n'
+    else:
+        error = "only pandas data series are accepted for upload at this time"
+        raise Exception(error)
+    params = {'name':name,'code':code, 'description':desc,'update_or_create':override, 'data':datestr}    
+            
+    
+    
+    #create API URL
+    url = "http://www.quandl.com/api/v1/datasets.json?auth_token=" + token 
+    
+    jsonreturn = _htmlpush(url,params)
+    print jsonreturn["errors"]
+    if jsonreturn["errors"] and jsonreturn["errors"]["code"][0] == "has already been taken":
+        error = "You are trying to overwrite a dataset which already exists on Quandl. If this is what you wish to do please recall the function with overide = True"
+        raise Exception(error)
+    
+    return "http://www.quandl.com/" + jsonreturn["source_code"] + "/" + jsonreturn["code"]
+
 
 
 #Helper function to parse dates
@@ -106,6 +175,24 @@ def _download(url):
     except urllib2.HTTPError as e:
         print 'url:',url
         raise Exception('Error Downloading! %s' %e)
+    
+#Helper function to make html push
+def _htmlpush(url,raw_params):
+    page = url
+    params = urllib.urlencode(raw_params)
+    request = urllib2.Request(page, params)
+    page = urllib2.urlopen(request)
+    return json.loads(page.read())
+
+
+def _pushcodetest(code):
+    regex = re.compile('[^0-9A-Z_]')
+    if not regex.search(code):
+        return code
+    else:
+        error = "Your Quandl Code for uploaded data must consist of only capital letters, underscores and capital numbers."
+        raise Exception(error)
+
 
 
 def _getauthtoken(token):
