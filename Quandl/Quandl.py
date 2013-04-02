@@ -87,7 +87,7 @@ def _parse_dates(date):
         date = parser.parse(date)
     except ValueError:
         raise Exception('%s is not recognised a date' % date)
-    return date.strftime('%Y-%m-%d')
+    return date.date().isoformat()
 
 
 #Helper function for actually making API call and downloading the file
