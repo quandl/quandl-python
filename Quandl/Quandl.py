@@ -141,7 +141,6 @@ def push(data, code, name, authtoken='', desc='', override = False):
     url = "http://www.quandl.com/api/v1/datasets.json?auth_token=" + token 
     
     jsonreturn = _htmlpush(url,params)
-    print jsonreturn["errors"]
     if jsonreturn["errors"] and jsonreturn["errors"]["code"][0] == "has already been taken":
         error = "You are trying to overwrite a dataset which already exists on Quandl. If this is what you wish to do please recall the function with overide = True"
         raise Exception(error)
