@@ -1,8 +1,12 @@
 import pandas as pd
 import pickle
-from dateutil import parser
 import urllib2
+import urllib
+import datetime
+from dateutil import parser
+
 from numpy import genfromtxt
+
 #TODO:Needs more debugging and tests,only a limited amount of testing done.
 
 
