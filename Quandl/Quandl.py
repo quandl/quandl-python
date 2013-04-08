@@ -1,7 +1,19 @@
-import pandas as pd
+from __future__ import (print_function, division, absolute_import,
+                        unicode_literals)
 import pickle
+
 from dateutil import parser
-import urllib2
+try:
+    from urllib.error import HTTPError  # Python 3
+    from urllib.parse import urlencode
+    from urllib.request import Request, urlopen
+except ImportError:
+    from urllib import urlencode  #Python 2
+    from urllib2 import HTTPError, Request, urlopen
+
+
+import pandas as pd
+
 from numpy import genfromtxt
 #TODO:Needs more debugging and tests,only a limited amount of testing done.
 
@@ -66,18 +78,18 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None, tra
      #Make the API call and download data as a CSV file to your python directory
     elif returns == 'pandas':
         urldata = _download(url)
-        print 'Returning Dataframe for ', dataset
+        print('Returning Dataframe for ', dataset)
         return urldata
     elif returns == 'numpy':
         try:
-            u=urllib2.urlopen(url)
+            u = urlopen(url)
             array = genfromtxt(u,names = True, delimiter=",",dtype=None)
             return array
         except IOError as e:
-            print 'url:',url
+            print('url:',url)
             raise Exception("Parsing Error! %s" %e)        
-        except urllib2.HTTPError as e:
-            print 'url:',url
+        except HTTPError as e:
+            print('url:',url)
             raise Exception('Error Downloading! %s' %e)
         
         
@@ -169,18 +181,18 @@ def _download(url):
         dframe = pd.read_csv(url, index_col=0, parse_dates=True)
         return dframe
     except pd._parser.CParserError as e:
-        print 'url:',url
+        print('url:',url)
         raise Exception('Error Reading Data! %s' %e)     
-    except urllib2.HTTPError as e:
-        print 'url:',url
+    except HTTPError as e:
+        print('url:',url)
         raise Exception('Error Downloading! %s' %e)
     
 #Helper function to make html push
 def _htmlpush(url,raw_params):
     page = url
-    params = urllib.urlencode(raw_params)
-    request = urllib2.Request(page, params)
-    page = urllib2.urlopen(request)
+    params = urlencode(raw_params)
+    request = Request(page, params)
+    page = urlopen(request)
     return json.loads(page.read())
 
 
@@ -202,11 +214,11 @@ def _getauthtoken(token):
         savedtoken = False
     if token:
         pickle.dump(token, open('authtoken.p', 'wb'))
-        print 'Token %s activated and saved for later use' % token
+        print('Token %s activated and saved for later use' % token)
     elif not savedtoken and not token:
-        print "No authentication tokens found,usage will be limited"
-        print "See www.quandl.com/api for more information"
+        print("No authentication tokens found,usage will be limited")
+        print("See www.quandl.com/api for more information")
     elif savedtoken and not token:
         token = savedtoken
-        print 'Using cached token %s for authentication ' % token
+        print('Using cached token %s for authentication ' % token)
     return token
