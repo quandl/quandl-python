@@ -181,6 +181,7 @@ def _download(url):
     
 #Helper function to make html push
 def _htmlpush(url,raw_params):
+    import json
     page = url
     params = urllib.urlencode(raw_params)
     request = urllib2.Request(page, params)
@@ -189,6 +190,7 @@ def _htmlpush(url,raw_params):
 
 
 def _pushcodetest(code):
+    import re
     regex = re.compile('[^0-9A-Z_]')
     if not regex.search(code):
         return code
