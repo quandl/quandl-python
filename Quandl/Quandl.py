@@ -21,7 +21,7 @@ from numpy import genfromtxt
 
 
 def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None,
-        transformation=None, rows=None, ascending=True, returns="pandas"):
+        transformation=None, rows=None, sort='asc', returns="pandas"):
     """
     Returns a Pandas dataframe object from datasets at http://www.quandl.com/
     Download limits are extended if authtoken is obtained from a registered
@@ -34,18 +34,12 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None,
     :param frequency: options are daily,weekly,monthly,quarterly,annual
     :param transformation: options are diff, rdiff, cumul, and normalize.
     :param rows: Number of rows which will be returned.
+    :param sort: options are asc, desc (defaults to asc)
     :param returns: specify what format you wish your dataset returned as.
-    :param ascending: boolean (defaults to True; see below)
     :returns Pandas Dataframe indexed by date.
 
-    Sorting:
-        The default timestamp ordering of Quandl datasets is descending, such
-        that the most recent data is at the top of the file. However Pandas
-        expects timestamps to ascend; otherwise, its timeseries functionality
-        may give unexpected results or simply raise errors. Therefore, this
-        function sorts imported data ascending by default. However, users may
-        change this (by setting ascending=False) in order to maintain
-        equivalence with manually downloaded Quandl datasets.
+    Note that Pandas expects timeseries data to be sorted ascending for most
+    timeseries functionality to work.
     """
     # Lists of allowable parameters
     allowedfreq = ['daily', 'weekly', 'monthly', 'quarterly', 'annual']
@@ -88,6 +82,10 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None,
     if rows:
         url += "&rows=%s" % rows
 
+    # append sort to API call
+    if sort:
+        url += "&sort_order=%s" % sort
+
     # return data as numpy array if wished but checks first if it is an
     # acceptable format to return.
 
@@ -99,8 +97,6 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None,
     # to your python directory
     elif returns == 'pandas':
         urldata = _download(url)
-        if ascending:
-            urldata.sort_index(ascending=True, inplace=True)
         print('Returning Dataframe for ', dataset)
         return urldata
 
@@ -108,8 +104,6 @@ def get(dataset, authtoken='', startdate=None, enddate=None, frequency=None,
         try:
             u = urlopen(url)
             array = genfromtxt(u, names=True, delimiter=",", dtype=None)
-            if ascending:
-                array = array[::-1]
             return array
         except IOError as e:
             print('url:', url)
