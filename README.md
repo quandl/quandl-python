@@ -58,7 +58,7 @@ data.tail()
 
 returns:
 ```
-No authentication tokens found,usage will be limited
+No authentication tokens found, usage will be limited
 See www.quandl.com/api for more information
 Returning Dataframe for  IMF/POILAPSP_INDEX
                  Price
