@@ -1,5 +1,6 @@
-#fix for package and file name being same
-from .Quandl import get
-__all__ =['Quandl']
-
+# -*- coding: utf-8 -*-
 __author__ = 'mhartney & ChrisStevens'
+__all__ = ['Quandl']
+
+
+from .Quandl import get, push
