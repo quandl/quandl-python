@@ -109,6 +109,12 @@ Questions/Comments
 ==================
 Please send any questions, comments, or any other inquires about this package to Chris@quandl.com
 
+Installation
+============
+The stable version of Quandl can be installed with pip:
+
+    pip install Quandl
+
 Dependencies
 ============
 Pandas https://code.google.com/p/pandas/
