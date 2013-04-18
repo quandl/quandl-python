@@ -24,8 +24,7 @@ except ImportError:
 
 
 
-def get(dataset, authtoken='', trim_start=None, trim_end=None, frequency=None,
-        transformation=None, rows=None, sort='asc', returns='pandas'):
+def get(dataset, **kwargs):
     """Returns a Pandas dataframe object from datasets at http://www.quandl.com
 
     :param dataset: Dataset codes are available on the Quandl website.
@@ -43,14 +42,17 @@ def get(dataset, authtoken='', trim_start=None, trim_end=None, frequency=None,
     timeseries functionality to work.
 
     """
-    token = _getauthtoken(authtoken)
-    trim_start, trim_end = map(_parse_dates, (trim_start, trim_end))
+    auth_token = _getauthtoken(kwargs.pop('authtoken', ''))
+    trim_start = _parse_dates(kwargs.pop('trim_state', None))
+    trim_end = _parse_dates(kwargs.pop('trim_end', None))
+    returns = kwargs.pop('returns', 'pandas')
 
     url = 'http://www.quandl.com/api/v1/datasets/{}.csv?'.format(dataset)
-    url = _append_query_fields(url, auth_token=token,
-                               transformation=transformation,
-                               collapse=frequency, rows=rows, sort_order=sort,
-                               trim_start=trim_start, trim_end=trim_end)
+    url = _append_query_fields(url,
+                               auth_token=auth_token,
+                               trim_start=trim_start,
+                               trim_end=trim_end
+                               **kwargs)
 
     if returns == 'numpy':
         try:
@@ -72,13 +74,13 @@ def get(dataset, authtoken='', trim_start=None, trim_end=None, frequency=None,
 def push(data, code, name, authtoken='', desc='', override=False):
     """Upload a pandas Dataframe to Quandl and returns link to the dataset.
 
-    :param data: Required, pandas ts or numpy array
-    :param code: Required, code to 
-    :param name: Dataset name, must consist of only capital letters,
-                 numbers, and underscores
-    :param authtoken: Required to upload data
+    :param data: (required), pandas ts or numpy array
+    :param code: (required) Dataset code
+                 must consist of only capital letters, numbers, and underscores
+    :param name: (required) Dataset name
+    :param authtoken: (required) to upload data
     :param desc: Description of dataset
-    :param overide: whether to overide dataset of same name
+    :param overide: whether to overide dataset of same code
     :returns link to uploaded data
 
     """
