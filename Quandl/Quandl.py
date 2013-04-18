@@ -25,18 +25,19 @@ except ImportError:
 
 
 def get(dataset, **kwargs):
-    """Returns a Pandas dataframe object from datasets at http://www.quandl.com
+    """Returns a Pandas dataframe object from datasets at
+    http://www.quandl.com.
 
-    :param dataset: Dataset codes are available on the Quandl website.
-    :param authtoken: Downloads are limited to 10 unless token is specified.
-    :param trim_start,trim_end: Optional datefilers, otherwise entire dataset
-           is returned
-    :param frequency: options are daily,weekly,monthly,quarterly,annual
-    :param transformation: options are diff, rdiff, cumul, and normalize.
-    :param rows: Number of rows which will be returned.
-    :param sort: options are asc, desc (defaults to asc)
-    :param returns: specify what format you wish your dataset returned as.
-    :returns pandas Dataframe indexed by date.
+    :param str dataset: Dataset codes are available on the Quandl website
+    :param str authtoken: Downloads are limited to 10 unless token is specified
+    :param str trim_start, trim_end: Optional datefilers, otherwise entire
+           dataset is returned
+    :param str frequency: Options are daily, weekly, monthly, quarterly, annual
+    :param str transformation: options are diff, rdiff, cumul, and normalize
+    :param int rows: Number of rows which will be returned
+    :param str sort: options are asc, desc (defaults to asc)
+    :param str returns: specify what format you wish your dataset returned as
+    :returns: :class:`pandas.DataFrame`
 
     Note that Pandas expects timeseries data to be sorted ascending for most
     timeseries functionality to work.
@@ -75,13 +76,13 @@ def push(data, code, name, authtoken='', desc='', override=False):
     """Upload a pandas Dataframe to Quandl and returns link to the dataset.
 
     :param data: (required), pandas ts or numpy array
-    :param code: (required) Dataset code
+    :param str code: (required), Dataset code
                  must consist of only capital letters, numbers, and underscores
-    :param name: (required) Dataset name
-    :param authtoken: (required) to upload data
-    :param desc: Description of dataset
-    :param overide: whether to overide dataset of same code
-    :returns link to uploaded data
+    :param str name: (required), Dataset name
+    :param str authtoken: (required), to upload data
+    :param str desc: (optional), Description of dataset
+    :param bool overide: (optional), whether to overide dataset of same code
+    :returns: :str: link to uploaded dataset
 
     """
     override = str(override).lower()
