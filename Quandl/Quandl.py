@@ -247,7 +247,7 @@ def _getauthtoken(token):
         pickle.dump(token, open('authtoken.p', 'wb'))
         print('Token %s activated and saved for later use' % token)
     elif not savedtoken and not token:
-        print("No authentication tokens found,usage will be limited")
+        print("No authentication tokens found, usage will be limited")
         print("See www.quandl.com/api for more information")
     elif savedtoken and not token:
         token = savedtoken

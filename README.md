@@ -9,23 +9,21 @@ You will need a familarity with Pandas (http://pandas.pydata.org/) to get the mo
 Example
 ========
 An example of creating a pandas time series for IBM stock data, with a weekly frequency
-
-    import Quandl
-    data = Quandl.get("GOOG/NYSE_IBM",frequency="weekly")
-    data.head()
+```
+import Quandl
+data = Quandl.get("GOOG/NYSE_IBM",frequency="weekly")
+data.tail() 
+```
 will output
-
-    No authentication tokens found,usage will be limited 
-    Returning Dataframe for  GOOG/NYSE_IBM
-              Open    High     Low   Close   Volume
-	Date                                               
-	2013-03-28  209.83  213.44  209.74  213.30  3752999
-	2013-03-15  215.38  215.90  213.41  214.92  7937244
-	2013-03-08  209.85  210.74  209.43  210.38  3700986
-	2013-03-01  200.65  202.94  199.36  202.91  3309434
-	2013-02-22  199.23  201.09  198.84  201.09  3107976
-
-
+```
+            Open    High     Low   Close   Volume
+Date                                               
+2013-03-15  215.38  215.90  213.41  214.92  7937244
+2013-03-22  212.21  213.17  211.62  212.08  3031457
+2013-03-29  209.83  213.44  209.74  213.30  3752999
+2013-04-05  209.10  209.84  206.34  209.41  4148177
+2013-04-17  210.53  211.09  209.50  209.67  3269874
+```
 Usage
 =====
 Usage is simple and mirrors the functionality found at http://www.quandl.com/api
@@ -33,7 +31,7 @@ Usage is simple and mirrors the functionality found at http://www.quandl.com/api
 A request with a full list of options would be the following.
 ```
 import Quandl
-data = Quandl.get('PRAGUESE/PX',authtoken='xxxxxx',startdate='2001-01-01',enddate='2010-01-01',frequency='annual',transformation = 'rdiff',rows= 4,formats='numpy')
+data = Quandl.get('PRAGUESE/PX', authtoken='xxxxxx', startdate='2001-01-01', enddate='2010-01-01', frequency='annual', transformation = 'rdiff', rows= 4, sort='asc', formats='numpy')
 ```
 All options beyond specifying the dataset (PRAUGESE/PX) are optional,though it is helpful to specify an authtoken at 
 least once to increase download limits, it should be cached after that.
@@ -52,21 +50,24 @@ Complex Example
 ===============
 Quarterly normalized crude oil prices since 2005, only returning first 4 values.
 
-	import Quandl
-	data = Quandl.get("IMF/POILAPSP_INDEX",frequency="quarterly",startdate="2005",transformation = "normalize",rows="4")
-	data.head()
+```python
+import Quandl
+data = Quandl.get("IMF/POILAPSP_INDEX", frequency="quarterly", startdate="2005", transformation="normalize", rows="4")
+data.tail()
+```
 
 returns:
-
-	No authentication tokens found,usage will be limited 
-	Returning Dataframe for  IMF/POILAPSP_INDEX
-                   Price
-    Date                  
-    2013-02-28  212.792283
-    2012-12-31  200.073398
-    2012-09-30  210.212855
-    2012-06-30  179.322638
-
+```
+No authentication tokens found, usage will be limited
+See www.quandl.com/api for more information
+Returning Dataframe for  IMF/POILAPSP_INDEX
+                 Price
+Date                  
+2012-06-30  169.159248
+2012-09-30  198.298714
+2012-12-31  188.733927
+2013-02-28  200.731949
+```
 
 ##Uploads
 You can now upload your own data to Quandl through the Python package.
@@ -108,6 +109,12 @@ Questions/Comments
 ==================
 Please send any questions, comments, or any other inquires about this package to Chris@quandl.com
 
+Installation
+============
+The stable version of Quandl can be installed with pip:
+
+    pip install Quandl
+
 Dependencies
 ============
 Pandas https://code.google.com/p/pandas/
@@ -118,3 +125,4 @@ License
 =======
 
 [MIT License](http://opensource.org/licenses/MIT)
+
