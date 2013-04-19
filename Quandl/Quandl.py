@@ -52,7 +52,7 @@ def get(dataset, **kwargs):
     url = _append_query_fields(url,
                                auth_token=auth_token,
                                trim_start=trim_start,
-                               trim_end=trim_end
+                               trim_end=trim_end,
                                **kwargs)
 
     if returns == 'numpy':
