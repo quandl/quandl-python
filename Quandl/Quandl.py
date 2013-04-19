@@ -22,6 +22,10 @@ except ImportError:
     from urllib import urlencode  # Python 2
     from urllib2 import HTTPError, Request, urlopen
 
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 
 def get(dataset, **kwargs):
@@ -70,6 +74,13 @@ def get(dataset, **kwargs):
         urldata = _download(url)
         print("Returning Dataframe for ", dataset)
         return urldata
+
+
+def search(query):
+    """Return dict of search results."""
+    search_url = "http://quandl.com/search/" + query + ".json"
+    response = urlopen(search_url)
+    return json.load(response)['response']
 
 
 def push(data, code, name, authtoken='', desc='', override=False):

@@ -3,4 +3,4 @@ __author__ = 'mhartney & ChrisStevens'
 __all__ = ['Quandl']
 
 
-from .Quandl import get, push
+from .Quandl import get, search, push
