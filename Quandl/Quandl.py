@@ -23,10 +23,11 @@ except ImportError:
     from urllib2 import HTTPError, Request, urlopen
 
 
+QUANDL_API_URL = 'http://www.quandl.com/api/v1/'
+
 
 def get(dataset, **kwargs):
-    """Returns a Pandas dataframe object from datasets at
-    http://www.quandl.com.
+    """Return dataframe of requested dataset from Quandl.
 
     :param str dataset: Dataset codes are available on the Quandl website
     :param str authtoken: Downloads are limited to 10 unless token is specified
@@ -36,19 +37,24 @@ def get(dataset, **kwargs):
     :param str transformation: options are diff, rdiff, cumul, and normalize
     :param int rows: Number of rows which will be returned
     :param str sort: options are asc, desc (defaults to asc)
-    :param str returns: specify what format you wish your dataset returned as
-    :returns: :class:`pandas.DataFrame`
+    :param str returns: specify what format you wish your dataset returned as, 
+        either `numpy` for a numpy ndarray or `pandas`. Default: `pandas`
+    :returns: :class:`pandas.DataFrame` or :class:`numpy.ndarray`
 
     Note that Pandas expects timeseries data to be sorted ascending for most
-    timeseries functionality to work.
+    timeseries functionality to work. 
+
+    Any other `kwargs` passed to `get` are sent as field/value params to Quandl
+    with no interference.
 
     """
     auth_token = _getauthtoken(kwargs.pop('authtoken', ''))
-    trim_start = _parse_dates(kwargs.pop('trim_state', None))
+    trim_start = _parse_dates(kwargs.pop('trim_start', None))
     trim_end = _parse_dates(kwargs.pop('trim_end', None))
     returns = kwargs.pop('returns', 'pandas')
 
-    url = 'http://www.quandl.com/api/v1/datasets/{}.csv?'.format(dataset)
+    url = QUANDL_API_URL + 'datasets/{}.csv?'.format(dataset)
+
     url = _append_query_fields(url,
                                auth_token=auth_token,
                                trim_start=trim_start,
@@ -98,7 +104,7 @@ def push(data, code, name, authtoken='', desc='', override=False):
     # Verify and format the data for upload.
     if not isinstance(data, pd.core.frame.DataFrame):
         error = "only pandas data series are accepted for upload at this time"
-        raise Exception(error)
+        raise ValueError(error)
 
     # check if indexed by date
     data_interm = data.to_records()
@@ -112,12 +118,12 @@ def push(data, code, name, authtoken='', desc='', override=False):
             # Check if index is a date
             try:
                 datestr += _parse_dates(str(i[0]))
-            except:
+            except ValueError:
                 error = ("Please check your indices, one of them is "
                          "not a recognizable date")
                 raise Exception(error)
         for n in i:
-            if isinstance(n, float) or isinstance(n, int):
+            if isinstance(n, (float, int)):
                 datestr += ',' + str(n)
         datestr += '\n'
 
@@ -127,14 +133,14 @@ def push(data, code, name, authtoken='', desc='', override=False):
               'update_or_create': override,
               'data': datestr}
 
-    url = 'http://www.quandl.com/api/v1/datasets.json?auth_token=' + token
+    url = QUANDL_API_URL + 'datasets.json?auth_token=' + token
     jsonreturn = _htmlpush(url, params)
     if (jsonreturn['errors']
         and jsonreturn['errors']['code'][0] == 'has already been taken'):
         error = ("You are trying to overwrite a dataset which already "
                  "exists on Quandl. If this is what you wish to do please "
                  "recall the function with overide = True")
-        raise Exception(error)
+        raise ValueError(error)
 
     rtn = ('http://www.quandl.com/' + jsonreturn['source_code'] + '/' +
            jsonreturn['code'])
@@ -152,21 +158,14 @@ def _parse_dates(date):
     try:
         date = parser.parse(date)
     except ValueError:
-        raise Exception("{} is not recognised a date.".format(date))
+        raise ValueError("{} is not recognised a date.".format(date))
     return date.date().isoformat()
 
 
 # Helper function for actually making API call and downloading the file
 def _download(url):
-    try:
-        dframe = pd.read_csv(url, index_col=0, parse_dates=True)
-        return dframe
-    except pd._parser.CParserError as e:
-        print("url:", url)
-        raise Exception("Error Reading Data! {}".format(e))
-    except HTTPError as e:
-        print("url:", url)
-        raise Exception("Error Downloading! {}".format(e))
+    dframe = pd.read_csv(url, index_col=0, parse_dates=True)
+    return dframe
 
 
 # Helper function to make html push
@@ -190,7 +189,7 @@ def _pushcodetest(code):
 
 
 def _getauthtoken(token):
-    """Return and dave API token to a pickle file for reuse."""
+    """Return and save API token to a pickle file for reuse."""
     try:
         savedtoken = pickle.load(open('authtoken.p', 'rb'))
     except IOError:
@@ -212,4 +211,3 @@ def _append_query_fields(url, **kwargs):
     field_values = ['{}={}'.format(key, val)
                     for key, val in kwargs.items() if val]
     return url + '&'.join(field_values)
-
