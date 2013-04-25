@@ -10,18 +10,18 @@ An example of creating a pandas time series for IBM stock data, with a weekly fr
 
 ```python
 import Quandl
-data = Quandl.get("GOOG/NYSE_IBM", frequency="weekly")
+data = Quandl.get('GOOG/NYSE_IBM', collapse='weekly')
 data.head()
 ```
 
 will output
 
 ```
-No authentication tokens found,usage will be limited 
+No authentication tokens found,usage will be limited
 Returning Dataframe for  GOOG/NYSE_IBM
 
               Open    High     Low   Close   Volume
-Date                                               
+Date
 2013-03-28  209.83  213.44  209.74  213.30  3752999
 2013-03-15  215.38  215.90  213.41  214.92  7937244
 2013-03-08  209.85  210.74  209.43  210.38  3700986
@@ -38,7 +38,7 @@ A request with a full list of options would be the following.
 ```python
 import Quandl
 data = Quandl.get('PRAGUESE/PX', authtoken='xxxxxx', trim_start='2001-01-01',
-                  trim_end='2010-01-01', frequency='annual', 
+                  trim_end='2010-01-01', collapse='annual',
                   transformation='rdiff', rows=4, returns='numpy')
 ```
 
@@ -58,7 +58,7 @@ Quarterly normalized crude oil prices since 2005, only returning first 4 values.
 
 ```python
 import Quandl
-data = Quandl.get('IMF/POILAPSP_INDEX', frequency='quarterly',
+data = Quandl.get('IMF/POILAPSP_INDEX', collapse='quarterly',
                    trim_start='2005', transformation='normalize', rows='4')
 data.head()
 ````

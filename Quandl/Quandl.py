@@ -33,28 +33,29 @@ def get(dataset, **kwargs):
     :param str authtoken: Downloads are limited to 10 unless token is specified
     :param str trim_start, trim_end: Optional datefilers, otherwise entire
            dataset is returned
-    :param str frequency: Options are daily, weekly, monthly, quarterly, annual
+    :param str collapse: Options are daily, weekly, monthly, quarterly, annual
     :param str transformation: options are diff, rdiff, cumul, and normalize
     :param int rows: Number of rows which will be returned
-    :param str sort_order: options are asc, desc. Default: `desc`
-    :param str returns: specify what format you wish your dataset returned as, 
+    :param str sort_order: options are asc, desc. Default: `asc`
+    :param str returns: specify what format you wish your dataset returned as,
         either `numpy` for a numpy ndarray or `pandas`. Default: `pandas`
     :returns: :class:`pandas.DataFrame` or :class:`numpy.ndarray`
 
     Note that Pandas expects timeseries data to be sorted ascending for most
-    timeseries functionality to work. 
+    timeseries functionality to work.
 
     Any other `kwargs` passed to `get` are sent as field/value params to Quandl
     with no interference.
 
     """
+    kwargs.setdefault('sort_order', 'asc')
+
     auth_token = _getauthtoken(kwargs.pop('authtoken', ''))
     trim_start = _parse_dates(kwargs.pop('trim_start', None))
     trim_end = _parse_dates(kwargs.pop('trim_end', None))
-    returns = kwargs.pop('returns', 'pandas')
+    returns = kwargs.get('returns', 'pandas')
 
     url = QUANDL_API_URL + 'datasets/{}.csv?'.format(dataset)
-
     url = _append_query_fields(url,
                                auth_token=auth_token,
                                trim_start=trim_start,
