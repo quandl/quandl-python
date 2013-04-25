@@ -36,7 +36,7 @@ def get(dataset, **kwargs):
     :param str frequency: Options are daily, weekly, monthly, quarterly, annual
     :param str transformation: options are diff, rdiff, cumul, and normalize
     :param int rows: Number of rows which will be returned
-    :param str sort: options are asc, desc (defaults to asc)
+    :param str sort_order: options are asc, desc. Default: `desc`
     :param str returns: specify what format you wish your dataset returned as, 
         either `numpy` for a numpy ndarray or `pandas`. Default: `pandas`
     :returns: :class:`pandas.DataFrame` or :class:`numpy.ndarray`
