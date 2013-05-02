@@ -2,13 +2,14 @@
 """
 Quandl's API for Python.
 
-Currently supports getting and pushing datasets.
+Currently supports getting, searching, and pushing datasets.
 
 """
 from __future__ import (print_function, division, absolute_import,
                         unicode_literals)
 import pickle
 import datetime
+import json
 import pandas as pd
 
 from dateutil import parser
@@ -21,6 +22,7 @@ try:
 except ImportError:
     from urllib import urlencode  # Python 2
     from urllib2 import HTTPError, Request, urlopen
+
 
 
 QUANDL_API_URL = 'http://www.quandl.com/api/v1/'
@@ -148,9 +150,24 @@ def push(data, code, name, authtoken='', desc='', override=False):
     return rtn
 
 
-# Helper function to parse dates with None fallback
+def search(query):
+    """Return array of dictionaries of search results.
+
+    :param str query: (required), query to search with
+    :returns: :array: search results
+
+    """
+    search_url = 'http://www.quandl.com/search/{}.json'.format(query)
+    text = urlopen(search_url).read()
+    data = json.loads(text)
+    response = data['response']
+    datasets = response['datasets']
+    return datasets
+
+
+# returns None is date is None
 def _parse_dates(date):
-    if date is None: 
+    if date is None:
         return date
     if isinstance(date, datetime.datetime):
         return date.date().isoformat()
@@ -163,15 +180,12 @@ def _parse_dates(date):
     return date.date().isoformat()
 
 
-# Helper function for actually making API call and downloading the file
 def _download(url):
     dframe = pd.read_csv(url, index_col=0, parse_dates=True)
     return dframe
 
 
-# Helper function to make html push
 def _htmlpush(url, raw_params):
-    import json
     page = url
     params = urlencode(raw_params)
     request = Request(page, params)
