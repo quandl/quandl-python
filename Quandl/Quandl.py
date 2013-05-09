@@ -11,6 +11,7 @@ import pickle
 import datetime
 import json
 import pandas as pd
+import re
 
 from dateutil import parser
 from numpy import genfromtxt
@@ -150,19 +151,41 @@ def push(data, code, name, authtoken='', desc='', override=False):
     return rtn
 
 
-def search(query):
-    """Return array of dictionaries of search results.
+def search(query,source = None, page = 1, authotoken = None):
+   """Return array of dictionaries of search results.
 
-    :param str query: (required), query to search with
-    :returns: :array: search results
+      :param str query: (required), query to search with
+      :param str source: (optional), source to search
+      :param +'ve int: (optional), page number of search 
+      :param str authotoken: (optional) Quandl auth token for extended API access
+      :returns: :array: search results
 
-    """
-    search_url = 'http://www.quandl.com/search/{}.json'.format(query)
-    text = urlopen(search_url).read()
-    data = json.loads(text)
-    response = data['response']
-    datasets = response['datasets']
-    return datasets
+      """
+      token = _getauthtoken(authtoken)
+      search_url = 'http://www.quandl.com/api/v1/datasets.json?query='
+      parsedquery = re.sub(" ", "+", query)
+      url = search_url + parsedquery
+      if token:
+          url += '&auth_token=' + token
+      if source:
+          url += '&source_code=' + source
+      url += '&page=' + str(page)
+      text= urlopen(url).read()
+      data = json.loads(text)
+      try:
+          datasets = data['docs']
+      except TypeError:
+          raise TypeError("There are no matches for this search")
+      datalist = []
+      for i in range(len(datasets)):
+          temp_dict ={}
+          temp_dict['name'] = datasets[i]['name']
+          temp_dict['code'] = datasets[i]['source_code'] + '/' + datasets[i]['code']
+          temp_dict['desc'] = datasets[i]['description']
+          temp_dict['freq'] = datasets[i]['frequency']
+          temp_dict['colname'] = datasets[i]['column_names']
+          datalist.append(temp_dict)
+      return datalist
 
 
 # returns None is date is None
@@ -194,7 +217,6 @@ def _htmlpush(url, raw_params):
 
 
 def _pushcodetest(code):
-    import re
     regex = re.compile('[^0-9A-Z_]')
     if regex.search(code):
         error = ("Your Quandl Code for uploaded data must consist of only "
