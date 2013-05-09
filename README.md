@@ -29,33 +29,32 @@ unless you change your working directory. To replace simply save the new token o
 
 
 ## Search Example
+Using the search function you can search Quandl, specifying what sources to search, and what page you wish to show.
+
+	Quandl.search(query = "Search terms", source = "Source you wish to search", page = 1)
+
 An example of searching for datasets having to do with oil: 
 
-```python
-import Quandl
-datasets = Quandl.search('OIL')
-datasets[0]
-```
+	python
+	import Quandl
+	datasets = Quandl.search('OIL')
+	datasets[0]
 
-will output 
 
-```python
-{u'code': u'OIL',
- u'created_at': u'2011-11-07T19:39:22Z',
- u'description': u'Historical prices for Oil India Limited (OIL),
-                   (ISIN: INE274J01014),  National Stock Exchange of India.',
- u'frequency': u'daily',
- u'from_date': u'2009-09-30',
- 
- [... elided ...]
+will output:
 
- u'highlights': {u'description': u'Historical prices for <em>Oil</em> India
-                                   Limited (<em>OIL</em>), (ISIN: INE274J01014),
-                                   National Stock Exchange of India.',
- u'name': u'<em>Oil</em> India Limited'},
- u'import_url': u'http://www.nseindia.com/[...]'
- u'keywords': u'Finance,India,Stocks,NSE'}
-```
+	{u'code': u'NSE/OIL',
+	 u'colname': [u'Date',
+  	 u'Open',
+  	 u'High',
+  	u'Low',
+  	u'Last',
+  	u'Close',
+  	u'Total Trade Quantity',
+  	u'Turnover (Lacs)'],
+ 	u'desc': u'Historical prices for Oil India Limited (OIL), (ISIN: INE274J01014),  	 National Stock Exchange of India.',
+ 	u'freq': u'daily',
+ 	u'name': u'Oil India Limited'}
 
 
 ## Get Example
