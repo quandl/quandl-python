@@ -166,6 +166,7 @@ def search(query, source = None, page= 1 , authtoken = None, prints = True):
     search_url = 'http://www.quandl.com/api/v1/datasets.json?query='
     #parse query for proper API submission
     parsedquery = re.sub(" ", "+", query)
+    parsedquery = re.sub("&", "+", parsedquery)
     url = search_url + parsedquery
     #Use authtoken if present
     if token:
