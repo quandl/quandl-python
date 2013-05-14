@@ -151,4 +151,3 @@ dateutil (should be installed as part of pandas) :: <http://labix.org/python-dat
 License
 =======
 [MIT License](http://opensource.org/licenses/MIT)
-

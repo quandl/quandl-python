@@ -151,44 +151,56 @@ def push(data, code, name, authtoken='', desc='', override=False):
     return rtn
 
 
-def search(query,source = None, page = 1, authotoken = None):
-   """Return array of dictionaries of search results.
+def search(query, source = None, page= 1 , authtoken = None, prints = True):
+    """Return array of dictionaries of search results.
 
-      :param str query: (required), query to search with
-      :param str source: (optional), source to search
-      :param +'ve int: (optional), page number of search 
-      :param str authotoken: (optional) Quandl auth token for extended API access
-      :returns: :array: search results
+    :param str query: (required), query to search with
+    :param str source: (optional), source to search
+    :param +'ve int: (optional), page number of search 
+    :param str authotoken: (optional) Quandl auth token for extended API access
+    :returns: :array: search results
 
-      """
-      token = _getauthtoken(authtoken)
-      search_url = 'http://www.quandl.com/api/v1/datasets.json?query='
-      parsedquery = re.sub(" ", "+", query)
-      url = search_url + parsedquery
-      if token:
-          url += '&auth_token=' + token
-      if source:
-          url += '&source_code=' + source
-      url += '&page=' + str(page)
-      text= urlopen(url).read()
-      data = json.loads(text)
-      try:
-          datasets = data['docs']
-      except TypeError:
-          raise TypeError("There are no matches for this search")
-      datalist = []
-      for i in range(len(datasets)):
-          temp_dict ={}
-          temp_dict['name'] = datasets[i]['name']
-          temp_dict['code'] = datasets[i]['source_code'] + '/' + datasets[i]['code']
-          temp_dict['desc'] = datasets[i]['description']
-          temp_dict['freq'] = datasets[i]['frequency']
-          temp_dict['colname'] = datasets[i]['column_names']
-          datalist.append(temp_dict)
-      return datalist
+    """
+    
+    token = _getauthtoken(authtoken)
+    search_url = 'http://www.quandl.com/api/v1/datasets.json?query='
+    #parse query for proper API submission
+    parsedquery = re.sub(" ", "+", query)
+    url = search_url + parsedquery
+    #Use authtoken if present
+    if token:
+        url += '&auth_token=' + token
+    #Add search source if given
+    if source:
+        url += '&source_code=' + source
+    #Page to be searched 
+    url += '&page=' + str(page)
+    text= urlopen(url).read()
+    data = json.loads(text)
+    try:
+        datasets = data['docs']
+    except TypeError:
+        raise TypeError("There are no matches for this search")
+    datalist = []
+    for i in range(len(datasets)):
+        temp_dict ={}
+        temp_dict['name'] = datasets[i]['name']
+        temp_dict['code'] = datasets[i]['source_code'] + '/' + datasets[i]['code']
+        temp_dict['desc'] = datasets[i]['description']
+        temp_dict['freq'] = datasets[i]['frequency']
+        temp_dict['colname'] = datasets[i]['column_names']
+        datalist.append(temp_dict)
+        if prints and i < 4:
+            print('{0:20}       :        {1:50}'.format('Name',temp_dict['name']))
+            print('{0:20}       :        {1:50}'.format('Quandl Code',temp_dict['code']))
+            print('{0:20}       :        {1:50}'.format('Description',temp_dict['desc']))
+            print('{0:20}       :        {1:50}'.format('Frequency',temp_dict['freq']))
+            print('{0:20}       :        {1:50}'.format('Column Names',temp_dict['colname']))
+            print('\n\n')
+    return datalist
 
 
-# returns None is date is None
+# returns None if date is None
 def _parse_dates(date):
     if date is None:
         return date
