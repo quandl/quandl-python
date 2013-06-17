@@ -12,6 +12,8 @@ import datetime
 import json
 import pandas as pd
 import re
+import os
+import sys
 
 from dateutil import parser
 from numpy import genfromtxt
@@ -245,6 +247,10 @@ def _getauthtoken(token):
     except IOError:
         savedtoken = False
     if token:
+        # Change to home directory to make sure to have
+        # write permission to save authtoken.p
+        if not sys.platform.startswith('win'):
+            os.chdir(os.path.expanduser('~'))
         pickle.dump(token, open('authtoken.p', 'wb'))
         print("Token {} activated and saved for later use.".format(token))
     elif not savedtoken and not token:
