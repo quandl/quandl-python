@@ -32,7 +32,7 @@ QUANDL_API_URL = 'http://www.quandl.com/api/v1/'
 def get(dataset, **kwargs):
     """Return dataframe of requested dataset from Quandl.
 
-    :param str dataset: Dataset codes are available on the Quandl website
+    :param dataset: str or list depending on single dataset or multiset usage. Dataset codes are available on the Quandl website
     :param str authtoken: Downloads are limited to 10 unless token is specified
     :param str trim_start, trim_end: Optional datefilers, otherwise entire
            dataset is returned
@@ -58,13 +58,36 @@ def get(dataset, **kwargs):
     trim_end = _parse_dates(kwargs.pop('trim_end', None))
     returns = kwargs.get('returns', 'pandas')
 
-    url = QUANDL_API_URL + 'datasets/{}.csv?'.format(dataset)
+    #Check whether dataset is given as a string (for a single dataset) or an array (for a multiset call)
+    
+    
+    #Unicode String
+    if type(dataset) == unicode:
+        url = QUANDL_API_URL + 'datasets/{}.csv?'.format(dataset)
+    
+    #Array
+    elif type(dataset) == list:
+        url = QUANDL_API_URL + 'multisets.csv?columns='
+        #Format for multisets call
+        dataset = [d.replace('/', '.') for d in dataset]
+        for i in dataset:
+            url += i + ','
+        #remove trailing ,
+        url = url[:-1] + '&'
+        
+    #If wrong format
+    else:
+        error = "Your dataset must either be specified as a string or an array for using multisets"
+        raise Exception(error)
+
+    #Append all paramteres to API call
     url = _append_query_fields(url,
                                auth_token=auth_token,
                                trim_start=trim_start,
                                trim_end=trim_end,
                                **kwargs)
 
+    #Determine format data is retrieved in
     if returns == 'numpy':
         try:
             u = urlopen(url)
@@ -100,8 +123,8 @@ def push(data, code, name, authtoken='', desc='', override=False):
     if token == '':
         error = ("You need an API token to upload your data to Quandl, "
                  "please see www.quandl.com/API for more information.")
-        raise Exception(error)
-
+        raise Exception(error)  
+    #test that code is in acceptable format
     _pushcodetest(code)
     datestr = ''
 
@@ -115,6 +138,8 @@ def push(data, code, name, authtoken='', desc='', override=False):
     index = data_interm.dtype.names
     datestr += ','.join(index) + '\n'
 
+
+    #format data for uploading
     for i in data_interm:
         if isinstance(i[0], datetime.datetime):
             datestr += i[0].date().isoformat()
@@ -148,6 +173,7 @@ def push(data, code, name, authtoken='', desc='', override=False):
 
     rtn = ('http://www.quandl.com/' + jsonreturn['source_code'] + '/' +
            jsonreturn['code'])
+    #Return URL of uploaded dataset
     return rtn
 
 

@@ -81,6 +81,42 @@ Date
 ```
 
 
+### Multisets
+
+Quandl's [multisets](http://www.quandl.com/help/multisets) allows you to create a collection of data, from any column of any dataset on Quandl, and download it as one dataset.
+
+If you wanted to compare the closing prices for Apple and Microsoft, you would obtain the two Quandl codes:
+
+```GOOG/NASDAQ_AAPL``` 
+
+```GOOG/NASDAQ_MSFT```
+
+Append the column you wish to get with a `.`, and put them into an array.
+
+`['GOOG/NASDAQ_AAPL.4','GOOG/NASDAQ_MSFT.4']`
+
+Just make a normal get call with the array passed to get, and your multiset will be returned.
+
+`data= Quandl.get(['GOOG/NASDAQ_AAPL.4','GOOG/NASDAQ_MSFT.4'])`
+
+Which outputs:
+
+```
+No authentication tokens found: usage will be limited.
+See www.quandl.com/api for more information.
+Returning Dataframe for  [u'GOOG.NASDAQ_AAPL.4', u'GOOG.NASDAQ_MSFT.4']
+
+        GOOG.NASDAQ_AAPL - Close  GOOG.NASDAQ_MSFT - Close
+Date                                                          
+1997-08-20        6.16                     17.57
+1997-08-21        6.00                     17.23
+1997-08-22        5.91                     17.16
+1997-08-25        5.77                     17.06
+1997-08-26        5.56                     16.88
+
+```
+
+
 ## Push Example
 You can now upload your own data to Quandl through the Python package.
 
