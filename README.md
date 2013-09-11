@@ -87,9 +87,9 @@ Quandl's [multisets](http://www.quandl.com/help/multisets) allows you to create 
 
 If you wanted to compare the closing prices for Apple and Microsoft, you would obtain the two Quandl codes:
 
-```GOOG/NASDAQ_AAPL``` 
+`GOOG/NASDAQ_AAPL`
 
-```GOOG/NASDAQ_MSFT```
+`GOOG/NASDAQ_MSFT`
 
 Append the column you wish to get with a `.`, and put them into an array.
 
