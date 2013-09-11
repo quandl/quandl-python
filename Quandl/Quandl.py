@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Quandl's API for Python.
 
@@ -26,13 +25,15 @@ except ImportError:
 
 
 
+#Base API call URL
 QUANDL_API_URL = 'http://www.quandl.com/api/v1/'
 
 
 def get(dataset, **kwargs):
     """Return dataframe of requested dataset from Quandl.
 
-    :param dataset: str or list depending on single dataset or multiset usage. Dataset codes are available on the Quandl website
+    :param dataset: str or list, depending on single dataset usage or multiset usage
+            Dataset codes are available on the Quandl website
     :param str authtoken: Downloads are limited to 10 unless token is specified
     :param str trim_start, trim_end: Optional datefilers, otherwise entire
            dataset is returned
@@ -58,6 +59,7 @@ def get(dataset, **kwargs):
     trim_end = _parse_dates(kwargs.pop('trim_end', None))
     returns = kwargs.get('returns', 'pandas')
 
+    
     #Check whether dataset is given as a string (for a single dataset) or an array (for a multiset call)
     
     
@@ -77,36 +79,68 @@ def get(dataset, **kwargs):
         
     #If wrong format
     else:
-        error = "Your dataset must either be specified as a string or an array for using multisets"
+        error = "Your dataset must either be specified as a string (containing a Quandl code) or an array (of Quandl codes) for multisets"
         raise Exception(error)
-
-    #Append all paramteres to API call
+        
+    #Append all parameters to API call
     url = _append_query_fields(url,
                                auth_token=auth_token,
                                trim_start=trim_start,
                                trim_end=trim_end,
                                **kwargs)
-
+    
     #Determine format data is retrieved in
     if returns == 'numpy':
         try:
             u = urlopen(url)
             array = genfromtxt(u, names=True, delimiter=',', dtype=None)
             return array
+        
+        #Errors
         except IOError as e:
             print("url:", url)
             raise Exception("Parsing Error! {}".format(e))
         except HTTPError as e:
-            print("url:", url)
-            raise Exception("Error Downloading! {}".format(e))
+            #API limit reached
+            if str(e) == 'HTTP Error 403: Forbidden':
+                error = 'API daily call limit exceeded. Contact us at connect@quandl.com if you want an increased daily limit'
+                raise Exception(error)
+                
+            #Dataset not found    
+            elif str(e) == 'HTTP Error 404: Not Found':
+                error = "Dataset not found. Check Quandl code: {} for errors".format(dataset)
+                raise Exception(error)
+            #Catch all
+            else:    
+                print("url:", url)
+                error = "Error Downloading! {}".format(e)
+                raise Exception(error)
     else: # assume pandas is requested
-        urldata = _download(url)
-        print("Returning Dataframe for ", dataset)
-        return urldata
-
+        try:
+            urldata = _download(url)
+            print("Returning Dataframe for ", dataset)
+            return urldata
+        
+        #Error catching
+        except HTTPError as e:
+            #API limit reached 
+            if str(e) == 'HTTP Error 403: Forbidden':
+                error = 'API daily call limit exceeded. Contact us at connect@quandl.com if you want an increased daily limit'
+                raise Exception(error)
+                
+            #Dataset not found    
+            elif str(e) == 'HTTP Error 404: Not Found':
+                error = "Dataset not found. Check Quandl code: {} for errors".format(dataset)
+                raise Exception(error)
+                
+            #Catch all 
+            else:    
+                print("url:", url)
+                error = "Error Downloading! {}".format(e)
+                raise Exception(error)
 
 def push(data, code, name, authtoken='', desc='', override=False):
-    """Upload a pandas Dataframe to Quandl and returns link to the dataset.
+    ''' Upload a pandas Dataframe to Quandl and returns link to the dataset.
 
     :param data: (required), pandas ts or numpy array
     :param str code: (required), Dataset code
@@ -115,22 +149,22 @@ def push(data, code, name, authtoken='', desc='', override=False):
     :param str authtoken: (required), to upload data
     :param str desc: (optional), Description of dataset
     :param bool overide: (optional), whether to overide dataset of same code
-    :returns: :str: link to uploaded dataset
+    :returns: :str: link to uploaded dataset'''
 
-    """
     override = str(override).lower()
     token = _getauthtoken(authtoken)
     if token == '':
         error = ("You need an API token to upload your data to Quandl, "
                  "please see www.quandl.com/API for more information.")
-        raise Exception(error)  
-    #test that code is in acceptable format
+        raise Exception(error)
+
+    #test that code is acceptable format
     _pushcodetest(code)
     datestr = ''
 
     # Verify and format the data for upload.
     if not isinstance(data, pd.core.frame.DataFrame):
-        error = "only pandas data series are accepted for upload at this time"
+        error = "only pandas DataFrames are accepted for upload at this time"
         raise ValueError(error)
 
     # check if indexed by date
@@ -138,13 +172,12 @@ def push(data, code, name, authtoken='', desc='', override=False):
     index = data_interm.dtype.names
     datestr += ','.join(index) + '\n'
 
-
     #format data for uploading
     for i in data_interm:
+            # Check if index is a date
         if isinstance(i[0], datetime.datetime):
             datestr += i[0].date().isoformat()
         else:
-            # Check if index is a date
             try:
                 datestr += _parse_dates(str(i[0]))
             except ValueError:
@@ -167,7 +200,7 @@ def push(data, code, name, authtoken='', desc='', override=False):
     if (jsonreturn['errors']
         and jsonreturn['errors']['code'][0] == 'has already been taken'):
         error = ("You are trying to overwrite a dataset which already "
-                 "exists on Quandl. If this is what you wish to do please "
+                 "exists on Quandl. If this is what you wish to do please "q
                  "recall the function with overide = True")
         raise ValueError(error)
 
@@ -227,7 +260,7 @@ def search(query, source = None, page= 1 , authtoken = None, prints = True):
     return datalist
 
 
-# returns None if date is None
+# format date, if None returns None
 def _parse_dates(date):
     if date is None:
         return date
@@ -242,11 +275,12 @@ def _parse_dates(date):
     return date.date().isoformat()
 
 
+# Download data into pandas dataframe
 def _download(url):
     dframe = pd.read_csv(url, index_col=0, parse_dates=True)
     return dframe
 
-
+#Push data to Quandl. Returns json of HTTP push.
 def _htmlpush(url, raw_params):
     page = url
     params = urlencode(raw_params)
@@ -254,15 +288,14 @@ def _htmlpush(url, raw_params):
     page = urlopen(request)
     return json.loads(page.read())
 
-
+#Test if code is capitalized alphanumeric
 def _pushcodetest(code):
     regex = re.compile('[^0-9A-Z_]')
     if regex.search(code):
         error = ("Your Quandl Code for uploaded data must consist of only "
-                 "capital letters, underscores and capital numbers.")
+                 "capital letters, underscores and numbers.")
         raise Exception(error)
     return code
-
 
 def _getauthtoken(token):
     """Return and save API token to a pickle file for reuse."""
