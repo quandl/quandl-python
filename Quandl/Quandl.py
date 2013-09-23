@@ -19,9 +19,11 @@ try:
     from urllib.error import HTTPError  # Python 3
     from urllib.parse import urlencode
     from urllib.request import Request, urlopen
+    strings = str
 except ImportError:
     from urllib import urlencode  # Python 2
     from urllib2 import HTTPError, Request, urlopen
+    strings = unicode
 
 
 
@@ -64,7 +66,7 @@ def get(dataset, **kwargs):
     
     
     #Unicode String
-    if type(dataset) == unicode:
+    if type(dataset) == strings:
         url = QUANDL_API_URL + 'datasets/{}.csv?'.format(dataset)
     
     #Array
@@ -200,7 +202,7 @@ def push(data, code, name, authtoken='', desc='', override=False):
     if (jsonreturn['errors']
         and jsonreturn['errors']['code'][0] == 'has already been taken'):
         error = ("You are trying to overwrite a dataset which already "
-                 "exists on Quandl. If this is what you wish to do please "q
+                 "exists on Quandl. If this is what you wish to do please "
                  "recall the function with overide = True")
         raise ValueError(error)
 
