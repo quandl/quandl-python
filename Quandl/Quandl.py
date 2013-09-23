@@ -66,7 +66,7 @@ def get(dataset, **kwargs):
     
     
     #Unicode String
-    if type(dataset) == strings:
+    if type(dataset) == strings or type(dataset) == str:
         url = QUANDL_API_URL + 'datasets/{}.csv?'.format(dataset)
     
     #Array
