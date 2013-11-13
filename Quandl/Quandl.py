@@ -237,7 +237,7 @@ def search(query, source = None, page= 1 , authtoken = None, prints = True):
         url += '&source_code=' + source
     #Page to be searched 
     url += '&page=' + str(page)
-    text= urlopen(url).read()
+    text= urlopen(url).read().decode("utf-8")
     data = json.loads(text)
     try:
         datasets = data['docs']
