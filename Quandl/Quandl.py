@@ -306,8 +306,12 @@ def _getauthtoken(token):
     except IOError:
         savedtoken = False
     if token:
-        pickle.dump(token, open('authtoken.p', 'wb'))
-        print("Token {} activated and saved for later use.".format(token))
+        try:
+            pickle.dump(token, open('authtoken.p', 'wb'))
+            print("Token {} activated and saved for later use.".format(token))
+        except Exception,e:
+            print("Error writing token to cache: {}".format(str(e)))
+
     elif not savedtoken and not token:
         print("No authentication tokens found: usage will be limited.")
         print("See www.quandl.com/api for more information.")
@@ -319,6 +323,6 @@ def _getauthtoken(token):
 
 # In lieu of urllib's urlencode, as this handles None values by ignoring them.
 def _append_query_fields(url, **kwargs):
-    field_values = ['{}={}'.format(key, val)
+    field_values = ['{0}={1}'.format(key, val)
                     for key, val in kwargs.items() if val]
     return url + '&'.join(field_values)
