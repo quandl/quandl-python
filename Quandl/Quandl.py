@@ -309,7 +309,7 @@ def _getauthtoken(token):
         try:
             pickle.dump(token, open('authtoken.p', 'wb'))
             print("Token {} activated and saved for later use.".format(token))
-        except Exception,e:
+        except Exception as e:
             print("Error writing token to cache: {}".format(str(e)))
 
     elif not savedtoken and not token:
