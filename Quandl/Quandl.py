@@ -45,6 +45,7 @@ def get(dataset, **kwargs):
     :param str sort_order: options are asc, desc. Default: `asc`
     :param str returns: specify what format you wish your dataset returned as,
         either `numpy` for a numpy ndarray or `pandas`. Default: `pandas`
+    :param str text: specify whether to print output text to stdout, pass 'no' to supress output.
     :returns: :class:`pandas.DataFrame` or :class:`numpy.ndarray`
 
     Note that Pandas expects timeseries data to be sorted ascending for most
@@ -55,11 +56,12 @@ def get(dataset, **kwargs):
 
     """
     kwargs.setdefault('sort_order', 'asc')
-
-    auth_token = _getauthtoken(kwargs.pop('authtoken', ''))
+    text = kwargs.get('text','yes')
+    auth_token = _getauthtoken(kwargs.pop('authtoken', ''),text)
     trim_start = _parse_dates(kwargs.pop('trim_start', None))
     trim_end = _parse_dates(kwargs.pop('trim_end', None))
     returns = kwargs.get('returns', 'pandas')
+
 
     
     #Check whether dataset is given as a string (for a single dataset) or an array (for a multiset call)
@@ -129,7 +131,10 @@ def get(dataset, **kwargs):
                 error = "Currently we only support multisets with up to 100 columns. Please contact connect@quandl.com if this is a problem."
                 raise Exception(error)
             else:
-                print("Returning Dataframe for ", dataset)
+                if text == "no":
+                    pass
+                else:
+                    print("Returning Dataframe for ", dataset)
                 return urldata
         
         
@@ -309,7 +314,7 @@ def _pushcodetest(code):
         raise Exception(error)
     return code
 
-def _getauthtoken(token):
+def _getauthtoken(token,text):
     """Return and save API token to a pickle file for reuse."""
     try:
         savedtoken = pickle.load(open('authtoken.p', 'rb'))
@@ -318,16 +323,26 @@ def _getauthtoken(token):
     if token:
         try:
             pickle.dump(token, open('authtoken.p', 'wb'))
-            print("Token {} activated and saved for later use.".format(token))
+            if text == "no":
+                pass
+                
+            else:
+                print("Token {} activated and saved for later use.".format(token))
         except Exception as e:
             print("Error writing token to cache: {}".format(str(e)))
 
     elif not savedtoken and not token:
-        print("No authentication tokens found: usage will be limited.")
-        print("See www.quandl.com/api for more information.")
+            if text == "no":
+                pass
+            else:
+                print("No authentication tokens found: usage will be limited.")
+                print("See www.quandl.com/api for more information.")
     elif savedtoken and not token:
         token = savedtoken
-        print("Using cached token {} for authentication.".format(token))
+        if text == "no":
+             pass
+        else:
+            print("Using cached token {} for authentication.".format(token))
     return token
 
 
