@@ -95,9 +95,13 @@ def get(dataset, **kwargs):
     if returns == 'numpy':
         try:
             u = urlopen(url)
-            array = genfromtxt(u, names=True, delimiter=',', dtype=None)
+            try:
+                array = genfromtxt(u, names=True, delimiter=',', dtype=None)
+            except ValueError as e:
+                error = "Currently we only support multisets with up to 100 columns. Please contact connect@quandl.com if this is a problem."
+                raise Exception(error)
+
             return array
-        
         #Errors
         except IOError as e:
             print("url:", url)
@@ -120,8 +124,14 @@ def get(dataset, **kwargs):
     else: # assume pandas is requested
         try:
             urldata = _download(url)
-            print("Returning Dataframe for ", dataset)
-            return urldata
+
+            if urldata.columns.size > 100:
+                error = "Currently we only support multisets with up to 100 columns. Please contact connect@quandl.com if this is a problem."
+                raise Exception(error)
+            else:
+                print("Returning Dataframe for ", dataset)
+                return urldata
+        
         
         #Error catching
         except HTTPError as e:
