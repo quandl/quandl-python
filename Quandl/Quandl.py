@@ -156,7 +156,7 @@ def get(dataset, **kwargs):
                 error = "Error Downloading! {}".format(e)
                 raise Exception(error)
 
-def push(data, code, name, authtoken='', desc='', override=False):
+def push(data, code, name, authtoken='', desc='', override=False,text='yes'):
     ''' Upload a pandas Dataframe to Quandl and returns link to the dataset.
 
     :param data: (required), pandas ts or numpy array
@@ -166,10 +166,12 @@ def push(data, code, name, authtoken='', desc='', override=False):
     :param str authtoken: (required), to upload data
     :param str desc: (optional), Description of dataset
     :param bool overide: (optional), whether to overide dataset of same code
+    :param str text: specify whether to print output text to stdout, pass 'no' to supress output.
+    
     :returns: :str: link to uploaded dataset'''
 
     override = str(override).lower()
-    token = _getauthtoken(authtoken)
+    token = _getauthtoken(authtoken,text)
     if token == '':
         error = ("You need an API token to upload your data to Quandl, "
                  "please see www.quandl.com/API for more information.")
