@@ -240,7 +240,7 @@ def search(query, source = None, page= 1 , authtoken = None, prints = True):
 
     """
     
-    token = _getauthtoken(authtoken)
+    token = _getauthtoken(authtoken,prints)
     search_url = 'http://www.quandl.com/api/v1/datasets.json?query='
     #parse query for proper API submission
     parsedquery = re.sub(" ", "+", query)
@@ -325,7 +325,7 @@ def _getauthtoken(token,text):
     if token:
         try:
             pickle.dump(token, open('authtoken.p', 'wb'))
-            if text == "no":
+            if text == "no" or text == False:
                 pass
                 
             else:
