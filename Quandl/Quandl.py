@@ -334,7 +334,7 @@ def _getauthtoken(token,text):
             print("Error writing token to cache: {}".format(str(e)))
 
     elif not savedtoken and not token:
-            if text == "no":
+            if text == "no" or text == False:
                 pass
             else:
                 print("No authentication tokens found: usage will be limited.")
