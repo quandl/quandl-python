@@ -241,7 +241,7 @@ def search(query, source = None, page= 1 , authtoken = None, prints = True):
     """
     
     token = _getauthtoken(authtoken,prints)
-    search_url = 'http://www.quandl.com/api/v1/datasets.json?query='
+    search_url = 'http://www.quandl.com/api/v1/datasets.json?request_source=python&request_version=2&query='
     #parse query for proper API submission
     parsedquery = re.sub(" ", "+", query)
     parsedquery = re.sub("&", "+", parsedquery)
@@ -352,4 +352,4 @@ def _getauthtoken(token,text):
 def _append_query_fields(url, **kwargs):
     field_values = ['{0}={1}'.format(key, val)
                     for key, val in kwargs.items() if val]
-    return url + '&'.join(field_values)
+    return url + 'request_source=python&request_version=2&' +'&'.join(field_values)
