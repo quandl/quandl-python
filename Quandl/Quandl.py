@@ -274,7 +274,7 @@ def search(query, source = None, page= 1 , authtoken = None, prints = True):
             print('{0:20}       :        {1:50}'.format('Quandl Code',temp_dict['code']))
             print('{0:20}       :        {1:50}'.format('Description',temp_dict['desc']))
             print('{0:20}       :        {1:50}'.format('Frequency',temp_dict['freq']))
-            print('{0:20}       :        {1:50}'.format('Column Names',temp_dict['colname']))
+            print('{0:20}       :        {1:50}'.format('Column Names',str(temp_dict['colname'])))
             print('\n\n')
     return datalist
 
