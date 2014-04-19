@@ -84,7 +84,7 @@ def get(dataset, **kwargs):
     #If wrong format
     else:
         error = "Your dataset must either be specified as a string (containing a Quandl code) or an array (of Quandl codes) for multisets"
-        raise Exception(error)
+        raise WrongFormat(error)
         
     #Append all parameters to API call
     url = _append_query_fields(url,
@@ -101,35 +101,35 @@ def get(dataset, **kwargs):
                 array = genfromtxt(u, names=True, delimiter=',', dtype=None)
             except ValueError as e:
                 error = "Currently we only support multisets with up to 100 columns. Please contact connect@quandl.com if this is a problem."
-                raise Exception(error)
+                raise MultisetLimit(error)
 
             return array
         #Errors
         except IOError as e:
             print("url:", url)
-            raise Exception("Parsing Error! {}".format(e))
+            raise ParsingError("Parsing Error! {}".format(e))
         except HTTPError as e:
             #API limit reached
             if str(e) == 'HTTP Error 403: Forbidden':
                 error = 'API daily call limit exceeded. Contact us at connect@quandl.com if you want an increased daily limit'
-                raise Exception(error)
+                raise CallLimitExceeded(error)
                 
             #Dataset not found    
             elif str(e) == 'HTTP Error 404: Not Found':
                 error = "Dataset not found. Check Quandl code: {} for errors".format(dataset)
-                raise Exception(error)
+                raise DatasetNotFound(error)
             #Catch all
             else:    
                 print("url:", url)
                 error = "Error Downloading! {}".format(e)
-                raise Exception(error)
+                raise ErrorDownloading(error)
     else: # assume pandas is requested
         try:
             urldata = _download(url)
 
             if urldata.columns.size > 100:
                 error = "Currently we only support multisets with up to 100 columns. Please contact connect@quandl.com if this is a problem."
-                raise Exception(error)
+                raise MultisetLimit(error)
             else:
                 if text == "no":
                     pass
@@ -143,18 +143,18 @@ def get(dataset, **kwargs):
             #API limit reached 
             if str(e) == 'HTTP Error 403: Forbidden':
                 error = 'API daily call limit exceeded. Contact us at connect@quandl.com if you want an increased daily limit'
-                raise Exception(error)
+                raise CallLimitExceeded(error)
                 
             #Dataset not found    
             elif str(e) == 'HTTP Error 404: Not Found':
                 error = "Dataset not found. Check Quandl code: {} for errors".format(dataset)
-                raise Exception(error)
+                raise DatasetNotFound(error)
                 
             #Catch all 
             else:    
                 print("url:", url)
                 error = "Error Downloading! {}".format(e)
-                raise Exception(error)
+                raise ErrorDownloading(error)
 
 def push(data, code, name, authtoken='', desc='', override=False,text='yes'):
     ''' Upload a pandas Dataframe to Quandl and returns link to the dataset.
@@ -175,7 +175,7 @@ def push(data, code, name, authtoken='', desc='', override=False,text='yes'):
     if token == '':
         error = ("You need an API token to upload your data to Quandl, "
                  "please see www.quandl.com/API for more information.")
-        raise Exception(error)
+        raise MissingToken(error)
 
     #test that code is acceptable format
     _pushcodetest(code)
@@ -202,7 +202,7 @@ def push(data, code, name, authtoken='', desc='', override=False,text='yes'):
             except ValueError:
                 error = ("Please check your indices, one of them is "
                          "not a recognizable date")
-                raise Exception(error)
+                raise DateNotRecognized(error)
         for n in i:
             if isinstance(n, (float, int)):
                 datestr += ',' + str(n)
@@ -313,7 +313,7 @@ def _pushcodetest(code):
     if regex.search(code):
         error = ("Your Quandl Code for uploaded data must consist of only "
                  "capital letters, underscores and numbers.")
-        raise Exception(error)
+        raise CodeFormatError(error)
     return code
 
 def _getauthtoken(token,text):
@@ -353,3 +353,50 @@ def _append_query_fields(url, **kwargs):
     field_values = ['{0}={1}'.format(key, val)
                     for key, val in kwargs.items() if val]
     return url + 'request_source=python&request_version=2&' +'&'.join(field_values)
+
+# Setup custom Exceptions
+
+
+class WrongFormat(Exception):
+    """Exception for dataset formatting errors"""
+    pass
+
+
+class MultisetLimit(Exception):
+    """Exception for calls exceeding the multiset limit"""
+    pass
+
+
+class ParsingError(Exception):
+    """Exception for I/O parsing errors"""
+    pass
+
+
+class CallLimitExceeded(Exception):
+    """Exception for daily call limit being exceeded"""
+    pass
+
+
+class DatasetNotFound(Exception):
+    """Exception for the dataset not being found"""
+    pass
+
+
+class ErrorDownloading(Exception):
+    """Catch all exception for download errors"""
+    pass
+
+
+class MissingToken(Exception):
+    """Exception when API token needed but missing"""
+    pass
+
+
+class DateNotRecognized(Exception):
+    """Exception when a date is not recognized as such"""
+    pass
+
+
+class CodeFormatError(Exception):
+    """Exception when a Quandl code is not formatted properly"""
+    pass
