@@ -11,7 +11,6 @@ import datetime
 import json
 import pandas as pd
 import re
-import logging
 
 from dateutil import parser
 from numpy import genfromtxt
@@ -30,7 +29,6 @@ except ImportError:
 
 #Base API call URL
 QUANDL_API_URL = 'http://www.quandl.com/api/v1/'
-logger = logging.getLogger(__name__)
 
 
 def get(dataset, **kwargs):
@@ -61,7 +59,7 @@ def get(dataset, **kwargs):
     kwargs.setdefault('sort_order', 'asc')
     verbose = kwargs.get('verbose', False)
     if 'text' in kwargs:
-        logger.warn('"text" is deprecated and will be removed in next release, use "verbose" instead.')
+        print('Deprecated: "text" is deprecated and will be removed in next release, use "verbose" instead.')
         if isinstance(kwargs['text'], str):
             if kwargs['text'].lower() in ['yes', 'y', 't', 'true', 'on']:
                 verbose = True
@@ -183,7 +181,7 @@ def push(data, code, name, authtoken='', desc='', override=False, verbose=False,
     :returns: :str: link to uploaded dataset'''
 
     if text is not None:
-        logger.warn('"text" is deprecated and will be removed in next release, use "verbose" instead.')
+        print('Deprecated: "text" is deprecated and will be removed in next release, use "verbose" instead.')
         verbose = text
     override = str(override).lower()
     token = _getauthtoken(authtoken, verbose)
@@ -255,7 +253,7 @@ def search(query, source=None, page=1, authtoken=None, verbose=True, prints=None
 
     """
     if prints is not None:
-        logger.warn('"print" is depreciated and will be removed in next release, use "verbose" instead.')
+        print('Deprecated: "print" is depreciated and will be removed in next release, use "verbose" instead.')
         verbose = prints
     token = _getauthtoken(authtoken, verbose)
     search_url = 'http://www.quandl.com/api/v1/datasets.json?request_source=python&request_version=2&query='
