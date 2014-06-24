@@ -45,7 +45,8 @@ def get(dataset, **kwargs):
     :param str sort_order: options are asc, desc. Default: `asc`
     :param str returns: specify what format you wish your dataset returned as,
         either `numpy` for a numpy ndarray or `pandas`. Default: `pandas`
-    :param str text: specify whether to print output text to stdout, pass 'no' to supress output.
+    :param bool verbose: specify whether to print output text to stdout, default is False.
+    :param str text: Deprecated. Use `verbose` instead.
     :returns: :class:`pandas.DataFrame` or :class:`numpy.ndarray`
 
     Note that Pandas expects timeseries data to be sorted ascending for most
@@ -56,8 +57,15 @@ def get(dataset, **kwargs):
 
     """
     kwargs.setdefault('sort_order', 'asc')
-    text = kwargs.get('text','yes')
-    auth_token = _getauthtoken(kwargs.pop('authtoken', ''),text)
+    verbose = kwargs.get('verbose', False)
+    if 'text' in kwargs:
+        print('Deprecated: "text" is deprecated and will be removed in next release, use "verbose" instead.')
+        if isinstance(kwargs['text'], (strings, str)):
+            if kwargs['text'].lower() in ['yes', 'y', 't', 'true', 'on']:
+                verbose = True
+        else:
+            verbose = bool(kwargs['text'])
+    auth_token = _getauthtoken(kwargs.pop('authtoken', ''), verbose)
     trim_start = _parse_dates(kwargs.pop('trim_start', None))
     trim_end = _parse_dates(kwargs.pop('trim_end', None))
     returns = kwargs.get('returns', 'pandas')
@@ -92,16 +100,15 @@ def get(dataset, **kwargs):
                                trim_start=trim_start,
                                trim_end=trim_end,
                                **kwargs)
-
+    if returns == 'url':
+        return url      # for test purpose
     try:
         urldata = _download(url)
         if urldata.columns.size > 100:
             error = "Currently we only support multisets with up to 100 columns. Please contact connect@quandl.com if this is a problem."
             raise MultisetLimit(error)
         else:
-            if text == "no":
-                pass
-            else:
+            if verbose and verbose != 'no':
                 print("Returning Dataframe for ", dataset)
 
     #Error catching
@@ -126,7 +133,7 @@ def get(dataset, **kwargs):
         return urldata.to_records()
     return urldata
 
-def push(data, code, name, authtoken='', desc='', override=False,text='yes'):
+def push(data, code, name, authtoken='', desc='', override=False, verbose=False, text=None):
     ''' Upload a pandas Dataframe to Quandl and returns link to the dataset.
 
     :param data: (required), pandas ts or numpy array
@@ -136,12 +143,16 @@ def push(data, code, name, authtoken='', desc='', override=False,text='yes'):
     :param str authtoken: (required), to upload data
     :param str desc: (optional), Description of dataset
     :param bool overide: (optional), whether to overide dataset of same code
-    :param str text: specify whether to print output text to stdout, pass 'no' to supress output.
-    
+    :param bool verbose: specify whether to print output text to stdout, default is False.
+    :param str text: Deprecated. Use `verbose` instead.
+
     :returns: :str: link to uploaded dataset'''
 
     override = str(override).lower()
-    token = _getauthtoken(authtoken,text)
+    if text is not None:
+        print('Deprecated: "text" is deprecated and will be removed in next release, use "verbose" instead.')
+        verbose = text
+    token = _getauthtoken(authtoken, verbose)
     if token == '':
         error = ("You need an API token to upload your data to Quandl, "
                  "please see www.quandl.com/API for more information.")
@@ -199,7 +210,7 @@ def push(data, code, name, authtoken='', desc='', override=False,text='yes'):
     return rtn
 
 
-def search(query, source = None, page= 1 , authtoken = None, prints = True):
+def search(query, source=None, page=1, authtoken=None, verbose=True, prints=None):
     """Return array of dictionaries of search results.
 
     :param str query: (required), query to search with
@@ -209,8 +220,11 @@ def search(query, source = None, page= 1 , authtoken = None, prints = True):
     :returns: :array: search results
 
     """
-    
-    token = _getauthtoken(authtoken,prints)
+
+    if prints is not None:
+        print('Deprecated: "prints" is depreciated and will be removed in next release, use "verbose" instead.')
+        verbose = prints
+    token = _getauthtoken(authtoken, verbose)
     search_url = 'http://www.quandl.com/api/v1/datasets.json?request_source=python&request_version=2&query='
     #parse query for proper API submission
     parsedquery = re.sub(" ", "+", query)
@@ -239,7 +253,7 @@ def search(query, source = None, page= 1 , authtoken = None, prints = True):
         temp_dict['freq'] = datasets[i]['frequency']
         temp_dict['colname'] = datasets[i]['column_names']
         datalist.append(temp_dict)
-        if prints and i < 4:
+        if verbose and i < 4:
             print('{0:20}       :        {1:50}'.format('Name',temp_dict['name']))
             print('{0:20}       :        {1:50}'.format('Quandl Code',temp_dict['code']))
             print('{0:20}       :        {1:50}'.format('Description',temp_dict['desc']))
