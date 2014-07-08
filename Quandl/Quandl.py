@@ -325,7 +325,7 @@ def _getauthtoken(token,text):
                 print("See www.quandl.com/api for more information.")
     elif savedtoken and not token:
         token = savedtoken
-        if text == "no" or text == 'False':
+        if text == "no" or text == False:
              pass
         else:
             print("Using cached token {} for authentication.".format(token))
