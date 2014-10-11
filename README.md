@@ -4,6 +4,12 @@ Basic wrapper to return datasets from the Quandl website as Pandas dataframe obj
 
 See the [Quandl API](http://www.quandl.com/api) for more information.
 
+Installation
+============
+You will need numpy and pandas before actually using the Quandl API
+
+    pip install numpy pandas Quandl
+
 
 Usage
 =====
