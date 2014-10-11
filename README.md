@@ -4,6 +4,12 @@ Basic wrapper to return datasets from the Quandl website as Pandas dataframe obj
 
 See the [Quandl API](http://www.quandl.com/api) for more information.
 
+Installation
+============
+You will also need numpy and pandas before using the Quandl API
+
+    pip install numpy pandas Quandl
+
 
 Usage
 =====
@@ -168,13 +174,6 @@ See [this link](http://pandas.pydata.org/pandas-docs/dev/timeseries.html) for mo
 Questions/Comments
 ==================
 Please send any questions, comments, or any other inquires about this package to <Chris@quandl.com>.
-
-
-Installation
-============
-The stable version of Quandl can be installed with pip:
-
-    pip install Quandl
 
 
 Dependencies
