@@ -125,7 +125,8 @@ def get(dataset, **kwargs):
 
         #Catch all
         else:
-            print("url:", url)
+            if verbose and verbose != 'no':                    
+                print("url:", url)
             error = "Error Downloading! {}".format(e)
             raise ErrorDownloading(error)
 
