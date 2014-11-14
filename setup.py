@@ -13,6 +13,9 @@ setup(name = 'Quandl',
       maintainer_email = Quandl.__email__,
       url = Quandl.__url__,
       license = Quandl.__license__,
-      install_requires = open('requirements.txt').readlines(),
+      install_requires = [
+      "pandas >= 0.14",
+      "numpy >= 1.8",
+      ],
       packages = ['Quandl'],
 )
