@@ -1,8 +1,7 @@
+
 """
 Quandl's API for Python.
-
 Currently supports getting, searching, and pushing datasets.
-
 """
 from __future__ import (print_function, division, absolute_import,
                         unicode_literals)
@@ -11,7 +10,7 @@ import datetime
 import json
 import pandas as pd
 import re
-
+from IPython import embed
 from dateutil import parser
 from numpy import genfromtxt
 
@@ -77,21 +76,34 @@ def get(dataset, **kwargs):
     
     #Unicode String
     if type(dataset) == strings or type(dataset) == str:
+       
+        if '.' in dataset:
+            dataset_temp = dataset.split('.')
+            dataset = dataset_temp[0]
+            dataset_columns = dataset_temp[1]
+            kwargs.update({'column':dataset_columns})
+
+
         url = QUANDL_API_URL + 'datasets/{}.csv?'.format(dataset)
-    
+
     #Array
     elif type(dataset) == list:
-        url = QUANDL_API_URL + 'multisets.csv?columns='
-        #Format for multisets call
-        dataset = [d.replace('/', '.') for d in dataset]
+        multiple_dataset_dataframe = pd.DataFrame()
         for i in dataset:
-            url += i + ','
-        #remove trailing ,
-        url = url[:-1] + '&'
-        
+            try:
+                d = get(i,**kwargs)
+            except DatasetNotFound:
+                d = pd.DataFrame({'NOT FOUND': []})
+
+            # format dataset name for column name
+            specific_column_name = i.split('.')[0].replace('/','.')
+            d.rename(columns = lambda x: specific_column_name + ' - ' + x, inplace = True)
+            multiple_dataset_dataframe = pd.merge(multiple_dataset_dataframe,d,right_index = True,left_index = True,how='outer')
+        return multiple_dataset_dataframe
+                
     #If wrong format
     else:
-        error = "Your dataset must either be specified as a string (containing a Quandl code) or an array (of Quandl codes) for multisets"
+        error = "Your dataset must either be specified as a string (containing a Quandl code) or an array (of Quandl codes)"
         raise WrongFormat(error)
         
     #Append all parameters to API call
@@ -104,12 +116,8 @@ def get(dataset, **kwargs):
         return url      # for test purpose
     try:
         urldata = _download(url)
-        if urldata.columns.size > 100:
-            error = "Currently we only support multisets with up to 100 columns. Please contact connect@quandl.com if this is a problem."
-            raise MultisetLimit(error)
-        else:
-            if verbose and verbose != 'no':
-                print("Returning Dataframe for ", dataset)
+        if verbose and verbose != 'no':
+            print("Returning Dataframe for ", dataset)
 
     #Error catching
     except HTTPError as e:
@@ -132,11 +140,11 @@ def get(dataset, **kwargs):
 
     if returns == 'numpy':
         return urldata.to_records()
+
     return urldata
 
 def push(data, code, name, authtoken='', desc='', override=False, verbose=False, text=None):
     ''' Upload a pandas Dataframe to Quandl and returns link to the dataset.
-
     :param data: (required), pandas ts or numpy array
     :param str code: (required), Dataset code
                  must consist of only capital letters, numbers, and underscores
@@ -146,7 +154,6 @@ def push(data, code, name, authtoken='', desc='', override=False, verbose=False,
     :param bool overide: (optional), whether to overide dataset of same code
     :param bool verbose: specify whether to print output text to stdout, default is False.
     :param str text: Deprecated. Use `verbose` instead.
-
     :returns: :str: link to uploaded dataset'''
 
     override = str(override).lower()
@@ -213,13 +220,11 @@ def push(data, code, name, authtoken='', desc='', override=False, verbose=False,
 
 def search(query, source=None, page=1, authtoken=None, verbose=True, prints=None):
     """Return array of dictionaries of search results.
-
     :param str query: (required), query to search with
     :param str source: (optional), source to search
     :param +'ve int: (optional), page number of search 
     :param str authotoken: (optional) Quandl auth token for extended API access
     :returns: :array: search results
-
     """
 
     if prints is not None:
