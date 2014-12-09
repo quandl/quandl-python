@@ -5,6 +5,7 @@ Currently supports getting, searching, and pushing datasets.
 """
 from __future__ import (print_function, division, absolute_import,
                         unicode_literals)
+
 import pickle
 import datetime
 import json
@@ -13,6 +14,7 @@ import re
 from IPython import embed
 from dateutil import parser
 from numpy import genfromtxt
+from warnings import DeprecationWarning
 
 try:
     from urllib.error import HTTPError  # Python 3
@@ -58,7 +60,10 @@ def get(dataset, **kwargs):
     kwargs.setdefault('sort_order', 'asc')
     verbose = kwargs.get('verbose', False)
     if 'text' in kwargs:
-        print('Deprecated: "text" is deprecated and will be removed in next release, use "verbose" instead.')
+        warnings.warn(
+            """Deprecated: 'text' is deprecated and will be removed in next release, use 'verbose" instead.""",
+            DeprecationWarning
+            )        
         if isinstance(kwargs['text'], (strings, str)):
             if kwargs['text'].lower() in ['yes', 'y', 't', 'true', 'on']:
                 verbose = True
@@ -158,7 +163,10 @@ def push(data, code, name, authtoken='', desc='', override=False, verbose=False,
 
     override = str(override).lower()
     if text is not None:
-        print('Deprecated: "text" is deprecated and will be removed in next release, use "verbose" instead.')
+        warnings.warn(
+            """Deprecated: 'text' is deprecated and will be removed in next release, use 'verbose" instead.""",
+            DeprecationWarning
+            )            
         verbose = text
     token = _getauthtoken(authtoken, verbose)
     if token == '':
@@ -228,7 +236,10 @@ def search(query, source=None, page=1, authtoken=None, verbose=True, prints=None
     """
 
     if prints is not None:
-        print('Deprecated: "prints" is depreciated and will be removed in next release, use "verbose" instead.')
+        warnings.warn(
+            """Deprecated: "prints" is depreciated and will be removed in next release, use "verbose" instead.""",
+            DeprecationWarning
+            )            
         verbose = prints
     token = _getauthtoken(authtoken, verbose)
     search_url = 'http://www.quandl.com/api/v1/datasets.json?request_source=python&request_version=2&query='
