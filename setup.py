@@ -1,4 +1,4 @@
-from Quandl import __version__, __authors__, __github_url__, __maintainer__, __email__, __url__, __license__
+from Quandl import __version__, __authors__, __maintainer__, __email__, __url__, __license__
 from Quandl import __name__ as package_name
 import os
 
