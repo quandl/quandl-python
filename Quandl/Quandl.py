@@ -10,7 +10,6 @@ import datetime
 import json
 import pandas as pd
 import re
-from IPython import embed
 from dateutil import parser
 from numpy import genfromtxt
 
