@@ -54,22 +54,7 @@ def get(dataset, **kwargs):
     with no interference.
 
     """
-    kwargs.setdefault('sort_order', 'asc')
-    verbose = kwargs.get('verbose', False)
-    if 'text' in kwargs:
-        print('Deprecated: "text" is deprecated and will be removed in next release, use "verbose" instead.')
-        if isinstance(kwargs['text'], (strings, str)):
-            if kwargs['text'].lower() in ['yes', 'y', 't', 'true', 'on']:
-                verbose = True
-        else:
-            verbose = bool(kwargs['text'])
-    auth_token = _getauthtoken(kwargs.pop('authtoken', ''), verbose)
-    trim_start = _parse_dates(kwargs.pop('trim_start', None))
-    trim_end = _parse_dates(kwargs.pop('trim_end', None))
-    returns = kwargs.get('returns', 'pandas')
 
-
-    
     #Check whether dataset is given as a string (for a single dataset) or an array (for a multiset call)
     
     
@@ -104,7 +89,20 @@ def get(dataset, **kwargs):
     else:
         error = "Your dataset must either be specified as a string (containing a Quandl code) or an array (of Quandl codes)"
         raise WrongFormat(error)
-        
+    #parse parameters    
+    kwargs.setdefault('sort_order', 'asc')
+    verbose = kwargs.get('verbose', False)
+    if 'text' in kwargs:
+        print('Deprecated: "text" is deprecated and will be removed in next release, use "verbose" instead.')
+        if isinstance(kwargs['text'], (strings, str)):
+            if kwargs['text'].lower() in ['yes', 'y', 't', 'true', 'on']:
+                verbose = True
+        else:
+            verbose = bool(kwargs['text'])
+    auth_token = _getauthtoken(kwargs.pop('authtoken', ''), verbose)
+    trim_start = _parse_dates(kwargs.pop('trim_start', None))
+    trim_end = _parse_dates(kwargs.pop('trim_end', None))
+    returns = kwargs.get('returns', 'pandas')        
     #Append all parameters to API call
     url = _append_query_fields(url,
                                auth_token=auth_token,
