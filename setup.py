@@ -13,9 +13,9 @@ try:
 except:
     requirements = []
 install_requires=[str(req).split(' ')[0].strip() for req in requirements if req.req and not req.url]
-print 'Install requirements found in requirements.txt: %r' % install_requires
+print('Install requirements found in requirements.txt: %r' % install_requires)
 dependency_links=[req.url for req in requirements if req.url]
-print 'Dependencies found in requirements.txt: %r' % dependency_links
+print('Dependencies found in requirements.txt: %r' % dependency_links)
 
 
 setup(
