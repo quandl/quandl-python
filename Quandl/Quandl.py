@@ -228,7 +228,7 @@ def search(query, source=None, page=1, authtoken=None, verbose=True, prints=None
         print('Deprecated: "prints" is depreciated and will be removed in next release, use "verbose" instead.')
         verbose = prints
     token = _getauthtoken(authtoken, verbose)
-    search_url = 'http://www.quandl.com/api/v1/datasets.json?request_source=python&request_version=2&query='
+    search_url = QUANDL_API_URL + '/datasets.json?request_source=python&request_version=2&query='
     #parse query for proper API submission
     parsedquery = re.sub(" ", "+", query)
     parsedquery = re.sub("&", "+", parsedquery)
