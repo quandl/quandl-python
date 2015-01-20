@@ -26,7 +26,7 @@ except ImportError:
 
 
 #Base API call URL
-QUANDL_API_URL = 'http://www.quandl.com/api/v1/'
+QUANDL_API_URL = 'https://www.quandl.com/api/v1/'
 
 
 def get(dataset, **kwargs):
@@ -56,11 +56,11 @@ def get(dataset, **kwargs):
     """
 
     #Check whether dataset is given as a string (for a single dataset) or an array (for a multiset call)
-    
-    
+
+
     #Unicode String
     if type(dataset) == strings or type(dataset) == str:
-       
+
         if '.' in dataset:
             dataset_temp = dataset.split('.')
             dataset = dataset_temp[0]
@@ -84,12 +84,12 @@ def get(dataset, **kwargs):
             d.rename(columns = lambda x: specific_column_name + ' - ' + x, inplace = True)
             multiple_dataset_dataframe = pd.merge(multiple_dataset_dataframe,d,right_index = True,left_index = True,how='outer')
         return multiple_dataset_dataframe
-                
+
     #If wrong format
     else:
         error = "Your dataset must either be specified as a string (containing a Quandl code) or an array (of Quandl codes)"
         raise WrongFormat(error)
-    #parse parameters    
+    #parse parameters
     kwargs.setdefault('sort_order', 'asc')
     verbose = kwargs.get('verbose', False)
     if 'text' in kwargs:
@@ -102,7 +102,7 @@ def get(dataset, **kwargs):
     auth_token = _getauthtoken(kwargs.pop('authtoken', ''), verbose)
     trim_start = _parse_dates(kwargs.pop('trim_start', None))
     trim_end = _parse_dates(kwargs.pop('trim_end', None))
-    returns = kwargs.get('returns', 'pandas')        
+    returns = kwargs.get('returns', 'pandas')
     #Append all parameters to API call
     url = _append_query_fields(url,
                                auth_token=auth_token,
@@ -130,7 +130,7 @@ def get(dataset, **kwargs):
 
         #Catch all
         else:
-            if verbose and verbose != 'no':                    
+            if verbose and verbose != 'no':
                 print("url:", url)
             error = "Error Downloading! {}".format(e)
             raise ErrorDownloading(error)
@@ -219,7 +219,7 @@ def search(query, source=None, page=1, authtoken=None, verbose=True, prints=None
     """Return array of dictionaries of search results.
     :param str query: (required), query to search with
     :param str source: (optional), source to search
-    :param +'ve int: (optional), page number of search 
+    :param +'ve int: (optional), page number of search
     :param str authotoken: (optional) Quandl auth token for extended API access
     :returns: :array: search results
     """
@@ -239,7 +239,7 @@ def search(query, source=None, page=1, authtoken=None, verbose=True, prints=None
     #Add search source if given
     if source:
         url += '&source_code=' + source
-    #Page to be searched 
+    #Page to be searched
     url += '&page=' + str(page)
     text= urlopen(url).read().decode("utf-8")
     data = json.loads(text)
@@ -314,7 +314,7 @@ def _getauthtoken(token,text):
             pickle.dump(token, open('authtoken.p', 'wb'))
             if text == "no" or text == False:
                 pass
-                
+
             else:
                 print("Token {} activated and saved for later use.".format(token))
         except Exception as e:
