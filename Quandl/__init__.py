@@ -8,7 +8,7 @@ __maintainer__ = 'Chris Stevens'
 __email__ = 'connect@quandl.com'
 __url__ = 'http://www.quandl.com/'
 __license__ = 'MIT'
-__version__ = '1.5'
+__version__ = '2.8.6'
 
 #############################################
 #
