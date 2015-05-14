@@ -27,6 +27,7 @@ except ImportError:
 
 #Base API call URL
 QUANDL_API_URL = 'https://www.quandl.com/api/v1/'
+VERSION = '2.8.7'
 
 
 def get(dataset, **kwargs):
@@ -228,7 +229,7 @@ def search(query, source=None, page=1, authtoken=None, verbose=True, prints=None
         print('Deprecated: "prints" is depreciated and will be removed in next release, use "verbose" instead.')
         verbose = prints
     token = _getauthtoken(authtoken, verbose)
-    search_url = QUANDL_API_URL + '/datasets.json?request_source=python&request_version=2&query='
+    search_url = QUANDL_API_URL + '/datasets.json?request_source=python&request_version=' + VERSION + '&query='
     #parse query for proper API submission
     parsedquery = re.sub(" ", "+", query)
     parsedquery = re.sub("&", "+", parsedquery)
@@ -339,7 +340,7 @@ def _getauthtoken(token,text):
 def _append_query_fields(url, **kwargs):
     field_values = ['{0}={1}'.format(key, val)
                     for key, val in kwargs.items() if val]
-    return url + 'request_source=python&request_version=2&' +'&'.join(field_values)
+    return url + 'request_source=python&request_version=' + VERSION + '&' +'&'.join(field_values)
 
 # Setup custom Exceptions
 
