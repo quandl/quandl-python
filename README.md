@@ -2,12 +2,8 @@ Quandl API for Python
 =====================
 Basic wrapper to return datasets from the Quandl website as Pandas dataframe objects with a timeseries index, or as a numpy array. This allows interactive manipulation of the results via IPython or storage of the datasets using Pandas I/O functions. You will need a familarity with [pandas](http://pandas.pydata.org/) to get the most out of this.
 
-See the [Quandl API](http://www.quandl.com/api) for more information.
-
-
 Usage
 =====
-Usage is simple and mirrors the functionality found at [Quandl/API](http://www.quandl.com/api).
 
 A request with a full list of options would be the following.
 
