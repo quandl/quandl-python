@@ -3,6 +3,7 @@ import re
 import requests
 
 from .util import Util
+from .version import VERSION
 from .api_config import ApiConfig
 from quandl.errors.quandl_error import (
     QuandlError, LimitExceededError, InternalServerError,
@@ -22,7 +23,9 @@ class Connection:
         if ApiConfig.api_version:
             accept_value += ", application/vnd.quandl+json;version=%s" % ApiConfig.api_version
 
-        headers = Util.merge_to_dicts({'accept': accept_value}, headers)
+        headers = Util.merge_to_dicts({'accept': accept_value,
+                                       'request-source': 'python',
+                                       'request-source-version': VERSION}, headers)
         if ApiConfig.api_key:
             headers = Util.merge_to_dicts({'x-api-token': ApiConfig.api_key}, headers)
 
