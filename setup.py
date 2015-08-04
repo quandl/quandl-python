@@ -1,3 +1,4 @@
+import os
 import sys
 
 try:
@@ -7,6 +8,10 @@ except ImportError:
 
 with open('LONG_DESCRIPTION.rst') as f:
     long_description = f.read()
+
+# Don't import quandl module here, since deps may not be installed
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'quandl'))
+from version import VERSION
 
 install_requires = [
     'pandas >= 0.14',
@@ -40,7 +45,7 @@ setup(
     name='quandl',
     description='Package for quandl API access',
     long_description=long_description,
-    version='3.0.0',
+    version=VERSION,
     author='Quandl',
     maintainer='Quandl Development Team',
     maintainer_email='dev@quandl.com',

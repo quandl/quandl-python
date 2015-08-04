@@ -55,6 +55,8 @@ class ConnectionTest(unittest2.TestCase):
                         headers={'x-custom-header': 'header value',
                                  'x-api-token': 'api_token',
                                  'accept': ('application/json, '
-                                            'application/vnd.quandl+json;version=2015-04-09')},
+                                            'application/vnd.quandl+json;version=2015-04-09'),
+                                 'request-source': 'python',
+                                 'request-source-version': '3.0.0'},
                         params={'per_page': 10, 'page': 2})
         self.assertEqual(mock.call_args, expected)
