@@ -13,6 +13,7 @@ import six
 from quandl.errors.quandl_error import (InternalServerError, QuandlError)
 from quandl.api_config import ApiConfig
 from quandl.model.database import Database
+from quandl.connection import Connection
 from mock import patch, call, mock_open
 from test.factories.database import DatabaseFactory
 from test.factories.meta import MetaFactory
@@ -131,39 +132,39 @@ class BulkDownloadDatabaseTest(unittest2.TestCase):
         database = {'database': DatabaseFactory.build(database_code='NSE')}
         self.database = Database(database['database'])
         ApiConfig.api_key = 'api_token'
+        ApiConfig.api_version = '2015-04-09'
 
     def test_get_bulk_downnload_url_with_download_type(self):
-        url = self.database.bulk_download_url(download_type='partial')
+        url = self.database.bulk_download_url(params={'download_type': 'partial'})
         parsed_url = urlparse(url)
         self.assertEqual(parsed_url.scheme, 'https')
         self.assertEqual(parsed_url.netloc, 'www.quandl.com')
         self.assertEqual(parsed_url.path, '/api/v3/databases/NSE/data')
         self.assertDictEqual(parse_qs(parsed_url.query), {
-                             'download_type': ['partial'], 'api_key': ['api_token']})
+                             'download_type': ['partial'],
+                             'api_key': ['api_token'], 'api_version': ['2015-04-09']})
 
     def test_get_bulk_download_url_without_download_type(self):
         url = self.database.bulk_download_url()
-        self.assertEqual(url, 'https://www.quandl.com/api/v3/databases/' +
-                         'NSE/data?api_key=api_token')
+        parsed_url = urlparse(url)
+        self.assertDictEqual(parse_qs(parsed_url.query), {
+                             'api_key': ['api_token'], 'api_version': ['2015-04-09']})
 
     def test_bulk_download_to_fileaccepts_download_type(self):
         m = mock_open()
-        with patch.object(Database, 'bulk_download_url') as mock_method:
-            mock_method.return_value = 'https://www.quandl.com/api/v3/databases/NSE/data'
+        with patch.object(Connection, 'request') as mock_method:
+            mock_method.return_value.url = 'https://www.blah.com/download/db.zip'
             with patch('quandl.model.database.open', m, create=True):
                 self.database.bulk_download_to_file(
-                    '.', download_type='partial')
+                    '.', params={'download_type': 'partial'})
 
-        expected = call(
-            download_type='partial', include_key=True, path_only=True)
+        expected = call('get', 'databases/NSE/data', params={'download_type': 'partial'}, stream=True)
         self.assertEqual(mock_method.call_args, expected)
 
     def test_bulk_download_to_file_writes_to_file(self):
         m = mock_open()
-        with patch.object(Database, 'bulk_download_url') as mock_method:
-            mock_method.return_value = 'https://www.quandl.com/api/v3/databases/NSE/data'
-            with patch('quandl.model.database.open', m, create=True):
-                self.database.bulk_download_to_file('.')
+        with patch('quandl.model.database.open', m, create=True):
+            self.database.bulk_download_to_file('.')
 
         m.assert_called_once_with(six.u('./db.zip'), 'wb')
         m().write.assert_called_once_with(six.b('{}'))

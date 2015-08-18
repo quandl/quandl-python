@@ -137,9 +137,9 @@ You can also retrieve the dataset through the database by using the helper metho
 quandl.Database.get('WIKI').datasets()
 ```
 
-### Database Bulk Download
+### Download Entire Database (Bulk Download)
 
-To get the url for bulk download of all datasets data of a database:
+To get the url for downloading all dataset data of a database:
 
 ```python
 import quandl
@@ -148,19 +148,19 @@ quandl.Database.get('ZEA').bulk_download_url()
 => "https://www.quandl.com/api/v3/databases/ZEA/data?api_key=tEsTkEy123456789"
 ```
 
-To bulk download all datasets data of a database:
+To bulk download all dataset data of a database:
 
 ```python
 quandl.ApiConfig.api_key = 'tEsTkEy123456789'
-quandl.Database.get('ZEA').bulk_download_to_file('/path/to/destination/folder')
+quandl.Database.get('ZEA').bulk_download_to_file('/path/to/destination/folder_or_file_path')
 ```
 
 For bulk download of premium databases, please ensure that a valid `api_key` is set, as authentication is required.
 
-For both `bulk_download_url` and `bulk_download_to_file`, an optional `download_type` parameter can be passed in:
+For both `bulk_download_url` and `bulk_download_to_file`, an optional `download_type` query parameter can be passed in:
 
 ```python
-quandl.Database.get('ZEA').bulk_download_to_file('.', download_type='partial')
+quandl.Database.get('ZEA').bulk_download_to_file('.', params={'download_type': 'partial'})
 ```
 
 If `download_type` is not specified, a `complete` bulk download will be performed. Please see the [API Documentation](https://www.quandl.com/docs/api) for more detail.
