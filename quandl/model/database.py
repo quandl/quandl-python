@@ -5,7 +5,7 @@ except ImportError:
     from urlparse import urlparse
     from urllib import urlencode
 
-from os.path import basename
+import os
 
 from quandl.api_config import ApiConfig
 from quandl.connection import Connection
@@ -20,37 +20,42 @@ class Database(GetOperation, ListOperation, ModelBase):
     BULK_CHUNK_SIZE = 512
 
     def bulk_download_url(self, **options):
-        url = self.default_path() + '/data'
-        if 'path_only' not in options or not options['path_only']:
-            url = ApiConfig.api_base + '/' + url
-        url = Util.constructed_path(url, {'id': self.database_code})
+        url = self._bulk_download_path()
+        url = ApiConfig.api_base + '/' + url
 
-        params = {}
-        if 'download_type' in options:
-            params['download_type'] = options['download_type']
-        if ('include_key' not in options or options['include_key']) \
-                and ApiConfig.api_key:
-            params['api_key'] = ApiConfig.api_key
+        if 'params' not in options:
+            options['params'] = {}
+        if ApiConfig.api_key:
+            options['params']['api_key'] = ApiConfig.api_key
+        if ApiConfig.api_version:
+            options['params']['api_version'] = ApiConfig.api_version
 
-        if list(params.keys()):
-            url += '?' + urlencode(params)
+        if list(options.keys()):
+            url += '?' + urlencode(options['params'])
 
         return url
 
-    def bulk_download_to_file(self, folder_path, **options):
-        if not isinstance(folder_path, str):
+    def bulk_download_to_file(self, file_or_folder_path, **options):
+        if not isinstance(file_or_folder_path, str):
             raise QuandlError('You must present a valid folder path.')
 
-        options = Util.merge_to_dicts({'include_key': True, 'path_only': True}, options)
-        path_url = self.bulk_download_url(**options)
+        path_url = self._bulk_download_path()
 
-        r = Connection.request('get', path_url, stream=True)
-        file_path = folder_path + '/' + basename(urlparse(r.url).path)
+        options['stream'] = True
+        r = Connection.request('get', path_url, **options)
+        file_path = file_or_folder_path
+        if os.path.isdir(file_or_folder_path):
+            file_path = file_or_folder_path + '/' + os.path.basename(urlparse(r.url).path)
         with open(file_path, 'wb') as fd:
             for chunk in r.iter_content(self.BULK_CHUNK_SIZE):
                 fd.write(chunk)
 
         return file_path
+
+    def _bulk_download_path(self):
+        url = self.default_path() + '/data'
+        url = Util.constructed_path(url, {'id': self.database_code})
+        return url
 
     def datasets(self, **options):
         params = {'database_code': self.database_code, 'query': '', 'page': 1}
