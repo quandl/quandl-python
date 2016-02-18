@@ -20,37 +20,10 @@ You can then view the dataframe with `data.head()`.
 
 See the [pandas documentation](http://pandas.pydata.org/) for a wealth of options on data manipulation.
 
-Authtokens are saved as pickled files in the local directory so it is unnecessary to enter them more than once,
+Authtokens are sav
+ed as pickled files in the local directory so it is unnecessary to enter them more than once,
 unless you change your working directory. To replace simply save the new token or delete the `authtoken.p` file.
 
-
-## Search Example
-Using the search function you can search Quandl, specifying what sources to search, and what page you wish to show.
-
-	Quandl.search(query = "Search terms", source = "Source you wish to search", page = 1)
-
-An example of searching for datasets having to do with oil: 
-
-	python
-	import Quandl
-	datasets = Quandl.search('OIL')
-	datasets[0]
-
-
-will output:
-
-	{u'code': u'NSE/OIL',
-	 u'colname': [u'Date',
-  	 u'Open',
-  	 u'High',
-  	u'Low',
-  	u'Last',
-  	u'Close',
-  	u'Total Trade Quantity',
-  	u'Turnover (Lacs)'],
- 	u'desc': u'Historical prices for Oil India Limited (OIL), (ISIN: INE274J01014),  	 National Stock Exchange of India.',
- 	u'freq': u'daily',
- 	u'name': u'Oil India Limited'}
 
 
 ## Get Example
@@ -77,9 +50,8 @@ Date
 ```
 
 
-### Multisets
+### Download Multiple Codes
 
-Quandl's [multisets](http://www.quandl.com/help/multisets) allows you to create a collection of data, from any column of any dataset on Quandl, and download it as one dataset.
 
 If you wanted to compare the closing prices for Apple and Microsoft, you would obtain the two Quandl codes:
 
