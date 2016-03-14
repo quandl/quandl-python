@@ -4,6 +4,7 @@ import httpretty
 import json
 import datetime
 from quandl.model.dataset import Dataset
+from quandl.model.database import Database
 from mock import patch, call
 from test.factories.dataset import DatasetFactory
 from test.factories.meta import MetaFactory
@@ -20,7 +21,7 @@ class GetDatasetTest(unittest2.TestCase):
                                re.compile(
                                    'https://www.quandl.com/api/v3/datasets/*'),
                                body=json.dumps(dataset))
-        cls.dataset_instance = Dataset(dataset['dataset'])
+        cls.dataset_instance = Dataset(Dataset.get_code_from_meta(dataset['dataset']), dataset['dataset'])
 
     @classmethod
     def tearDownClass(cls):
@@ -29,30 +30,29 @@ class GetDatasetTest(unittest2.TestCase):
 
     @patch('quandl.connection.Connection.request')
     def test_dataset_calls_connection(self, mock):
-        Dataset.get('NSE/OIL')
+        d = Dataset('NSE/OIL')
+        d.data_fields()
         expected = call('get', 'datasets/NSE/OIL/metadata', params={})
         self.assertEqual(mock.call_args, expected)
 
     def test_dataset_returns_dataset_object(self):
-        dataset = Dataset.get('NSE/OIL')
+        dataset = Dataset('NSE/OIL')
         self.assertIsInstance(dataset, Dataset)
         self.assertEqual(dataset.dataset_code, 'OIL')
 
     def test_dataset_attributes_are_datetime_objects(self):
-        dataset = Dataset.get('NSE/OIL')
+        dataset = Dataset('NSE/OIL')
         self.assertIsInstance(dataset.refreshed_at, datetime.datetime)
         self.assertIsInstance(dataset.newest_available_date, datetime.date)
 
     def test_dataset_column_names_match_expected(self):
-        dataset = Dataset.get('NSE/OIL')
+        dataset = Dataset('NSE/OIL')
         self.assertItemsEqual(
             dataset.column_names, ['Date', 'column.1', 'column.2', 'column.3'])
 
-    @patch('quandl.model.database.Database.get')
-    def test_dataset_database_calls_database_get(self, mock):
-        self.dataset_instance.database()
-        expected = call('NSE')
-        self.assertEqual(mock.call_args, expected)
+    def test_dataset_database_gives_instance_of_database(self):
+        database = self.dataset_instance.database()
+        self.assertIsInstance(database, Database)
 
     @patch('quandl.model.data.Data.all')
     def test_dataset_data_calls_data_all(self, mock):

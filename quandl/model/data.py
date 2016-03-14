@@ -9,10 +9,10 @@ class Data(DataListOperation, DataMixin, ModelBase):
     def __init__(self, data, **options):
         self.meta = options['meta']
         converted_column_names = list([Util.methodize(x) for x in options['meta']['column_names']])
-        self.raw_data = Util.convert_to_dates(OrderedDict(list(zip(converted_column_names, data))))
+        self._raw_data = Util.convert_to_dates(OrderedDict(list(zip(converted_column_names, data))))
 
     def __getattr__(self, k):
-        if k[0] == '_':
+        if k[0] == '_' and k != '_raw_data':
             raise AttributeError(k)
         elif k in self.meta:
             return self.meta[k]

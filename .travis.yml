@@ -5,14 +5,11 @@ python:
   - "3.2"
   - "3.3"
   - "3.4"
+  - "3.5"
 install:
   - pip install flake8
   - pip install -r requirements.txt
 script:
   - flake8 quandl
   - python -W always setup.py -q test
-cache:
-  directories:
-    - $HOME/.cache/pip
-    - ./.eggs
-    - ./quandl.egg-info
+cache: pip
