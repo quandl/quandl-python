@@ -1,6 +1,6 @@
 import re
 import unittest2
-import httpretty
+from test.helpers.httpretty_extension import httpretty
 import json
 import datetime
 from quandl.model.dataset import Dataset
