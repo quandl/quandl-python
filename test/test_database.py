@@ -38,12 +38,13 @@ class GetDatabaseTest(unittest2.TestCase):
 
     @patch('quandl.connection.Connection.request')
     def test_database_calls_connection(self, mock):
-        Database.get('NSE')
+        database = Database('NSE')
+        database.data_fields()
         expected = call('get', 'databases/NSE', params={})
         self.assertEqual(mock.call_args, expected)
 
     def test_database_returns_database_object(self):
-        database = Database.get('NSE')
+        database = Database('NSE')
         self.assertIsInstance(database, Database)
         self.assertEqual(database.database_code, 'NSE')
 
@@ -130,7 +131,7 @@ class BulkDownloadDatabaseTest(unittest2.TestCase):
 
     def setUp(self):
         database = {'database': DatabaseFactory.build(database_code='NSE')}
-        self.database = Database(database['database'])
+        self.database = Database(database['database']['database_code'], database['database'])
         ApiConfig.api_key = 'api_token'
         ApiConfig.api_version = '2015-04-09'
 
@@ -158,7 +159,10 @@ class BulkDownloadDatabaseTest(unittest2.TestCase):
                 self.database.bulk_download_to_file(
                     '.', params={'download_type': 'partial'})
 
-        expected = call('get', 'databases/NSE/data', params={'download_type': 'partial'}, stream=True)
+        expected = call('get',
+                        'databases/NSE/data',
+                        params={'download_type': 'partial'},
+                        stream=True)
         self.assertEqual(mock_method.call_args, expected)
 
     def test_bulk_download_to_file_writes_to_file(self):

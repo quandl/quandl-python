@@ -39,11 +39,9 @@ class GetMergedDatasetTest(unittest2.TestCase):
             database_code='GOOG', dataset_code='NASDAQ_MSFT',
             newest_available_date='2015-07-30', oldest_available_date='2013-01-01')}
 
-        self.oil_obj = Dataset(self.nse_oil['dataset'])
-        self.aapl_obj = Dataset(self.goog_aapl['dataset'])
-        self.goog_obj = Dataset(self.goog_msft['dataset'])
-
-        self.dataset_objs = [self.oil_obj, self.aapl_obj, self.goog_obj]
+        self.oil_obj = Dataset('NSE/OIL', self.nse_oil['dataset'])
+        self.aapl_obj = Dataset('GOOG/AAPL', self.goog_aapl['dataset'])
+        self.goog_obj = Dataset('GOOG/MSFT', self.goog_msft['dataset'])
 
         httpretty.register_uri(httpretty.GET,
                                re.compile(
@@ -61,15 +59,17 @@ class GetMergedDatasetTest(unittest2.TestCase):
         httpretty.disable()
         httpretty.reset()
 
-    @patch('quandl.model.dataset.Dataset.get')
-    def test_merged_dataset_calls_Dataset_get(self, mock):
+    @patch('quandl.model.merged_dataset.MergedDataset._get_dataset')
+    def test_merged_dataset_calls_merged_dataset_get_dataset(self, mock):
         mock.return_value = self.oil_obj
-        MergedDataset.get(
+        md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
              ('GOOG/NASDAQ_MSFT')])
+        md.data_fields()
+
         expected_calls = [
-            call('NSE/OIL'), call('GOOG/NASDAQ_AAPL'), call('GOOG/NASDAQ_MSFT')]
+            call(('NSE/OIL', {'column_index': [1, 2]})), call(('GOOG/NASDAQ_AAPL', {'column_index': [1]})), call('GOOG/NASDAQ_MSFT')]
         self.assertEqual(mock.call_count, 3)
         for index, expected in enumerate(expected_calls):
             self.assertEqual(mock.mock_calls[index], expected)
@@ -78,22 +78,34 @@ class GetMergedDatasetTest(unittest2.TestCase):
     def test_removes_column_index_query_param(self, mock):
         self.oil_obj.column_index = []
         mock.return_value = self.oil_obj
-        MergedDataset.get(
+        md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]})], params={'column_index': 1})
+        md.data_fields()
         expected = call(('NSE/OIL', {'column_index': [1, 2]}), params={})
         self.assertEqual(mock.call_args, expected)
 
-    def test_sets_column_index_on_each_dataset(self):
-        md = MergedDataset.get(
+    def test_sets_dataset_codes_for_the_datasets(self):
+        md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
              ('GOOG/NASDAQ_MSFT')])
+        self.assertEqual(md._datasets, None)
+        self.assertItemsEqual([1, 2], md.dataset_codes[0][1]['column_index'])
+        self.assertItemsEqual([1], md.dataset_codes[1][1]['column_index'])
+        self.assertEqual('O', md.dataset_codes[2][1])
+
+    def test_sets_column_index_on_each_dataset(self):
+        md = MergedDataset(
+            [('NSE/OIL', {'column_index': [1, 2]}),
+             ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
+             ('GOOG/NASDAQ_MSFT')])
+        md.data_fields()
         self.assertItemsEqual([1, 2], md._datasets[0].column_index)
         self.assertItemsEqual([1], md._datasets[1].column_index)
         self.assertItemsEqual([], md._datasets[2].column_index)
 
     def test_merged_dataset_column_names(self):
-        md = MergedDataset.get(
+        md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
              ('GOOG/NASDAQ_MSFT')])
@@ -106,28 +118,28 @@ class GetMergedDatasetTest(unittest2.TestCase):
         self.assertItemsEqual(md.column_names, expected)
 
     def test_merged_dataset_oldest_available_date(self):
-        md = MergedDataset.get(
+        md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
              ('GOOG/NASDAQ_MSFT')])
         self.assertEqual(md.oldest_available_date, datetime.date(2013, 1, 1))
 
     def test_merged_dataset_newest_available_date(self):
-        md = MergedDataset.get(
+        md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
              ('GOOG/NASDAQ_MSFT')])
         self.assertEqual(md.newest_available_date, datetime.date(2015, 7, 30))
 
     def test_merged_dataset_database_codes(self):
-        md = MergedDataset.get(
+        md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
              ('GOOG/NASDAQ_MSFT')])
         self.assertItemsEqual(md.database_code, ['NSE', 'GOOG'])
 
     def test_merged_dataset_dataset_codes(self):
-        md = MergedDataset.get(
+        md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
              ('GOOG/NASDAQ_MSFT')])
@@ -135,32 +147,32 @@ class GetMergedDatasetTest(unittest2.TestCase):
             md.dataset_code, ['OIL', 'NASDAQ_AAPL', 'NASDAQ_MSFT'])
 
     def test_get_returns_merged_dataset_obj(self):
-        md = MergedDataset.get(['NSE/OIL'])
+        md = MergedDataset(['NSE/OIL'])
         self.assertIsInstance(md, MergedDataset)
 
     def test_raise_error_when_datasets_arg_not_list(self):
-        self.assertRaises(ValueError, lambda: MergedDataset.get('NSE/OIL'))
+        self.assertRaises(ValueError, lambda: MergedDataset('NSE/OIL').data_fields())
 
     def test_raise_error_when_datasets_arg_list_has_invalid_type(self):
         self.assertRaises(
-            ValueError, lambda: MergedDataset.get(['NSE/OIL', {'blah': [1]}]))
+            ValueError, lambda: MergedDataset(['NSE/OIL', {'blah': [1]}]).data_fields())
 
     def test_raise_error_when_column_index_specified_and_not_list(self):
-        self.assertRaises(ValueError, lambda: MergedDataset.get(
-            [('NSE/OIL', {'column_index': 'foo'})]))
+        self.assertRaises(ValueError, lambda: MergedDataset(
+            [('NSE/OIL', {'column_index': 'foo'})]).data_fields())
 
     def test_raise_error_when_column_index_greater_than_max(self):
         self.assertRaises(
-            ValueError, lambda: MergedDataset.get([('NSE/OIL', {'column_index': [10]})]))
+            ValueError, lambda: MergedDataset([('NSE/OIL', {'column_index': [10]})]).data_fields())
 
     def test_raise_error_when_column_index_less_than_one(self):
         self.assertRaises(
-            ValueError, lambda: MergedDataset.get([('NSE/OIL', {'column_index': [0]})]))
+            ValueError, lambda: MergedDataset([('NSE/OIL', {'column_index': [0]})]).data_fields())
 
     @patch.object(Dataset, 'data')
     def test_data_forwards_requests_to_datset_data(self, mock_method):
         mock_method.return_value = self.data_list_obj
-        MergedDataset.get(
+        MergedDataset(
             ['NSE/OIL', 'GOOG/NASDAQ_AAPL',
              'GOOG/NASDAQ_MSFT']).data(params={'start_date': '2015-07-01'})
         self.assertEqual(mock_method.call_count, 3)
@@ -168,7 +180,7 @@ class GetMergedDatasetTest(unittest2.TestCase):
             self.assertEqual(actual, call(params={'start_date': '2015-07-01'}))
 
     def test_get_merged_dataset_data_returns_correct_types(self):
-        data = MergedDataset.get(
+        data = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
              ('GOOG/NASDAQ_MSFT')]).data()
@@ -176,14 +188,14 @@ class GetMergedDatasetTest(unittest2.TestCase):
         self.assertIsInstance(data[0], Data)
 
     def test_get_merged_dataset_creates_merged_pandas_dataframe(self):
-        data = MergedDataset.get(
+        data = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
              ('GOOG/NASDAQ_MSFT')]).data()
         self.assertIsInstance(data.to_pandas(), pandas.core.frame.DataFrame)
 
     def test_get_merged_dataset_data_returns_specified_columns(self):
-        data = MergedDataset.get(
+        data = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
              ('GOOG/NASDAQ_MSFT')]).data()
@@ -197,7 +209,7 @@ class GetMergedDatasetTest(unittest2.TestCase):
         self.assertItemsEqual(actual, expected)
 
     def test_get_merged_dataset_data_to_list(self):
-        data = MergedDataset.get(
+        data = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
              ('GOOG/NASDAQ_MSFT', {'column_index': [3]})]).data()
@@ -210,7 +222,7 @@ class GetMergedDatasetTest(unittest2.TestCase):
             self.assertItemsEqual(results[index], expected_item)
 
     def test_get_merged_dataset_data_is_descending_when_specified_in_params(self):
-        data = MergedDataset.get(['NSE/OIL', 'GOOG/NASDAQ_AAPL',
+        data = MergedDataset(['NSE/OIL', 'GOOG/NASDAQ_AAPL',
                                   'GOOG/NASDAQ_MSFT']).data(params={'order': 'desc'})
         results = data.to_list()
         dates = list([x[0] for x in results])

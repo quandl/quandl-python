@@ -5,7 +5,7 @@ from quandl.model.model_base import ModelBase
 class ModelTest(unittest2.TestCase):
 
     def setUp(self):
-        self.model = ModelBase({'foo': 'bar', 'here': 1})
+        self.model = ModelBase('foo', {'foo': 'bar', 'here': 1})
 
     def test_data_fields_returns_list_of_attribute_keys(self):
         data_fields = self.model.data_fields()
