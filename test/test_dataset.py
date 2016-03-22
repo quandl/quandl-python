@@ -21,7 +21,8 @@ class GetDatasetTest(unittest2.TestCase):
                                re.compile(
                                    'https://www.quandl.com/api/v3/datasets/*'),
                                body=json.dumps(dataset))
-        cls.dataset_instance = Dataset(Dataset.get_code_from_meta(dataset['dataset']), dataset['dataset'])
+        dataset_code = Dataset.get_code_from_meta(dataset['dataset'])
+        cls.dataset_instance = Dataset(dataset_code, dataset['dataset'])
 
     @classmethod
     def tearDownClass(cls):
