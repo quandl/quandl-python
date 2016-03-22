@@ -9,10 +9,12 @@ from .model.dataset import Dataset
 from .model.datatable import Datatable
 from .model.data import Data
 from .model.merged_dataset import MergedDataset
+import warnings
 import copy, os, sys
 
 def get_table(code, **options):
-    paginate = options.pop('paginate')
+    paginate = None
+    if 'paginate' in options.keys(): paginate = options.pop('paginate')
     row_limit = 100
     data = None
     while True:
@@ -26,7 +28,7 @@ def get_table(code, **options):
 
         if len(data.values) >= row_limit:
             if os.isatty(sys.stdout.fileno()):
-                print "data over row limit, rest data won't include"
+                warnings.warn("data over row limit, rest data won't include", UserWarning)
             break
 
         next_cursor_id = next_data.meta['next_cursor_id']
@@ -34,7 +36,7 @@ def get_table(code, **options):
             break
         elif paginate is not True and next_cursor_id is not None:
             if os.isatty(sys.stdout.fileno()):
-                print "This is the first page, for more pages, please use 'paginate=True'"
+                warnings.warn("This is the first page, for more pages, please use 'paginate=True'", UserWarning)
             break
 
         options['qopts.cursor_id'] = next_cursor_id
