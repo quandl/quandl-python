@@ -19,6 +19,10 @@ from .model_base import ModelBase
 class Database(GetOperation, ListOperation, ModelBase):
     BULK_CHUNK_SIZE = 512
 
+    @classmethod
+    def get_code_from_meta(cls, metadata):
+        return metadata['database_code']
+
     def bulk_download_url(self, **options):
         url = self._bulk_download_path()
         url = ApiConfig.api_base + '/' + url

@@ -1,7 +1,10 @@
 class ModelList(object):
     def __init__(self, klass, values, meta):
         self.klass = klass
-        self.values = list([klass(x, meta=meta) for x in values])
+        if hasattr(klass, 'get_code_from_meta'):
+            self.values = list([klass(klass.get_code_from_meta(x), x, meta=meta) for x in values])
+        else:
+            self.values = list([klass(x, meta=meta) for x in values])
         self.meta = meta
 
     def to_list(self):

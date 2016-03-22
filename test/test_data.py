@@ -104,10 +104,10 @@ class ListDataTest(unittest2.TestCase):
     def test_raw_data_is_zip_of_column_names_and_data(self):
         results = Data.all(
             params={'database_code': 'NSE', 'dataset_code': 'OIL'})
-        self.assertItemsEqual(results[0].raw_data, self.expected_raw_data[0])
-        self.assertItemsEqual(results[1].raw_data, self.expected_raw_data[1])
-        self.assertItemsEqual(results[2].raw_data, self.expected_raw_data[2])
-        self.assertItemsEqual(results[3].raw_data, self.expected_raw_data[3])
+        self.assertItemsEqual(results[0].__get_raw_data__(), self.expected_raw_data[0])
+        self.assertItemsEqual(results[1].__get_raw_data__(), self.expected_raw_data[1])
+        self.assertItemsEqual(results[2].__get_raw_data__(), self.expected_raw_data[2])
+        self.assertItemsEqual(results[3].__get_raw_data__(), self.expected_raw_data[3])
 
     def test_data_to_list(self):
         list_data = Data.all(
