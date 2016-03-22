@@ -14,7 +14,8 @@ class ModelBase(object):
             raise AttributeError(k)
         elif k in self.__get_raw_data__():
             return self.__get_raw_data__()[k]
-        raise AttributeError(k)
+        else:
+            raise AttributeError(k)
 
     def __getitem__(self, k):
         return self.__get_raw_data__()[k]
