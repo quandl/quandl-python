@@ -1,8 +1,15 @@
+from quandl.util import Util
+
+
 class ModelList(object):
     def __init__(self, klass, values, meta):
         self.klass = klass
+        if 'columns' in meta.keys():
+            meta['columns'] = Util.convert_to_colums_list(meta['columns'])
+
         if hasattr(klass, 'get_code_from_meta'):
-            self.values = list([klass(klass.get_code_from_meta(x), x, meta=meta) for x in values])
+            self.values = list([klass(klass.get_code_from_meta(x), x,
+                                      meta=meta) for x in values])
         else:
             self.values = list([klass(x, meta=meta) for x in values])
         self.meta = meta
