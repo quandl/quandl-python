@@ -7,8 +7,11 @@ import pandas
 import numpy
 import six
 from quandl.model.data import Data
+from quandl.model.datatable import Datatable
 from mock import patch, call
 from test.factories.dataset_data import DatasetDataFactory
+from test.factories.datatable_data import DatatableDataFactory
+from test.factories.datatable_meta import DatatableMetaFactory
 from quandl.errors.quandl_error import InvalidDataError
 
 
@@ -22,6 +25,7 @@ class DataTest(unittest2.TestCase):
                                meta={'column_names': cls.expected_column_names})
 
     def test_to_pandas_returns_pandas_dataframe_object(self):
+
         data = self.data_object.to_pandas()
         self.assertIsInstance(data, pandas.core.frame.DataFrame)
 
@@ -45,7 +49,6 @@ class DataTest(unittest2.TestCase):
 
     def test_meta_exists(self):
         self.assertIsNotNone(self.data_object.meta)
-
 
 class ListDataTest(unittest2.TestCase):
 

@@ -17,5 +17,18 @@ class DataListOperation(ListOperation):
         return DataList(cls, values, metadata)
 
     @classmethod
+    def create_datatable_list_from_response(cls, data):
+        if len(data['datatable']['data']) > 0 \
+                and len(data['datatable']['columns']) != len(
+                    data['datatable']['data'][0]):
+            raise InvalidDataError(
+                'number of column names does not match number of data points in a row!',
+                response_data=data)
+        values = data['datatable'].pop('data')
+        metadata = {'columns': data['datatable']['columns'],
+                    'next_cursor_id': data['meta']['next_cursor_id']}
+        return DataList(cls, values, metadata)
+
+    @classmethod
     def list_path(cls):
         return "datasets/:database_code/:dataset_code/data"

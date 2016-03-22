@@ -8,7 +8,11 @@ from .data_mixin import DataMixin
 class Data(DataListOperation, DataMixin, ModelBase):
     def __init__(self, data, **options):
         self.meta = options['meta']
-        converted_column_names = list([Util.methodize(x) for x in options['meta']['column_names']])
+        if 'column_names' in options['meta'].keys():
+            the_list = [Util.methodize(x) for x in options['meta']['column_names']]
+            converted_column_names = list(the_list)
+        else:
+            converted_column_names = list([Util.methodize(x) for x in options['meta']['columns']])
         self._raw_data = Util.convert_to_dates(OrderedDict(list(zip(converted_column_names, data))))
 
     def __getattr__(self, k):
