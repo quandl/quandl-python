@@ -79,8 +79,8 @@ class Util(object):
         return {'params': new_options}
 
     @staticmethod
-    def convert_to_colums_list(meta):
+    def convert_to_colums_list(meta, type):
         columns = []
         for key in meta:
-            columns.extend([key['name']])
+            columns.extend([key[type]])
         return columns

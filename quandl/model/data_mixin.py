@@ -10,9 +10,12 @@ class DataMixin(object):
             data = [data]
         if 'columns' in self.meta.keys():
             df = pd.DataFrame(data=data, columns=self.columns)
+            for index, type in enumerate(self.columns_type):
+                if type == 'Date':
+                    df[self.columns[index]] = df[self.columns[index]].apply(pd.to_datetime)
         else:
             df = pd.DataFrame(data=data, columns=self.column_names)
-        # ensure our first column of time series data is of pd.datetime
+            # ensure our first column of time series data is of pd.datetime
             df[self.column_names[0]] = df[self.column_names[0]].apply(pd.to_datetime)
             df.set_index(self.column_names[0], inplace=True)
 

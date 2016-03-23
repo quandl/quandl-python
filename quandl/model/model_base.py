@@ -14,8 +14,6 @@ class ModelBase(object):
             raise AttributeError(k)
         elif k in self.__get_raw_data__():
             return self.__get_raw_data__()[k]
-        elif k == 'metadata':
-            return self.__get_raw_data__()
         else:
             raise AttributeError(k)
 
