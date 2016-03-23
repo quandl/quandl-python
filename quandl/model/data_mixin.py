@@ -10,7 +10,7 @@ class DataMixin(object):
             data = [data]
         if 'columns' in self.meta.keys():
             df = pd.DataFrame(data=data, columns=self.columns)
-            for index, type in enumerate(self.columns_type):
+            for index, type in enumerate(self.column_types):
                 if type == 'Date':
                     df[self.columns[index]] = df[self.columns[index]].apply(pd.to_datetime)
         else:

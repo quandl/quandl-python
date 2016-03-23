@@ -5,7 +5,7 @@ class ModelList(object):
     def __init__(self, klass, values, meta):
         self.klass = klass
         if 'columns' in meta.keys():
-            meta['columns_type'] = Util.convert_to_colums_list(meta['columns'], 'type')
+            meta['column_types'] = Util.convert_to_colums_list(meta['columns'], 'type')
             meta['columns'] = Util.convert_to_colums_list(meta['columns'], 'name')
 
         if hasattr(klass, 'get_code_from_meta'):

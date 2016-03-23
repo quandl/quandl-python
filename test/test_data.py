@@ -163,8 +163,12 @@ class DatatableDataTest(unittest2.TestCase):
         cls.expected_column_names = [six.u('per_end_date'),
                                      six.u('ticker'),
                                      six.u('tot_oper_exp')]
+        cls.expected_column_types = [six.u('Date'),
+                                     six.u('String'),
+                                     six.u('String')]
         cls.data_object = Data(['2015-07-11', 'AAPL', 440.0],
-                               meta={'columns': cls.expected_column_names})
+                               meta={'columns': cls.expected_column_names,
+                                     'column_types': cls.expected_column_types})
 
     def test_to_pandas_returns_pandas_dataframe_object(self):
         data = self.data_object.to_pandas()
@@ -247,6 +251,9 @@ class ListDatatableDataTest(unittest2.TestCase):
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         data = results.to_csv()
-        expected = "Date,column.1,column.2,column.3\n2015-07-11,444.3,10,3\n" + \
-                   "2015-07-13,433.3,4,3\n2015-07-14,437.5,3,3\n2015-07-15,440.0,2,3\n"
-        # self.assertEqual(data, expected)
+        expected = "None,per_end_date,ticker,tot_oper_exp\n" + \
+                    "0,2015-07-11,AAPL,456.9\n" + \
+                    "1,2015-07-13,433.3,\n"  + \
+                    "2,2015-07-14,AAPL,419.1\n" + \
+                    "3,2015-07-15,476.5,\n"
+        self.assertEqual(data, expected)

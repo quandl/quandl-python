@@ -45,3 +45,8 @@ class UtilTest(unittest2.TestCase):
         expect_result = {'params': {'qopts.per_page': 5, 'per_end_date.gte': set(['2015-01-01']), 'ticker[]': ['AAPL', 'MSFT'], 'qopts.columns[]': ['ticker', 'per_end_date']}}
         result = Util.convert_options(**options)
         self.assertEqual(cmp(result,expect_result), 0)
+
+        options = {'params': {'ticker': 'AAPL', 'per_end_date': {'gte': {'2015-01-01' }}, 'qopts': {'columns': ['ticker', 'per_end_date']}}}
+        expect_result = {'params': {'per_end_date.gte': set(['2015-01-01']), 'ticker': 'AAPL', 'qopts.columns[]': ['ticker', 'per_end_date']}}
+        result = Util.convert_options(**options)
+        self.assertEqual(cmp(result,expect_result), 0)

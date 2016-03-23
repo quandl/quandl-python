@@ -29,7 +29,7 @@ class GetDatasetTest(unittest2.TestCase):
 
     @patch('quandl.connection.Connection.request')
     def test_datatable_calls_connection(self, mock):
-        Datatable('ZACKS/FC').metadata
+        Datatable('ZACKS/FC').data_fields()
         expected = call('get', 'datatables/ZACKS/FC/metadata', params={})
         self.assertEqual(mock.call_args, expected)
 
@@ -47,6 +47,6 @@ class GetDatasetTest(unittest2.TestCase):
         self.assertEqual(datatable.datatable_code, 'FC')
 
     def test_dataset_column_names_match_expected(self):
-        metadata = Datatable('ZACKS/FC').metadata
+        metadata = Datatable('ZACKS/FC').data_fields()
         self.assertItemsEqual(
-            metadata.keys(), [u'datatable_code', u'id', u'name', u'vendor_code'])
+            metadata, [u'datatable_code', u'id', u'name', u'vendor_code'])

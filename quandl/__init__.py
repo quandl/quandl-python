@@ -12,6 +12,10 @@ from .model.merged_dataset import MergedDataset
 import warnings
 import copy, os, sys
 
+# This function is define in python 2 but not at python 3
+def cmp(a, b):
+    return (a > b) - (a < b)
+
 def get_table(code, **options):
     paginate = None
     if 'paginate' in options.keys(): paginate = options.pop('paginate')
