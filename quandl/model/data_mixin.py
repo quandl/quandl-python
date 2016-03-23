@@ -8,10 +8,17 @@ class DataMixin(object):
         # ensure pandas gets a list of lists
         if data and isinstance(data, list) and not isinstance(data[0], list):
             data = [data]
-        df = pd.DataFrame(data=data, columns=self.column_names)
-        # ensure our first column of time series data is of pd.datetime
-        df[self.column_names[0]] = df[self.column_names[0]].apply(pd.to_datetime)
-        df.set_index(self.column_names[0], inplace=True)
+        if 'columns' in self.meta.keys():
+            df = pd.DataFrame(data=data, columns=self.columns)
+            for index, type in enumerate(self.column_types):
+                if type == 'Date':
+                    df[self.columns[index]] = df[self.columns[index]].apply(pd.to_datetime)
+        else:
+            df = pd.DataFrame(data=data, columns=self.column_names)
+            # ensure our first column of time series data is of pd.datetime
+            df[self.column_names[0]] = df[self.column_names[0]].apply(pd.to_datetime)
+            df.set_index(self.column_names[0], inplace=True)
+
         # unfortunately to_records() cannot handle unicode in 2.7
         df.index.name = str(df.index.name)
         # keep_column_indexes are 0 based, 0 is the first column
