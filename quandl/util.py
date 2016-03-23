@@ -65,7 +65,7 @@ class Util(object):
                         new_value = dict()
                         is_dict = True
                         old_key = key
-                        for k, v  in value.items():
+                        for k, v in value.items():
                             key = key + '.' + k
                             if isinstance(v, list):
                                 key = key + '[]'

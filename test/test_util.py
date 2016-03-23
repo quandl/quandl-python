@@ -39,3 +39,9 @@ class UtilTest(unittest2.TestCase):
         result = Util.constructed_path(path, params)
         self.assertEqual(result, '/hello/bar/world/1')
         self.assertDictEqual(params, {'another': 'a'})
+
+    def test_convert_options(self):
+        options = {'params': {'ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': {'2015-01-01' }}, 'qopts': {'columns': ['ticker', 'per_end_date'], 'per_page': 5}}}
+        expect_result = {'params': {'qopts.per_page': 5, 'per_end_date.gte': set(['2015-01-01']), 'ticker[]': ['AAPL', 'MSFT'], 'qopts.columns[]': ['ticker', 'per_end_date']}}
+        result = Util.convert_options(**options)
+        self.assertEqual(cmp(result,expect_result), 0)
