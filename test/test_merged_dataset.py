@@ -69,7 +69,10 @@ class GetMergedDatasetTest(unittest2.TestCase):
         md.data_fields()
 
         expected_calls = [
-            call(('NSE/OIL', {'column_index': [1, 2]})), call(('GOOG/NASDAQ_AAPL', {'column_index': [1]})), call('GOOG/NASDAQ_MSFT')]
+            call(('NSE/OIL', {'column_index': [1, 2]})),
+            call(('GOOG/NASDAQ_AAPL', {'column_index': [1]})),
+            call('GOOG/NASDAQ_MSFT')
+        ]
         self.assertEqual(mock.call_count, 3)
         for index, expected in enumerate(expected_calls):
             self.assertEqual(mock.mock_calls[index], expected)
@@ -223,7 +226,7 @@ class GetMergedDatasetTest(unittest2.TestCase):
 
     def test_get_merged_dataset_data_is_descending_when_specified_in_params(self):
         data = MergedDataset(['NSE/OIL', 'GOOG/NASDAQ_AAPL',
-                                  'GOOG/NASDAQ_MSFT']).data(params={'order': 'desc'})
+                              'GOOG/NASDAQ_MSFT']).data(params={'order': 'desc'})
         results = data.to_list()
         dates = list([x[0] for x in results])
         self.assertTrue(all(dates[i] >= dates[i + 1]

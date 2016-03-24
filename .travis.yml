@@ -9,6 +9,6 @@ install:
   - pip install flake8
   - pip install -r requirements.txt
 script:
-  - flake8 quandl
+  - flake8
   - python -W always setup.py -q test
 cache: pip
