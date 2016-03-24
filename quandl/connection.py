@@ -65,21 +65,15 @@ class Connection:
         if prog.match(code):
             code_letter = prog.match(code).group(1)
 
-        if code_letter == 'L':
-            klass = LimitExceededError
-        elif code_letter == 'M':
-            klass = InternalServerError
-        elif code_letter == 'A':
-            klass = AuthenticationError
-        elif code_letter == 'P':
-            klass = ForbiddenError
-        elif code_letter == 'S':
-            klass = InvalidRequestError
-        elif code_letter == 'C':
-            klass = NotFoundError
-        elif code_letter == 'X':
-            klass = ServiceUnavailableError
-        else:
-            klass = QuandlError
+        d_klass = {
+            'L': LimitExceededError,
+            'M': InternalServerError,
+            'A': AuthenticationError,
+            'P': ForbiddenError,
+            'S': InvalidRequestError,
+            'C': NotFoundError,
+            'X': ServiceUnavailableError
+        }
+        klass = d_klass.get(code_letter, QuandlError)
 
         raise klass(message, resp.status_code, resp.text, resp.headers, code)
