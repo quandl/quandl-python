@@ -84,3 +84,12 @@ class Util(object):
         for key in meta:
             columns.extend([key[type]])
         return columns
+
+    @staticmethod
+    def convert_column_names(meta):
+        converted_column_names = None
+        if 'column_names' in meta.keys():
+            the_list = [Util.methodize(x) for x in meta['column_names']]
+            return list(the_list)
+        else:
+            return list([Util.methodize(x) for x in meta['columns']])
