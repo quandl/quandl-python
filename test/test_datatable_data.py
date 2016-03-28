@@ -2,17 +2,14 @@ import re
 import unittest2
 import httpretty
 import json
-import datetime
 import pandas
 import numpy
 import six
 from quandl.model.data import Data
 from quandl.model.datatable import Datatable
 from mock import patch, call
-from test.factories.dataset_data import DatasetDataFactory
 from test.factories.datatable_data import DatatableDataFactory
 from test.factories.datatable_meta import DatatableMetaFactory
-from quandl.errors.quandl_error import InvalidDataError
 
 
 class DatatableDataTest(unittest2.TestCase):
@@ -54,6 +51,7 @@ class DatatableDataTest(unittest2.TestCase):
     def test_meta_exists(self):
         self.assertIsNotNone(self.data_object.meta)
 
+
 class ListDatatableDataTest(unittest2.TestCase):
 
     @classmethod
@@ -74,12 +72,18 @@ class ListDatatableDataTest(unittest2.TestCase):
         httpretty.disable()
         httpretty.reset()
 
-
     @patch('quandl.connection.Connection.request')
     def test_data_calls_connection(self, mock):
         datatable = Datatable('ZACKS/FC')
-        Data.page(datatable, params={'ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': {'2015-01-01' }}, 'qopts': {'columns': ['ticker', 'per_end_date']}})
-        expected = call('get', 'datatables/ZACKS/FC', params={'ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': {'2015-01-01' }}, 'qopts': {'columns': ['ticker', 'per_end_date']}})
+        Data.page(datatable, params={'ticker': ['AAPL', 'MSFT'],
+                                     'per_end_date': {'gte': {'2015-01-01'}},
+                                     'qopts': {'columns': ['ticker', 'per_end_date']}})
+        expected = call('get', 'datatables/ZACKS/FC', params={'ticker': ['AAPL', 'MSFT'],
+                                                              'per_end_date':
+                                                              {'gte': {'2015-01-01'}},
+                                                              'qopts': {'columns':
+                                                                        ['ticker',
+                                                                         'per_end_date']}})
         self.assertEqual(mock.call_args, expected)
 
     def test_values_and_meta_exist(self):
@@ -122,8 +126,8 @@ class ListDatatableDataTest(unittest2.TestCase):
         results = Data.page(datatable, params={})
         data = results.to_csv()
         expected = "None,per_end_date,ticker,tot_oper_exp\n" + \
-                    "0,2015-07-11,AAPL,456.9\n" + \
-                    "1,2015-07-13,433.3,\n"  + \
-                    "2,2015-07-14,AAPL,419.1\n" + \
-                    "3,2015-07-15,476.5,\n"
+                   "0,2015-07-11,AAPL,456.9\n" + \
+                   "1,2015-07-13,433.3,\n" + \
+                   "2,2015-07-14,AAPL,419.1\n" + \
+                   "3,2015-07-15,476.5,\n"
         self.assertEqual(data, expected)

@@ -10,6 +10,7 @@ def cmp(a, b):
     b = sorted(b)
     return (a > b) - (a < b)
 
+
 class UtilTest(unittest2.TestCase):
 
     def test_methodize(self):
@@ -47,12 +48,21 @@ class UtilTest(unittest2.TestCase):
         self.assertDictEqual(params, {'another': 'a'})
 
     def test_convert_options(self):
-        options = {'params': {'ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': {'2015-01-01' }}, 'qopts': {'columns': ['ticker', 'per_end_date'], 'per_page': 5}}}
-        expect_result = {'params': {'qopts.per_page': 5, 'per_end_date.gte': set(['2015-01-01']), 'ticker[]': ['AAPL', 'MSFT'], 'qopts.columns[]': ['ticker', 'per_end_date']}}
+        options = {'params': {'ticker': ['AAPL', 'MSFT'],
+                              'per_end_date': {'gte': {'2015-01-01'}},
+                              'qopts': {'columns': ['ticker', 'per_end_date'],
+                                        'per_page': 5}}}
+        expect_result = {'params': {'qopts.per_page': 5,
+                                    'per_end_date.gte': set(['2015-01-01']),
+                                    'ticker[]': ['AAPL', 'MSFT'],
+                                    'qopts.columns[]': ['ticker', 'per_end_date']}}
         result = Util.convert_options(**options)
-        self.assertEqual(cmp(result,expect_result), 0)
+        self.assertEqual(cmp(result, expect_result), 0)
 
-        options = {'params': {'ticker': 'AAPL', 'per_end_date': {'gte': {'2015-01-01' }}, 'qopts': {'columns': ['ticker', 'per_end_date']}}}
-        expect_result = {'params': {'per_end_date.gte': set(['2015-01-01']), 'ticker': 'AAPL', 'qopts.columns[]': ['ticker', 'per_end_date']}}
+        options = {'params': {'ticker': 'AAPL', 'per_end_date': {'gte': {'2015-01-01'}},
+                              'qopts': {'columns': ['ticker', 'per_end_date']}}}
+        expect_result = {'params': {'per_end_date.gte': set(['2015-01-01']),
+                                    'ticker': 'AAPL',
+                                    'qopts.columns[]': ['ticker', 'per_end_date']}}
         result = Util.convert_options(**options)
-        self.assertEqual(cmp(result,expect_result), 0)
+        self.assertEqual(cmp(result, expect_result), 0)

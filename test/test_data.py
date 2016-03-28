@@ -7,11 +7,8 @@ import pandas
 import numpy
 import six
 from quandl.model.data import Data
-from quandl.model.datatable import Datatable
 from mock import patch, call
 from test.factories.dataset_data import DatasetDataFactory
-from test.factories.datatable_data import DatatableDataFactory
-from test.factories.datatable_meta import DatatableMetaFactory
 from quandl.errors.quandl_error import InvalidDataError
 
 
@@ -49,6 +46,7 @@ class DataTest(unittest2.TestCase):
 
     def test_meta_exists(self):
         self.assertIsNotNone(self.data_object.meta)
+
 
 class ListDataTest(unittest2.TestCase):
 

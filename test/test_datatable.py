@@ -37,7 +37,6 @@ class GetDatatableDatasetTest(unittest2.TestCase):
         expected = call('get', 'datatables/ZACKS/FC', params={})
         self.assertEqual(mock.call_args, expected)
 
-
     def test_datatable_returns_datatable_object(self):
         datatable = Datatable('ZACKS/FC')
         self.assertIsInstance(datatable, Datatable)
