@@ -5,7 +5,7 @@ from quandl.errors.quandl_error import (
     AuthenticationError, ForbiddenError, InvalidRequestError,
     NotFoundError, ServiceUnavailableError)
 import unittest2
-import httpretty
+from test.helpers.httpretty_extension import httpretty
 import json
 from mock import patch, call
 

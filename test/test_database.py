@@ -7,7 +7,7 @@ except ImportError:
 
 import re
 import unittest2
-import httpretty
+from test.helpers.httpretty_extension import httpretty
 import json
 import six
 from quandl.errors.quandl_error import (InternalServerError, QuandlError)
@@ -29,7 +29,8 @@ class GetDatabaseTest(unittest2.TestCase):
                                re.compile(
                                    'https://www.quandl.com/api/v3/databases/*'),
                                body=json.dumps(database))
-        cls.db_instance = Database(database['database'])
+        cls.db_instance = Database(Database.get_code_from_meta(
+            database['database']), database['database'])
 
     @classmethod
     def tearDownClass(cls):

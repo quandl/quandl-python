@@ -1,4 +1,5 @@
 import factory
+import six
 
 
 class DatasetFactory(factory.Factory):
@@ -13,7 +14,7 @@ class DatasetFactory(factory.Factory):
     name = 'National Stock Exchange of India'
     description = 'Stock and index data from the National Stock Exchange of India. '
     frequency = 'daily'
-    column_names = ['Date', 'column.1', 'column.2', 'column.3']
+    column_names = [six.u('Date'), six.u('column.1'), six.u('column.2'), six.u('column.3')]
     type = 'Time Series'
     premium = False
     refreshed_at = '2015-07-24T02:39:40.624Z'

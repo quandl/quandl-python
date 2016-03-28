@@ -11,7 +11,9 @@ with open('LONG_DESCRIPTION.rst') as f:
 
 # Don't import quandl module here, since deps may not be installed
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'quandl'))
-from version import VERSION
+# can only import VERSION successfully after the above line
+# ignore flake8 warning that requires imports to be at the top
+from version import VERSION  # NOQA
 
 install_requires = [
     'pandas >= 0.14',
@@ -29,9 +31,7 @@ installs_for_two = [
     'pyasn1'
 ]
 
-ndg_httpsclient_version = 'ndg-httpsclient'
 if sys.version_info[0] < 3:
-    ndg_httpsclient_version = 'ndg-httpsclient == 0.3.0'
     install_requires += installs_for_two
 
 packages = [
@@ -58,8 +58,7 @@ setup(
         'nose',
         'httpretty',
         'mock',
-        'factory_boy',
-        ndg_httpsclient_version
+        'factory_boy'
     ],
     test_suite="nose.collector",
     packages=packages

@@ -1,58 +1,21 @@
-import re
 import unittest2
-import httpretty
-import json
+from test.helpers.httpretty_extension import httpretty
 import six
 import datetime
 import pandas
-from quandl.model.data import Data
-from quandl.model.data_list import DataList
-from quandl.model.merged_data_list import MergedDataList
 from quandl.model.dataset import Dataset
+from quandl.model.data import Data
+from quandl.model.merged_data_list import MergedDataList
 from quandl.model.merged_dataset import MergedDataset
 from mock import patch, call
-from test.factories.dataset import DatasetFactory
-from test.factories.dataset_data import DatasetDataFactory
+from test.helpers.merged_datasets_helper import setupDatasetsTest
 
 
 class GetMergedDatasetTest(unittest2.TestCase):
 
     @classmethod
     def setUp(self):
-        httpretty.reset()
-        httpretty.enable()
-
-        self.dataset_data = {'dataset_data': DatasetDataFactory.build()}
-
-        dataset_data = DatasetDataFactory.build()
-        d_values = dataset_data.pop('data')
-        d_metadata = dataset_data
-        self.data_list_obj = DataList(Data, d_values, d_metadata)
-
-        self.nse_oil = {'dataset': DatasetFactory.build(
-            database_code='NSE', dataset_code='OIL')}
-
-        self.goog_aapl = {'dataset': DatasetFactory.build(
-            database_code='GOOG', dataset_code='NASDAQ_AAPL')}
-
-        self.goog_msft = {'dataset': DatasetFactory.build(
-            database_code='GOOG', dataset_code='NASDAQ_MSFT',
-            newest_available_date='2015-07-30', oldest_available_date='2013-01-01')}
-
-        self.oil_obj = Dataset('NSE/OIL', self.nse_oil['dataset'])
-        self.aapl_obj = Dataset('GOOG/AAPL', self.goog_aapl['dataset'])
-        self.goog_obj = Dataset('GOOG/MSFT', self.goog_msft['dataset'])
-
-        httpretty.register_uri(httpretty.GET,
-                               re.compile(
-                                   'https://www.quandl.com/api/v3/datasets/.*/metadata'),
-                               responses=[httpretty.Response(body=json.dumps(dataset))
-                                          for dataset in
-                                          [self.nse_oil, self.goog_aapl, self.goog_msft]])
-        httpretty.register_uri(httpretty.GET,
-                               re.compile(
-                                   'https://www.quandl.com/api/v3/datasets/.*/data'),
-                               body=json.dumps(self.dataset_data))
+        setupDatasetsTest(self, httpretty)
 
     @classmethod
     def tearDownClass(cls):

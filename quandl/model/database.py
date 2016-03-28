@@ -14,6 +14,7 @@ from quandl.errors.quandl_error import QuandlError
 from quandl.operations.get import GetOperation
 from quandl.operations.list import ListOperation
 from .model_base import ModelBase
+import quandl.model.dataset
 
 
 class Database(GetOperation, ListOperation, ModelBase):
@@ -58,12 +59,10 @@ class Database(GetOperation, ListOperation, ModelBase):
 
     def _bulk_download_path(self):
         url = self.default_path() + '/data'
-        url = Util.constructed_path(url, {'id': self.database_code})
+        url = Util.constructed_path(url, {'id': self.code})
         return url
 
     def datasets(self, **options):
-        params = {'database_code': self.database_code, 'query': '', 'page': 1}
+        params = {'database_code': self.code, 'query': '', 'page': 1}
         options = Util.merge_options('params', params, **options)
-        return Dataset.all(**options)
-
-from .dataset import Dataset
+        return quandl.model.dataset.Dataset.all(**options)
