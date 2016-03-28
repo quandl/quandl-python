@@ -34,6 +34,16 @@ class GetDataTableTest(unittest2.TestCase):
         httpretty.reset()
 
     @patch('quandl.connection.Connection.request')
-    def test_datatable_returns_datatable_object(self, mock):
-        df = quandl.get_table('ZACKS/FC', params={})
+    def test_datatable_returns_pandas_datatable_object(self, mock):
+        df = quandl.get_table('ZACKS/FC')
         self.assertIsInstance(df, pandas.core.frame.DataFrame)
+
+    @patch('quandl.connection.Connection.request')
+    def test_datatable_returns_numpy_datatable_object(self, mock):
+        df = quandl.get_table('ZACKS/FC', returns='numpy')
+        self.assertEqual(type(df).__name__, 'recarray')
+
+    @patch('quandl.connection.Connection.request')
+    def test_datatable_returns_csv_datatable_object(self, mock):
+        df = quandl.get_table('ZACKS/FC', returns='csv')
+        self.assertEqual(type(df).__name__, 'str')

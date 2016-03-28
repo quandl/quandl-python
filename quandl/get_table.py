@@ -11,6 +11,11 @@ def get_table(code, **options):
     else:
         paginate = None
 
+    if 'returns' in options.keys():
+        returns = options.pop('returns')
+    else:
+        returns = None
+
     data = None
     page_count = 0
     while True:
@@ -37,4 +42,10 @@ def get_table(code, **options):
             break
         page_count = page_count + 1
         options['qopts.cursor_id'] = next_cursor_id
-    return data.to_pandas()
+
+    if returns == 'numpy':
+        return data.to_numpy()
+    elif returns == 'csv':
+        return data.to_csv()
+    else:
+        return data.to_pandas()
