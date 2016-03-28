@@ -22,6 +22,14 @@ simply change this too:
 import quandl as Quandl
 ```
 
+Additionally if you were relying on a saved version of your `api key` _(authtoken)_ in your scripts please note that this functionality has been dropped from the existing package. To continue to load your api key from the filesystem we recommend you manually load the key and set it via the api config `quandl.ApiConfig.api_key`. Some example code that will do this is:
+
+```python
+import quandl as Quandl
+import pickle
+Quandl.ApiConfig.api_key = pickle.load(open('authtoken.p', 'rb'))
+```
+
 That's it! The new package should be ready to use.
 
 ## Continuing with the old release
@@ -37,3 +45,9 @@ To continue using quandl package version 2, do the following:
 2. In your python program's directory, execute `pip freeze > requirements.txt`. Alternatively, create the `requirements.txt` file and enter the desired quandl package version, e.g., `Quandl==2.8.8` into it.
 
 3. Execute `pip install -r requirements.txt` to ensure the desired quandl package version is installed
+
+
+## FAQ
+
+Q: `I tried out your sample code for loading the api key from a file and its not working.`
+A: Note that for the sample code to work you must have access to read the file with the auth token. The sample script also assumes that file is stored in the same directory that the script is being run from. If you wish to use a key in another directory you will need to change the path being used in the example.

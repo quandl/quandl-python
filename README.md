@@ -4,7 +4,7 @@ The official python package for all your data needs! The Quandl client can be us
 
 ## Deprecation of old package
 
-Please see this readme for more information and upgrade instructions: [2.x series transition notes](./2_SERIES.md)
+Please see this readme for more information and upgrade instructions: [2.x series transition notes](./2_SERIES_UPGRADE.md)
 
 ## Installation
 
