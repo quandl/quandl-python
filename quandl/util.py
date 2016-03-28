@@ -36,21 +36,28 @@ class Util(object):
         return options
 
     @staticmethod
-    def convert_to_dates(dic):
-        if not isinstance(dic, dict):
-            return dic
-        for k, v in list(dic.items()):
-            if isinstance(v, string_types) and re.search(r'^\d{4}-\d{2}-\d{2}$', v):
-                # convert to datetime.date
-                dic[k] = dateutil.parser.parse(v).date()
-            elif isinstance(v, string_types) and re.search(r'^\d{4}-\d{2}-\d{2}T[\d:\.]+Z$', v):
-                # convert to datetime.datetime, default timezone is utc
-                dic[k] = dateutil.parser.parse(v)
-            elif isinstance(v, list):
-                list(map(lambda x: Util.convert_to_dates(x), v))
-            elif isinstance(v, dict):
-                Util.convert_to_dates(v)
-        return dic
+    def convert_to_dates(dic_or_list):
+        if isinstance(dic_or_list, dict):
+            for k, v in list(dic_or_list.items()):
+                dic_or_list[k] = Util.convert_to_dates(v)
+        elif isinstance(dic_or_list, list):
+            for idx, v in enumerate(dic_or_list):
+                dic_or_list[idx] = Util.convert_to_dates(v)
+        else:
+            return Util.convert_to_date(dic_or_list)
+
+        return dic_or_list
+
+    @staticmethod
+    def convert_to_date(value):
+        if isinstance(value, string_types) and re.search(r'^\d{4}-\d{2}-\d{2}$', value):
+            # convert to datetime.date
+            return dateutil.parser.parse(value).date()
+        elif isinstance(value, string_types) and re.search(r'^\d{4}-\d{2}-\d{2}T[\d:\.]+Z$', value):
+            # convert to datetime.datetime, default timezone is utc
+            return dateutil.parser.parse(value)
+        else:
+            return value
 
     @staticmethod
     def convert_options(**options):
@@ -84,3 +91,18 @@ class Util(object):
         for key in meta:
             columns.extend([key[type]])
         return columns
+
+    @staticmethod
+    def convert_column_names(meta):
+        if meta is None:
+            return None
+
+        # Dataset API call
+        if 'column_names' in meta.keys():
+            the_list = [Util.methodize(x) for x in meta['column_names']]
+            return list(the_list)
+        # Datatable API call
+        elif 'columns' in meta.keys():
+            return list([Util.methodize(x) for x in meta['columns']])
+        else:
+            return None

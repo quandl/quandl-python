@@ -1,7 +1,8 @@
 *.pyc
 
+/.tox/
 /.eggs
 /quandl.egg-info
 /build
 /dist
-/.tox/
+/tmp/
