@@ -51,3 +51,36 @@ class Util(object):
             elif isinstance(v, dict):
                 Util.convert_to_dates(v)
         return dic
+
+    @staticmethod
+    def convert_options(**options):
+        new_options = dict()
+        if 'params' in options.keys():
+            for key, value in options['params'].items():
+                is_dict = False
+                if isinstance(value, list):
+                    key = key + '[]'
+                else:
+                    if isinstance(value, dict) and value != {}:
+                        new_value = dict()
+                        is_dict = True
+                        old_key = key
+                        for k, v in value.items():
+                            key = key + '.' + k
+                            if isinstance(v, list):
+                                key = key + '[]'
+                            new_value[key] = v
+                            key = old_key
+
+                if is_dict:
+                    new_options.update(new_value)
+                else:
+                    new_options[key] = value
+        return {'params': new_options}
+
+    @staticmethod
+    def convert_to_columns_list(meta, type):
+        columns = []
+        for key in meta:
+            columns.extend([key[type]])
+        return columns
