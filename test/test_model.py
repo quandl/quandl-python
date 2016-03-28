@@ -20,7 +20,7 @@ class ModelTest(unittest2.TestCase):
         self.assertEqual(self.model.here, 1)
 
     def test_throws_exception_when_attribute_does_not_exist(self):
-      self.assertRaises(AttributeError, lambda: self.model.blah)
+        self.assertRaises(AttributeError, lambda: self.model.blah)
 
     def test_to_list_returns_values(self):
         results = self.model.to_list()
