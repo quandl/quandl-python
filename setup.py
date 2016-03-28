@@ -1,38 +1,66 @@
-from Quandl import __version__, __authors__, __maintainer__, __email__, __url__, __license__
-from Quandl import __name__ as package_name
 import os
+import sys
 
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
-try:
-    from pip.req import parse_requirements
-    requirements = list(parse_requirements('requirements.txt'))
-except:
-    requirements = []
-install_requires=[str(req).split(' ')[0].strip() for req in requirements if req.req and not req.url]
-print('Install requirements found in requirements.txt: %r' % install_requires)
-dependency_links=[req.url for req in requirements if req.url]
-print('Dependencies found in requirements.txt: %r' % dependency_links)
+with open('LONG_DESCRIPTION.rst') as f:
+    long_description = f.read()
 
+# Don't import quandl module here, since deps may not be installed
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'quandl'))
+from version import VERSION
+
+install_requires = [
+    'pandas >= 0.14',
+    'numpy >= 1.8',
+    'requests >= 2.7.0',
+    'inflection >= 0.3.1',
+    'python-dateutil',
+    'six',
+    'more-itertools'
+]
+
+installs_for_two = [
+    'pyOpenSSL',
+    'ndg-httpsclient',
+    'pyasn1'
+]
+
+ndg_httpsclient_version = 'ndg-httpsclient'
+if sys.version_info[0] < 3:
+    ndg_httpsclient_version = 'ndg-httpsclient == 0.3.0'
+    install_requires += installs_for_two
+
+packages = [
+    'quandl',
+    'quandl.errors',
+    'quandl.model',
+    'quandl.operations'
+]
 
 setup(
-      name = package_name,
-      description = 'Package for Quandl API access',
-      long_description = open(os.path.join(os.path.dirname(__file__), 'README.md')).read(),
-      version = __version__,
-      author = ", ".join(__authors__),
-      maintainer = __maintainer__,
-      maintainer_email = __email__,
-      url = __url__,
-      license = __license__,
-      install_requires = [
-        "pandas >= 0.14",
-        "numpy >= 1.8",
-      ],
-      # install_requires = install_requires,
-      dependency_links = dependency_links,
-      packages = ['Quandl'],
+    name='quandl',
+    description='Package for quandl API access',
+    long_description=long_description,
+    version=VERSION,
+    author='Quandl',
+    maintainer='Quandl Development Team',
+    maintainer_email='dev@quandl.com',
+    url='https://github.com/quandl/quandl-python',
+    license='MIT',
+    install_requires=install_requires,
+    tests_require=[
+        'unittest2',
+        'flake8',
+        'nose',
+        'httpretty',
+        'mock',
+        'factory_boy',
+        ndg_httpsclient_version
+    ],
+    test_suite="nose.collector",
+    packages=packages
 )
