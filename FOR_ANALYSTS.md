@@ -4,8 +4,8 @@ Analyst access gives a convientent was to retrieve individual datasets or datata
 
 ## Retrieving Data
 
-Retrieving data can be achieved easily using the two methods `quandl.get` and `quandl.get_table`. In both cases we strongly recommend that you set your api key via: 
- 
+Retrieving data can be achieved easily using the two methods `quandl.get` and `quandl.get_table`. In both cases we strongly recommend that you set your api key via:
+
  ```python
 import quandl
 quandl.ApiConfig.api_key = 'tEsTkEy123456789'
@@ -17,11 +17,11 @@ A simple example of retrieving dataset data could be:
 
 ```python
 import quandl
-data = quandl.get('NSE/OIL', returns='numpy')
+data = quandl.get('NSE/OIL')
 ```
 
-This will find all data points for the dataset `NSE/OIL` and stores them in a NumPy dataframe. You can then view the dataframe with
- 
+This will find all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with
+
 ```python
 data.head()
 ```
@@ -30,12 +30,12 @@ However we recommend filtering on only the data you really need. To do this you 
 
 ```python
 import quandl
-data = quandl.get('NSE/OIL', start_date='2010-01-01', end_date='2014-01-01', 
-                  collapse='annual', transformation='rdiff', 
-                  rows=4, returns='numpy')
+data = quandl.get('NSE/OIL', start_date='2010-01-01', end_date='2014-01-01',
+                  collapse='annual', transformation='rdiff',
+                  rows=4)
 ```
 
-This revised query will find all data points annually for the dataset `NSE/OIL` between the year 2010 and 2014 and transform them using the `rdiff` transformation. The query parameters used are documented in our [api docs](https://www.quandl.com/docs/api#data). Since the `data` was retrieved in the numpy format you can then view the dataframe with data.head(). 
+This revised query will find all data points annually for the dataset `NSE/OIL` between the year 2010 and 2014 and transform them using the `rdiff` transformation. The query parameters used are documented in our [api docs](https://www.quandl.com/docs/api#data). Since the `data` was retrieved in the pandas format you can then view the dataframe with data.head().
 
 #### Available parameters:
 
@@ -45,9 +45,8 @@ The following additional parameters can be specified for a dataset call:
 |---|---|---|---|
 | api_key | Your access key | `api_key='tEsTkEy123456789'` | Used to identify who you are and provide more access. Only required if not set via `quandl.ApiConfig.api_key=` |
 | \<filter / transformation parameter\> | A parameter which filters or transforms the resulting data | `start_date='2010-01-01` | For a full list see our [api docs](https://www.quandl.com/docs/api#data) |
-| returns | The output format of the resulting data | `returns='numpy'` | Value can be one of either _(default)_ `pandas`, `numpy`, or `csv` |
 
-For more information on how to use and manipulate the resulting data see the [pandas documentation](http://pandas.pydata.org/) or [NumPy](http://www.numpy.org/) documentation.
+For more information on how to use and manipulate the resulting data see the [pandas documentation](http://pandas.pydata.org/).
 
 #### Download Multiple Codes
 
@@ -94,17 +93,17 @@ The data is seperated into pages as retrieving all the data in one call would be
 
 ```python
 import quandl
-data = quandl.get_table('ZACKS/FC', paginate=true)
+data = quandl.get_table('ZACKS/FC', paginate=True)
 ```
 
 This would retrieve more pages of data and merge them together as if they were one large page. In some cases however the data returned may be too large for the number of resulting pages of data. In this case we recommend you filter your data using the available query parameters.
 
 ```python
 import quandl
-data = quandl.get_table('ZACKS/FC', paginate=true, returns='numpy', m_ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}}, qopts={'columns':['m_ticker', 'per_end_date']})
+data = quandl.get_table('ZACKS/FC', paginate=True, m_ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}}, qopts={'columns':['m_ticker', 'per_end_date']})
 ```
 
-In this query we are asking for more pages of data, `m_ticker` values of eithier `AAPL` or `MSFT` and a `per_end_date` that is greater than or equal to `2015-01-01`. We are also filtering the returned columns on `m_ticker`, `per_end_date` and `comp_name` rather than all available columns. We are also specifying the output format as `NumPy` rather than the default of `pandas`.
+In this query we are asking for more pages of data, `m_ticker` values of eithier `AAPL` or `MSFT` and a `per_end_date` that is greater than or equal to `2015-01-01`. We are also filtering the returned columns on `m_ticker`, `per_end_date` and `comp_name` rather than all available columns. The output format is `pandas`.
 
 #### Available parameters:
 
@@ -114,15 +113,14 @@ The following additional parameters can be specified for a dataset call:
 |---|---|---|---|
 | api_key | Your access key | `api_key='tEsTkEy123456789'` | Used to identify who you are and provide more access. Only required if not set via `quandl.ApiConfig.api_key=` |
 | \<filter / transformation parameter\> | A parameter which filters or transforms the resulting data | `start_date='2010-01-01'` | For a full list see our [api docs](https://www.quandl.com/docs/api#datatables) |
-| paginate | Wether to autoamtically paginate data | `paginate=true` | Will paginate through the first few pages of data automatically and merge them together in a larger output format. |
-| returns | The output format of the resulting data | `returns='numpy'` | Value can be one of eithier `numpy`, `pandas`, or `csv` |
+| paginate | Wether to autoamtically paginate data | `paginate=True` | Will paginate through the first few pages of data automatically and merge them together in a larger output format. |
 
-For more information on how to use and manipulate the resulting data see the [pandas documentation](http://pandas.pydata.org/) or [NumPy](http://www.numpy.org/) documentation.
+For more information on how to use and manipulate the resulting data see the [pandas documentation](http://pandas.pydata.org/).
 
 #### Things to note
 
 * Some datatables will return `sample` data if a valid api key is not used. If you are not recieving all of the expected data please double check your api key.
-* When using the paginate=true option depending on the total number of rows in the result set you may recieve an error indicating that there are more pages that have not been downloaded. This is due to a very large result sets that would be too large to send via the analyst method. If this happens we recommend you take one of two approaches:
+* When using the paginate=True option depending on the total number of rows in the result set you may recieve an error indicating that there are more pages that have not been downloaded. This is due to a very large result sets that would be too large to send via the analyst method. If this happens we recommend you take one of two approaches:
   * *(recommended)* Refine your filter parameters to retrieve a smaller results set
   * Use the the [Developer](./FOR_DEVELOPERS.md) method below to iterate through more of the data.
 

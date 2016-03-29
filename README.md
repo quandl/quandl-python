@@ -41,21 +41,21 @@ Retrieving data can be done easily using the analyst convenience methods. The fo
 
 ```python
 import quandl
-data = quandl.get('NSE/OIL', returns='numpy')
+data = quandl.get('NSE/OIL')
 ```
 
-The previous example will find all data points for the dataset `NSE/OIL` and stores them in a NumPy dataframe. You can then view the dataframe with data.head().
+The previous example will find all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with data.head().
 
 A similiar call can be used to retrieve a database datatable:
 
 ```python
 import quandl
-data = quandl.get_table('ZACKS/FC', ticker='AAPL', returns='numpy')
+data = quandl.get_table('ZACKS/FC', ticker='AAPL')
 ```
 
-This example retrieves all rows for `ZACKS/FC` where `ticker='AAPL'` and stores them in a NumPy dataframe. Similarily you can then view the dataframe with data.head(). 
+This example retrieves all rows for `ZACKS/FC` where `ticker='AAPL'` and stores them in a pandas dataframe. Similarily you can then view the dataframe with data.head().
 
-Note that in both example if an `api_key` has not bee set you may recieved limited or example data. Note that unlike Datasets, Datatables will return a preview sample of data if you do not use an api_key with access to the data. You can find more details on these call and others like it in our [Detailed guide for analysts](./FOR_ANALYSTS.md) 
+Note that in both example if an `api_key` has not bee set you may recieved limited or example data. Note that unlike Datasets, Datatables will return a preview sample of data if you do not use an api_key with access to the data. You can find more details on these call and others like it in our [Detailed guide for analysts](./FOR_ANALYSTS.md)
 
 ### Additional Usages
 
