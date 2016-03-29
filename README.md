@@ -8,7 +8,7 @@ Please see this readme for more information and upgrade instructions: [2.x serie
 
 ## Installation
 
-Installation varies depending on python version and system used. However in most cases the following should work:
+The installation process varies depending on your python version and system used. However in most cases the following should work:
 
 ```shell
 pip install quandl
