@@ -33,7 +33,7 @@ quandl.ApiConfig.api_key = 'tEsTkEy123456789'
 quandl.ApiConfig.api_version = '2015-04-09'
 ```
 
-`quandl.ApiConfig.api_version` is optional however it is strongly recommended that is provided to avoid issues with rate-limiting. For premium databases, datasets and datatables `quandl.ApiConfig.api_key` will need to be set to identify you to our api. Please see [API Documentation](https://www.quandl.com/docs/api) for more detail.
+`quandl.ApiConfig.api_version` is optional however it is strongly recommended to avoid issues with rate-limiting. For premium databases, datasets and datatables `quandl.ApiConfig.api_key` will need to be set to identify you to our api. Please see [API Documentation](https://www.quandl.com/docs/api) for more detail.
 
 ## Retrieving Data
 
