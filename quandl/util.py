@@ -95,7 +95,7 @@ class Util(object):
     @staticmethod
     def convert_column_names(meta):
         if meta is None:
-            return None
+            return []
 
         # Dataset API call
         if 'column_names' in meta.keys():
@@ -105,4 +105,4 @@ class Util(object):
         elif 'columns' in meta.keys():
             return list([Util.methodize(x) for x in meta['columns']])
         else:
-            return None
+            return []

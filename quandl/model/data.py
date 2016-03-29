@@ -20,8 +20,7 @@ class Data(DataListOperation, DataMixin, ModelBase):
     def data_fields(self):
         if not self._converted_column_names and self.meta:
             self._converted_column_names = Util.convert_column_names(self.meta)
-        else:
-            return []
+
         return self._converted_column_names
 
     def __getattr__(self, k):
