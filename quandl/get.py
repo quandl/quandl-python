@@ -2,8 +2,10 @@ from quandl.errors.quandl_error import InvalidRequestError
 from .model.dataset import Dataset
 from .model.merged_dataset import MergedDataset
 from .utils.api_key_util import ApiKeyUtil
+from .util import Util
 from six import string_types
 import warnings
+import re
 
 OLD_TO_NEW_PARAMS = {'authtoken': 'api_key', 'trim_start': 'start_date',
                      'trim_end': 'end_date', 'transformation': 'transform',
@@ -47,6 +49,10 @@ def get(dataset, **kwargs):
         data = Dataset(dataset_args['code']).data(params=kwargs)
     # Array
     elif isinstance(dataset, list):
+        if Util.is_multiset_calls(dataset):
+            warnings.warn("Unable to find source-code formatter for language: python. \
+            Available languages are: actionscript, html, java, javascript, \
+            none, sql, xhtml, xm", DeprecationWarning)
         args = _build_merged_dataset_args(dataset)
         # handle_not_found_error if set to True will add an empty DataFrame
         # for a non-existent dataset instead of raising an error

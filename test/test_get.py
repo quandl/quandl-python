@@ -3,7 +3,7 @@ from test.helpers.httpretty_extension import httpretty
 from test.helpers.merged_datasets_helper import setupDatasetsTest
 import pandas
 import numpy
-from mock import patch, call, Mock
+from mock import patch, call, Mock, patch_object
 from quandl.model.dataset import Dataset
 from quandl.model.merged_dataset import MergedDataset
 from quandl.get import get
@@ -34,6 +34,12 @@ class GetSingleDatasetTest(unittest2.TestCase):
     def test_returns_numpys_when_requested(self):
         result = get('NSE/OIL', returns='numpy')
         self.assertIsInstance(result, numpy.core.records.recarray)
+
+    @patch_object(warnings, 'warn')
+    def test_returns_pandas_by_default(self, mock_warn):
+        result = get('WIKI/AAPL.1')
+        self.assertTrue(mock_warn.called)
+        self.assertIsInstance(result, pandas.core.frame.DataFrame)
 
     def test_setting_api_key_config(self):
         mock_connection = Mock(wraps=Connection)

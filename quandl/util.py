@@ -106,3 +106,11 @@ class Util(object):
             return list([Util.methodize(x) for x in meta['columns']])
         else:
             return []
+
+    @staticmethod
+    def is_multiset_calls(datasets):
+        for data in datasets:
+            m = re.search('\.[0-9]+$', data)
+            if m is not None:
+                return True
+        return False
