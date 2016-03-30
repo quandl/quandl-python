@@ -106,3 +106,19 @@ class Util(object):
             return list([Util.methodize(x) for x in meta['columns']])
         else:
             return []
+
+    @staticmethod
+    def is_multiset_calls(self, dataset):
+        if isinstance(dataset, string_types):
+            return self._is_end_with_dot_number(dataset)
+        elif isinstance(dataset, list):
+            for data in dataset:
+                if self._is_end_with_dot_number(data):
+                    return True
+        return False
+
+    @staticmethod
+    def _is_end_with_dot_number(data):
+        m = re.search('\.[0-9]+$', data)
+        if m is not None:
+            return True

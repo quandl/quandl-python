@@ -2,6 +2,7 @@ from quandl.errors.quandl_error import InvalidRequestError
 from .model.dataset import Dataset
 from .model.merged_dataset import MergedDataset
 from .utils.api_key_util import ApiKeyUtil
+from .util import Util
 from six import string_types
 import warnings
 
@@ -35,6 +36,8 @@ def get(dataset, **kwargs):
     data_format = kwargs.pop('returns', 'pandas')
 
     ApiKeyUtil.init_api_key_from_args(kwargs)
+
+    _multiset_Deprecation_warning(dataset)
 
     # Check whether dataset is given as a string
     # (for a single dataset) or an array (for a multiset call)
@@ -91,3 +94,8 @@ def _convert_params_to_v3(params):
             # update to the new query param if not specified already
             if v not in params:
                 params[v] = params.pop(k)
+
+
+def _multiset_Deprecation_warning(dataset):
+    if Util.is_multiset_calls(Util, dataset):
+        warnings.warn("Multiset calls will be deprecated.", DeprecationWarning)
