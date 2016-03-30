@@ -2,16 +2,30 @@ from quandl.util import Util
 
 
 class ModelList(object):
+
     def __init__(self, klass, values, meta):
         self.klass = klass
         if 'columns' in meta.keys():
             meta['column_types'] = Util.convert_to_columns_list(meta['columns'], 'type')
             meta['columns'] = Util.convert_to_columns_list(meta['columns'], 'name')
 
+        # Since we are iterating over a list of data be sure to only compute the
+        # methodized column names once and pass that down to the objects that are being created.
+        converted_column_names = Util.convert_column_names(meta)
+
         if hasattr(klass, 'get_code_from_meta'):
-            self.values = list([klass(klass.get_code_from_meta(x), x, meta=meta) for x in values])
+            self.values = list([klass(
+                klass.get_code_from_meta(x),
+                x,
+                meta=meta,
+                converted_column_names=converted_column_names
+            ) for x in values])
         else:
-            self.values = list([klass(x, meta=meta) for x in values])
+            self.values = list([klass(
+                x,
+                meta=meta,
+                converted_column_names=converted_column_names
+            ) for x in values])
         self.meta = meta
 
     def to_list(self):

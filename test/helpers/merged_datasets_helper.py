@@ -1,5 +1,6 @@
 import re
-import json
+import jsondate as json
+
 from quandl.model.dataset import Dataset
 from quandl.model.data import Data
 from quandl.model.data_list import DataList
