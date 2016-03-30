@@ -44,13 +44,15 @@ def get(dataset, **kwargs):
         dataset_args = _parse_dataset_code(dataset)
         if dataset_args['column_index'] is not None:
             kwargs.update({'column_index': dataset_args['column_index']})
-        data = Dataset(dataset_args['code']).data(params=kwargs)
+        data = Dataset(dataset_args['code']).data(params=kwargs, handle_column_not_found=True)
     # Array
     elif isinstance(dataset, list):
         args = _build_merged_dataset_args(dataset)
         # handle_not_found_error if set to True will add an empty DataFrame
         # for a non-existent dataset instead of raising an error
-        data = MergedDataset(args).data(params=kwargs, handle_not_found_error=True)
+        data = MergedDataset(args).data(params=kwargs,
+                                        handle_not_found_error=True,
+                                        handle_column_not_found=True)
     # If wrong format
     else:
         error = "Your dataset must either be specified as a string \

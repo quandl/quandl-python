@@ -54,3 +54,7 @@ class ForbiddenError(QuandlError):
 
 class InvalidDataError(QuandlError):
     pass
+
+
+class ColumnNotFound(QuandlError):
+    pass

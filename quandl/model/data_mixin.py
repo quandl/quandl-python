@@ -1,4 +1,5 @@
 import pandas as pd
+from quandl.errors.quandl_error import ColumnNotFound
 
 
 class DataMixin(object):
@@ -23,6 +24,7 @@ class DataMixin(object):
         df.index.name = str(df.index.name)
         # keep_column_indexes are 0 based, 0 is the first column
         if len(keep_column_indexes) > 0:
+            self._validate_col_index(df, keep_column_indexes)
             # need to decrement all our indexes by 1 because
             # Date is considered a column by our API, but in pandas,
             # it is the index, so column 0 is the first column after Date index
@@ -35,3 +37,10 @@ class DataMixin(object):
 
     def to_csv(self):
         return self.to_pandas().to_csv()
+
+    def _validate_col_index(self, df, keep_column_indexes):
+        num_columns = len(df.columns)
+        for col_index in keep_column_indexes:
+            if col_index > num_columns or col_index < 1:
+                raise ColumnNotFound('Requested column index %s does not exist'
+                                     % col_index)
