@@ -1,6 +1,7 @@
 from quandl.model.data_list import DataList
 from .list import ListOperation
 from quandl.errors.quandl_error import (InvalidDataError, ColumnNotFound)
+from quandl.message import Message
 
 
 class DataListOperation(ListOperation):
@@ -17,7 +18,7 @@ class DataListOperation(ListOperation):
                 and len(data['datatable']['columns']) != len(
                     data['datatable']['data'][0]):
             raise InvalidDataError(
-                'number of column names does not match number of data points in a row!',
+                Message.ERROR_COLUMNS_DATA_NOT_MATCHED,
                 response_data=data)
         values = data['datatable'].pop('data')
         metadata = {'columns': data['datatable']['columns'],
@@ -34,7 +35,7 @@ class DataListOperation(ListOperation):
                 and len(dataset_data['column_names']) != len(
                     dataset_data['data'][0]):
             raise InvalidDataError(
-                'number of column names does not match number of data points in a row!',
+                Message.ERROR_COLUMNS_DATA_NOT_MATCHED,
                 response_data=dataset_data)
         # if column index was requested
         # and data returned nothing
@@ -42,7 +43,7 @@ class DataListOperation(ListOperation):
         if (dataset_data.get('column_index', None) and
             not dataset_data['data'] and
                 cls.column_name_missing(dataset_data)):
-            raise ColumnNotFound('Requested column index %s does not exist'
+            raise ColumnNotFound(Message.ERROR_REQUESTED_COLUMN_NOT_EXIST
                                  % dataset_data['column_index'])
 
     @classmethod

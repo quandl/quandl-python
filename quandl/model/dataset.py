@@ -7,6 +7,7 @@ from .data_list import DataList
 import quandl.model.database
 import six
 from quandl.errors.quandl_error import (NotFoundError, ColumnNotFound)
+from quandl.message import Message
 
 
 class Dataset(GetOperation, ListOperation, ModelBase):
@@ -24,8 +25,7 @@ class Dataset(GetOperation, ListOperation, ModelBase):
 
         parsed_code = self.code.split("/")
         if len(parsed_code) < 2:
-            raise SyntaxError('Your quandl code is in an invalid format. It should look like '
-                              '`DATABASE_CODE/DATASET_CODE`. Please check your code and try again.')
+            raise SyntaxError(Message.ERROR_INVALID_DATABASE_CODE_FROMAT)
 
         self.database_code = parsed_code[0]
         self.dataset_code = parsed_code[1]
