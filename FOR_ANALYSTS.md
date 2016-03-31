@@ -48,6 +48,31 @@ The following additional parameters can be specified for a dataset call:
 
 For more information on how to use and manipulate the resulting data see the [pandas documentation](http://pandas.pydata.org/).
 
+#### Download Entire Database (Bulk Download)
+
+You can download all the data in a database in a single call. The following will download the entire EOD database as a zip file to your current working directory:
+
+```python
+import quandl
+quandl.bulkdownload('EOD')
+```
+
+After the download is finished, the `quandl.bulkdownload` will return the filename of the downloaded zip file. 
+
+To download database data from the previous day, use the download_type option:
+
+```python
+import quandl
+quandl.bulkdownload('EOD', download_type='partial')
+```
+
+You can also change the filename of the downloaded zip file by using the filename option:
+
+```python
+import quandl
+quandl.bulkdownload('EOD', filename='/my/path/EOD_DB.zip')
+```
+
 #### Download Multiple Codes
 
 Sometimes you want to compare two codes. For example if you wanted to compare the closing prices for Apple and Microsoft, you would obtain the two Quandl codes:
@@ -100,10 +125,10 @@ This would retrieve more pages of data and merge them together as if they were o
 
 ```python
 import quandl
-data = quandl.get_table('ZACKS/FC', paginate=True, m_ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}}, qopts={'columns':['m_ticker', 'per_end_date']})
+data = quandl.get_table('ZACKS/FC', paginate=True, ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}, qopts={'columns':['ticker', 'per_end_date']})
 ```
 
-In this query we are asking for more pages of data, `m_ticker` values of eithier `AAPL` or `MSFT` and a `per_end_date` that is greater than or equal to `2015-01-01`. We are also filtering the returned columns on `m_ticker`, `per_end_date` and `comp_name` rather than all available columns. The output format is `pandas`.
+In this query we are asking for more pages of data, `ticker` values of eithier `AAPL` or `MSFT` and a `per_end_date` that is greater than or equal to `2015-01-01`. We are also filtering the returned columns on `ticker`, `per_end_date` and `comp_name` rather than all available columns. The output format is `pandas`.
 
 #### Available parameters:
 

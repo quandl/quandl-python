@@ -301,6 +301,4 @@ Lists also return metadata associated with the request. This can include things 
 ```python
 quandl.Database.all().current_page
 => 1
-quandl.Database.all()['current_page']
-=> 1
 ```
