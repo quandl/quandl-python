@@ -38,7 +38,8 @@ packages = [
     'quandl',
     'quandl.errors',
     'quandl.model',
-    'quandl.operations'
+    'quandl.operations',
+    'quandl.utils'
 ]
 
 setup(
