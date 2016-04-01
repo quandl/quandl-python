@@ -60,7 +60,8 @@ class GetSingleDatasetTest(unittest2.TestCase):
             transformation='rdiff', rows=4, sort_order='desc')
         self.assertEqual(mock_method.call_count, 1)
         self.assertEqual(mock_method.mock_calls[0],
-                         call(params={'start_date': '2001-01-01', 'end_date': '2010-01-01',
+                         call(handle_column_not_found=True,
+                              params={'start_date': '2001-01-01', 'end_date': '2010-01-01',
                                       'collapse': 'annual', 'transform': 'rdiff',
                                       'rows': 4, 'order': 'desc'}))
 
@@ -71,7 +72,8 @@ class GetSingleDatasetTest(unittest2.TestCase):
             transform='rdiff', rows=4, order='desc')
         self.assertEqual(mock_method.call_count, 1)
         self.assertEqual(mock_method.mock_calls[0],
-                         call(params={'start_date': '2001-01-01', 'end_date': '2010-01-01',
+                         call(handle_column_not_found=True,
+                              params={'start_date': '2001-01-01', 'end_date': '2010-01-01',
                                       'collapse': 'annual', 'transform': 'rdiff',
                                       'rows': 4, 'order': 'desc'}))
 
@@ -87,7 +89,8 @@ class GetSingleDatasetTest(unittest2.TestCase):
     def test_number_becomes_column_index(self, mock_method):
         get('NSE/OIL.1')
         self.assertEqual(mock_method.call_count, 1)
-        self.assertEqual(mock_method.mock_calls[0], call(params={'column_index': 1}))
+        self.assertEqual(mock_method.mock_calls[0],
+                         call(handle_column_not_found=True, params={'column_index': 1}))
 
     @patch('quandl.model.data.Data.all')
     def test_code_and_column_is_parsed_and_used(self, mock):
@@ -113,10 +116,10 @@ class GetMultipleDatasetsTest(unittest2.TestCase):
         httpretty.disable()
         httpretty.reset()
 
-    @patch('quandl.model.merged_dataset.MergedDataset._get_dataset')
+    @patch('quandl.model.merged_dataset.MergedDataset._build_dataset_object')
     def test_multiple_datasets_args_formed(self, mock):
-        # column_index is a dynamically added attribute
-        self.oil_obj.column_index = []
+        # requested_column_indexes is a dynamically added attribute
+        self.oil_obj.requested_column_indexes = []
         mock.return_value = self.oil_obj
         get(['GOOG/NASDAQ_AAPL.1', 'GOOG/NASDAQ_MSFT.2', 'NSE/OIL'])
         expected = [call(('GOOG/NASDAQ_AAPL', {'column_index': [1]})),
@@ -133,7 +136,7 @@ class GetMultipleDatasetsTest(unittest2.TestCase):
 
         self.assertEqual(mock_method.call_count, 1)
         self.assertEqual(mock_method.mock_calls[0],
-                         call(handle_not_found_error=True,
+                         call(handle_not_found_error=True, handle_column_not_found=True,
                               params={'start_date': '2001-01-01', 'end_date': '2010-01-01',
                                       'collapse': 'annual', 'transform': 'rdiff',
                                       'rows': 4, 'order': 'desc'}))
@@ -146,7 +149,7 @@ class GetMultipleDatasetsTest(unittest2.TestCase):
             transform='rdiff', rows=4, order='desc')
         self.assertEqual(mock_method.call_count, 1)
         self.assertEqual(mock_method.mock_calls[0],
-                         call(handle_not_found_error=True,
+                         call(handle_not_found_error=True, handle_column_not_found=True,
                               params={'start_date': '2001-01-01', 'end_date': '2010-01-01',
                                       'collapse': 'annual', 'transform': 'rdiff',
                                       'rows': 4, 'order': 'desc'}))

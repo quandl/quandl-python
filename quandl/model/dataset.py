@@ -5,7 +5,8 @@ from .model_base import ModelBase
 from .data import Data
 from .data_list import DataList
 import quandl.model.database
-from quandl.errors.quandl_error import NotFoundError
+import six
+from quandl.errors.quandl_error import (NotFoundError, ColumnNotFound)
 
 
 class Dataset(GetOperation, ListOperation, ModelBase):
@@ -34,6 +35,7 @@ class Dataset(GetOperation, ListOperation, ModelBase):
         # handle_not_found_error if set to True will add an empty DataFrame
         # for a non-existent dataset instead of raising an error
         handle_not_found_error = options.pop('handle_not_found_error', False)
+        handle_column_not_found = options.pop('handle_column_not_found', False)
         # default order to ascending, and respect whatever user passes in
         params = {
             'database_code': self.database_code,
@@ -45,8 +47,11 @@ class Dataset(GetOperation, ListOperation, ModelBase):
             return Data.all(**updated_options)
         except NotFoundError:
             if handle_not_found_error:
-                # return empty data list
-                return DataList(Data, [], {'column_names': ['None', 'Not Found']})
+                return DataList(Data, [], {'column_names': [six.u('None'), six.u('Not Found')]})
+            raise
+        except ColumnNotFound:
+            if handle_column_not_found:
+                return DataList(Data, [], {'column_names': [six.u('None'), six.u('Not Found')]})
             raise
 
     def database(self):
