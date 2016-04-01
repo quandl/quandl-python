@@ -14,6 +14,7 @@ from quandl.errors.quandl_error import QuandlError
 from quandl.operations.get import GetOperation
 from quandl.operations.list import ListOperation
 from .model_base import ModelBase
+from quandl.message import Message
 import quandl.model.dataset
 
 
@@ -42,7 +43,7 @@ class Database(GetOperation, ListOperation, ModelBase):
 
     def bulk_download_to_file(self, file_or_folder_path, **options):
         if not isinstance(file_or_folder_path, str):
-            raise QuandlError('You must present a valid folder path.')
+            raise QuandlError(Message.ERROR_FOLDER_ISSUE)
 
         path_url = self._bulk_download_path()
 

@@ -1,6 +1,7 @@
 from quandl.errors.quandl_error import InvalidRequestError
 from .utils.api_key_util import ApiKeyUtil
 from .model.database import Database
+from .message import Message
 
 
 def bulkdownload(database, **kwargs):
@@ -15,10 +16,7 @@ def bulkdownload(database, **kwargs):
 
     # discourage users from using authtoken
     if 'authtoken' in kwargs:
-        error_msg = "Parameter authtoken is no longer supported. \
-        For more information please see \
-        https://github.com/quandl/quandl-python/blob/master/README.md"
-        raise InvalidRequestError(error_msg)
+        raise InvalidRequestError(Message.ERROR_AUTHTOKEN_NOT_SUPPORTED)
 
     ApiKeyUtil.init_api_key_from_args(kwargs)
 

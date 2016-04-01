@@ -45,6 +45,7 @@ packages = [
 setup(
     name='quandl',
     description='Package for quandl API access',
+    keywords=['quandl', 'API', 'data', 'financial', 'economic'],
     long_description=long_description,
     version=VERSION,
     author='Quandl',

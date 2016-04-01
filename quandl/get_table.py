@@ -1,5 +1,6 @@
 from quandl.model.datatable import Datatable
 from .api_config import ApiConfig
+from .message import Message
 import warnings
 import copy
 import os
@@ -24,7 +25,7 @@ def get_table(code, **options):
 
         if page_count >= ApiConfig.page_limit:
             if os.isatty(0):
-                warnings.warn("data over page limit, rest data won't include", UserWarning)
+                warnings.warn(Message.WARN_DATA_LIMIT_EXCEEDED, UserWarning)
             break
 
         next_cursor_id = next_data.meta['next_cursor_id']
@@ -32,8 +33,7 @@ def get_table(code, **options):
             break
         elif paginate is not True and next_cursor_id is not None:
             if os.isatty(0):
-                warnings.warn("This is the first page, for more pages, " +
-                              "please use 'paginate=True'", UserWarning)
+                warnings.warn(Message.WARN_PAGE_LIMIT_EXCEEDED, UserWarning)
             break
         page_count = page_count + 1
         options['qopts.cursor_id'] = next_cursor_id

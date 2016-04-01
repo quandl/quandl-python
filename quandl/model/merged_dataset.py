@@ -5,6 +5,7 @@ from .model_base import ModelBase
 from quandl.util import Util
 from .merged_data_list import MergedDataList
 from .data import Data
+from quandl.message import Message
 from .dataset import Dataset
 
 
@@ -181,7 +182,7 @@ class MergedDataset(ModelBase):
             column_index = params['column_index']
             if not isinstance(column_index, list):
                 raise ValueError(
-                    "%s : column_index needs to be a list of integer indexes" % code_str)
+                    Message.ERROR_COLUMN_INDEX_LIST % code_str)
             return column_index
         # default, no column indexes to filter
         return []
@@ -192,7 +193,7 @@ class MergedDataset(ModelBase):
         elif isinstance(dataset_code, string_types):
             return dataset_code
         else:
-            raise ValueError("Arguments in list must be tuple or string")
+            raise ValueError(Message.ERROR_ARGUMENTS_LIST_FORMAT)
 
     def _get_request_params(self, dataset_code):
         if isinstance(dataset_code, tuple):

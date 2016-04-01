@@ -2,6 +2,7 @@ from quandl.errors.quandl_error import InvalidRequestError
 from .model.dataset import Dataset
 from .model.merged_dataset import MergedDataset
 from .utils.api_key_util import ApiKeyUtil
+from .message import Message
 from six import string_types
 import warnings
 
@@ -55,9 +56,7 @@ def get(dataset, **kwargs):
                                         handle_column_not_found=True)
     # If wrong format
     else:
-        error = "Your dataset must either be specified as a string \
-(containing a Quandl code) or an array (of Quandl codes)"
-        raise InvalidRequestError(error)
+        raise InvalidRequestError(Message.ERROR_DATASET_FORMAT)
 
     if data_format == 'numpy':
         return data.to_numpy()
@@ -69,7 +68,7 @@ def _parse_dataset_code(dataset):
         return {'code': dataset, 'column_index': None}
     dataset_temp = dataset.split('.')
     if not dataset_temp[1].isdigit():
-        raise ValueError("The column index needs to be an integer in %s" % dataset)
+        raise ValueError(Message.ERROR_COLUMN_INDEX_TYPE % dataset)
     return {'code': dataset_temp[0], 'column_index': int(dataset_temp[1])}
 
 
@@ -88,7 +87,7 @@ def _build_merged_dataset_args(datasets):
 def _convert_params_to_v3(params):
     for k, v in OLD_TO_NEW_PARAMS.items():
         if k in params:
-            msg = "%s will no longer supported. Please use %s instead." % (k, v)
+            msg = Message.WARN_PARAMS_NOT_SUPPORTED % (k, v)
             warnings.warn(msg, DeprecationWarning)
             # update to the new query param if not specified already
             if v not in params:
