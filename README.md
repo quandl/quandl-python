@@ -1,6 +1,6 @@
-# Quandl Python Client [![Build Status](https://travis-ci.org/quandl/quandl-python.svg?branch=master)](https://travis-ci.org/quandl/quandl-python)
+# Quandl Python Package [![Build Status](https://travis-ci.org/quandl/quandl-python.svg?branch=master)](https://travis-ci.org/quandl/quandl-python)
 
-This is the official documentation for Python's Quandl package. The Quandl client can be used to interact with the latest version of the [Quandl RESTful API](https://www.quandl.com/docs/api). This package is compatible with python v2.7.x and v3.x+
+This is the official documentation for Quandl's Python Package. The package can be used to interact with the latest version of the [Quandl RESTful API](https://www.quandl.com/docs/api). This package is compatible with python v2.7.x and v3.x+
 
 ## Deprecation of old package
 
