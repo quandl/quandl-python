@@ -33,11 +33,11 @@ quandl.ApiConfig.api_key = 'tEsTkEy123456789'
 quandl.ApiConfig.api_version = '2015-04-09'
 ```
 
-`quandl.ApiConfig.api_version` is optional however it is strongly recommended to avoid issues with rate-limiting. For premium databases, datasets and datatables `quandl.ApiConfig.api_key` will need to be set to identify you to our api. Please see [API Documentation](https://www.quandl.com/docs/api) for more detail.
+`quandl.ApiConfig.api_version` is optional however it is strongly recommended to avoid issues with rate-limiting. For premium databases, datasets and datatables `quandl.ApiConfig.api_key` will need to be set to identify you to our API. Please see [API Documentation](https://www.quandl.com/docs/api) for more detail.
 
 ## Retrieving Data
 
-Retrieving data can be done via two methods: Quick and Detailed. Quandl supports two types of data structures: time-series (dataset) data and non-time series (datatable). 
+Retrieving data can be done via two methods: quick and detailed. Quandl supports two types of data structures: time-series (dataset) data and non-time series (datatable). 
 
 The following quick call can be used to retrieve dataset data:
 
@@ -46,7 +46,7 @@ import quandl
 data = quandl.get('NSE/OIL')
 ```
 
-The previous example will find all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with data.head().
+The previous example finds all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with data.head().
 
 A similiar quick call can be used to retrieve a database datatable:
 
@@ -59,7 +59,7 @@ This example retrieves all rows for `ZACKS/FC` where `ticker='AAPL'` and stores 
 
 Note that in both examples if an `api_key` has not been set you may receive limited or sample data. You can find more details on these calls and others in our [Quick Method Guide](./FOR_ANALYSTS.md)
 
-### Additional Usages
+### Detailed Usage
 
 Our API can provide more than just data. It can also be used to search and provide metadata or to programatically retrieve data. For these more advanced techniques please follow our [Detailed Method Guide](./FOR_DEVELOPERS.md)
 
