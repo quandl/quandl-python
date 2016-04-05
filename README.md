@@ -37,7 +37,7 @@ quandl.ApiConfig.api_version = '2015-04-09'
 
 ## Retrieving Data
 
-There is a quick method for retrieving data and a detailed method, more suitable to application programming. Both methods work with Quandl's two types of data structures: time-series (dataset) data and non-time series (datatable). 
+There is a quick method for retrieving data and a detailed method; the latter more suitable to application programming. Both methods work with Quandl's two types of data structures: time-series (dataset) data and non-time series (datatable). 
 
 The following quick call can be used to retrieve a dataset:
 
@@ -46,7 +46,7 @@ import quandl
 data = quandl.get('NSE/OIL')
 ```
 
-The previous example finds all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with data.head().
+This example finds all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with data.head().
 
 A similiar quick call can be used to retrieve a datatable:
 
