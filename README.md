@@ -1,4 +1,6 @@
-# Quandl Python Client [![Build Status](https://travis-ci.org/quandl/quandl-python.svg?branch=master)](https://travis-ci.org/quandl/quandl-python)
+# Quandl Python Client 
+[![Build Status](https://travis-ci.org/quandl/quandl-python.svg?branch=master)](https://travis-ci.org/quandl/quandl-python)
+[![PyPI version](https://badge.fury.io/py/quandl.svg)](https://badge.fury.io/py/quandl)
 
 The official python package for all your data needs! The Quandl client can be used to interact with the latest version of the [Quandl RESTful API](https://www.quandl.com/docs/api). This package is compatible with python v2.7.x and v3.x+
 

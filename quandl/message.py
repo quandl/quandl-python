@@ -16,15 +16,16 @@ class Message:
         permission to access to the folder. Check your settings and try again.'
     ERROR_INVALID_DATABASE_CODE_FROMAT = 'Invalid format used for Quandl database code. \
         The correct format is: `DATABASE_CODE/DATASET_CODE`'
-    ERROR_INVALID_DATASET = 'Invalid dataset. Your dataset must be specified as an array \
-        of Quandl codes.'
+    ERROR_INVALID_DATASET = 'Invalid dataset. Your data set must be specified as a string that \
+        contains a Quandl code or as a tuple with multiple Quandl codes'
     ERROR_REQUESTED_INDEX_OUT_OF_RANGE = '%s : The requested index %s is out of range. The \
         minimum index is 1 and the maximum index is %s'
     ERROR_REQUESTED_COLUMN_NOT_EXIST = 'Requested column index %s does not exist'
 
-    WARN_DATA_LIMIT_EXCEEDED = 'Data limit exceeded. A maximum of 1 million rows can be returned \
-        based on your settings. For more information please see: \
-        https://github.com/quandl/quandl-python/blob/master/README.md'
-    WARN_PAGE_LIMIT_EXCEEDED = "Page limit exceeded. The first 10,000 rows have been returned. \
-        To increase your limit set 'paginate=True'"
+    WARN_DATA_LIMIT_EXCEEDED = 'This call returns a larger amount of data than quandl.get_table() \
+        allows. Please view our documentation on developer methods to request more data. \
+        https://github.com/quandl/quandl-python/blob/master/FOR_ANALYSTS.md#things-to-note'
+    WARN_PAGE_LIMIT_EXCEEDED = 'To request more pages, please set paginate=true in your \
+        quandl.get_table() call. For more information see our documentation: \
+        https://github.com/quandl/quandl-python/blob/master/FOR_ANALYSTS.md#things-to-note'
     WARN_PARAMS_NOT_SUPPORTED = '%s will no longer supported. Please use %s instead'
