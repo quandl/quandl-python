@@ -6,23 +6,21 @@ With the release of version 3 of our API we are officially deprecating version 2
 
 There are numerous advantages to upgrade from the older 2.x series package including increased performance and stability. The upgrade process is fairly simple. 
 
-1. Upgrade your package using pip. 
+Upgrade your package using pip and running: `pip install --upgrade quandl`
 
-`pip install --upgrade quandl`
-
-2. Wherever you have: 
+Wherever you have: 
 
 ```python
 import Quandl
 ```
 
-simply change this to: 
+change this to: 
 
 ```python
 import quandl as Quandl
 ```
 
-3. Additionally if you were relying on a saved version of your `api key` _(authtoken)_ in your scripts please note that this functionality has been dropped from the existing package. To continue to load your api key from the filesystem we recommend you import the key and set it via the api config `quandl.ApiConfig.api_key`. Below is a example of importing your previously pickled key if it exists:
+Additionally if you were relying on a saved version of your `api key` _(authtoken)_ in your scripts please note that this functionality has been dropped from the existing package. To continue to load your api key from the filesystem we recommend you import the key and set it via the api config `quandl.ApiConfig.api_key`. Below is a example of importing your previously pickled key if it exists:
 
 ```python
 import quandl as Quandl
