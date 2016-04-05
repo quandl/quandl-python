@@ -37,9 +37,9 @@ quandl.ApiConfig.api_version = '2015-04-09'
 
 ## Retrieving Data
 
-Retrieving data can be done via two methods: quick and detailed. Quandl supports two types of data structures: time-series (dataset) data and non-time series (datatable). 
+There is a quick method for retrieving data and a detailed method, more suitable to application programming. Both methods work with Quandl's two types of data structures: time-series (dataset) data and non-time series (datatable). 
 
-The following quick call can be used to retrieve dataset data:
+The following quick call can be used to retrieve a dataset:
 
 ```python
 import quandl
@@ -48,7 +48,7 @@ data = quandl.get('NSE/OIL')
 
 The previous example finds all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with data.head().
 
-A similiar quick call can be used to retrieve a database datatable:
+A similiar quick call can be used to retrieve a datatable:
 
 ```python
 import quandl
@@ -57,7 +57,7 @@ data = quandl.get_table('ZACKS/FC', ticker='AAPL')
 
 This example retrieves all rows for `ZACKS/FC` where `ticker='AAPL'` and stores them in a pandas dataframe. Similarily you can then view the dataframe with data.head().
 
-Note that in both examples if an `api_key` has not been set you may receive limited or sample data. You can find more details on these calls and others in our [Quick Method Guide](./FOR_ANALYSTS.md).
+Note that in both examples if an `api_key` has not been set you may receive limited or sample data. You can find more details on these quick calls and others in our [Quick Method Guide](./FOR_ANALYSTS.md).
 
 ### Detailed Usage
 
