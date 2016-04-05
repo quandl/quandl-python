@@ -57,11 +57,11 @@ data = quandl.get_table('ZACKS/FC', ticker='AAPL')
 
 This example retrieves all rows for `ZACKS/FC` where `ticker='AAPL'` and stores them in a pandas dataframe. Similarily you can then view the dataframe with data.head().
 
-Note that in both examples if an `api_key` has not been set you may receive limited or sample data. You can find more details on these calls and others in our [Quick Method Guide](./FOR_ANALYSTS.md)
+Note that in both examples if an `api_key` has not been set you may receive limited or sample data. You can find more details on these calls and others in our [Quick Method Guide](./FOR_ANALYSTS.md).
 
 ### Detailed Usage
 
-Our API can provide more than just data. It can also be used to search and provide metadata or to programatically retrieve data. For these more advanced techniques please follow our [Detailed Method Guide](./FOR_DEVELOPERS.md)
+Our API can provide more than just data. It can also be used to search and provide metadata or to programatically retrieve data. For these more advanced techniques please follow our [Detailed Method Guide](./FOR_DEVELOPERS.md).
 
 ## Local Development
 
@@ -97,7 +97,7 @@ See [this link](http://pandas.pydata.org/pandas-docs/dev/timeseries.html) for mo
 
 ## Questions/Comments
 
-For any questions, comments or inquires about this package please open a ticket on the github repo or email the development team at <dev@quandl.com>. For any questions about data provided by the API please email connect@quandl.com
+For any questions, comments or inquires about this package please open a ticket on the github repo or email the development team at <dev@quandl.com>. For any questions about data provided by the API please email connect@quandl.com.
 
 ## Additional Links
 
