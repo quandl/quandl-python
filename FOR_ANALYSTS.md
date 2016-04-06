@@ -1,10 +1,10 @@
-# Quick Guide To Quandl's Python Package
+# Quick Method Guide - Quandl-Python
 
-This quick guide offers convientent ways to retrieve individual datasets or datatables with the python package without the need for complex commands.  
+This quick guide offers convienent ways to retrieve individual datasets or datatables with the Python package without the need for complex commands.  
 
 ## Retrieving Data
 
-Retrieving data can be achieved easily using the two methods `quandl.get` for data sets and `quandl.get_table` for datatables. In both cases we strongly recommend that you set your api key via:
+Retrieving data can be achieved easily using the two methods `quandl.get` for datasets and `quandl.get_table` for datatables. In both cases we strongly recommend that you set your api key via:
 
  ```python
 import quandl
@@ -84,7 +84,7 @@ import quandl
 data = quandl.get_table('ZACKS/FC')
 ```
 
-Given the volume of data stored in datatables, this call will retrieve the first page of the `ZACKS/FC` datatable. However there may be more data available in which case you can turn on pagination. To get more pages use:
+Given the volume of data stored in datatables, this call will retrieve the first page of the `ZACKS/FC` datatable. You may turn on pagination to return more data by using:
 
 ```python
 import quandl
@@ -121,4 +121,4 @@ For more information on how to use and manipulate the resulting data see the [pa
 
 ## More usages
 
-For even more advanced usage please see our [detailed guide] (./FOR_DEVELOPERS.md).
+For even more advanced usage please see our [Detailed Method Guide] (./FOR_DEVELOPERS.md).
