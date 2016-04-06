@@ -1,10 +1,10 @@
 # 2.x Series package Notes
 
-With the release of version 3 of our API we are officially deprecating version 2 of the `Quandl` python package. We have re-written the package from the ground up and will be moving forward with a 3.x.x package under the new namespace of `quandl` that will rely on version 3 of our RESTful API.
+With the release of version 3 of our API we are officially deprecating version 2 of the Quandl Python package. We have re-written the package and will be moving forward with a 3.x.x package under the new namespace of `quandl` that will rely on version 3 of our RESTful API.
 
 ## Upgrading
 
-There are numerous advantages to upgrade from the older 2.x series package including increased performance and stability. The upgrade process is fairly simple. 
+There are numerous advantages to upgrade from the older 2.x series package including improved performance and stability. The upgrade process is fairly simple. 
 
 Upgrade your package using pip and running: `pip install --upgrade quandl`
 
@@ -32,7 +32,7 @@ if os.path.isfile('authtoken.p'):
 
 That's it! The new package should be ready to use.
 
-## Continuing with the old release
+## Continuing with the Old Release
 
 If you wish to continue using the old package during this transitional period please follow the instructions below: 
 
@@ -42,12 +42,8 @@ To continue using Quandl API version 2, do the following:
 
 1. Ensure you have [pip installed](https://pip.pypa.io/en/latest/installing.html)
 
-2. In your python program's directory, execute `pip freeze > requirements.txt`. Alternatively, create the `requirements.txt` file and enter the desired Quandl package version, e.g., `Quandl==2.8.8`.
+2. In your Python program's directory, execute `pip freeze > requirements.txt`. Alternatively, create the `requirements.txt` file and enter the desired Quandl package version, e.g., `Quandl==2.8.8`.
 
 3. Execute `pip install -r requirements.txt` to ensure the desired Quandl package version is installed.
 
-
-## FAQ
-
-Q: `I tried out your sample code for loading the API key from a file and its not working.`
-A: Note that for the sample code to work you must have access to read the file with the auth token. The sample script also assumes that file is stored in the same directory that the script is being run from. If you wish to use a key in another directory you will need to change the path to the key being used in the example.
+Note: for the sample code to work you must have access to read the file with the auth token. The sample script also assumes that file is stored in the same directory from where the script is run. If you wish to use a key in another directory you will need to match the path used in the sample.
