@@ -52,4 +52,5 @@ To continue using quandl package version 2, do the following:
 ## FAQ
 
 Q: `I tried out your sample code for loading the api key from a file and its not working.`
+
 A: Note that for the sample code to work you must have access to read the file with the auth token. The sample script also assumes that file is stored in the same directory that the script is being run from. If you wish to use a key in another directory you will need to change the path to the key being used in the example.
