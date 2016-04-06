@@ -1,12 +1,12 @@
-# Quandl Python detailed usage for Developers
+# Detailed Method Guide - Quandl/Python
 
-Developer access gives more flexibility when making requests to the Quandl api. Although very similiar to the analyst method it allows for users to achieve unique lookups that cannot be done via the analyst api. These include:
+In addition to the Quick methods for retrieivng data, some additional commands may be used for more querying specificity. These include:
  
 * Retrieving metadata without data
 * Customizing how data is returned more granularly
 * Allowing easier iteration of data
 
-In each of the following sections it is assumed your quandl api key has been set via: 
+In each of the following sections it is assumed your Quandl API key has been set via: 
 
 ```python
 import quandl
@@ -31,7 +31,7 @@ A number of optional query parameters can be passed to `data()`:
 dataset_data = quandl.Dataset('WIKI/AAPL').data(params={ 'start_date':'2001-01-01', 'end_date':'2010-01-01', 'collapse':'annual', 'transformation':'rdiff', 'rows':4 })
 ```
 
-You can access the data much like you would other lists. In addition all the data column fields are mapped to their column_names for convenience:
+You can access the data much like you would other lists. In addition all the data columns, fields are mapped to their column_names for convenience:
 
 ```python
 dataset_data[0].date
@@ -45,15 +45,15 @@ A datatable's data can be retrieved in much the same was as a dataset. For examp
 data = quandl.Datatable('ZACKS/FC').data()
 ```
 
-however one thing to keep in mind is that unlike a dataset a datatables information may be paginated. If the data object returned back contains as `cursor_id` you will need to make another call appending that cursor_id to the datatables params
+Note that unlike a dataset, datatables information may be paginated. If the data object returned back contains a `cursor_id` you will need to make another call appending that `cursor_id` to the datatables parameters.
 
 ```python
 data2 = quandl.Datatable('ZACKS/FC').data(params={'qopts': {'cursor_id': data.meta['next_cursor_id']}})
 ```
 
-Note that all paramter options are given under the kwarg `params`. These parameters will be passed through the API call. You can see a complete list of parameters [here](https://www.quandl.com/docs/api#datatables).
+Note that all parameter options are given under the kwarg `params`. These parameters will be passed through the API call. You can see a complete list of parameters [here](https://www.quandl.com/docs/api#datatables).
 
-To reduce the number of calls to the server we also recommend using filters. This can help to reduce the number of pages returned in the result set. For example:
+We also recommend using filters. This can help to reduce the number of pages returned in the result set. For example:
 
 ```python
 data = quandl.Datatable('ZACKS/FC').data(params={'m_ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': '2015-01-01'}, 'qopts': {'columns': ['m_ticker', 'comp_name']}})
@@ -74,14 +74,14 @@ while True:
 
 ### Download Entire Database (Bulk Download)
 
-To get the url for downloading all dataset data of a database:
+To get the url for downloading all dataset data in a database:
 
 ```python
 quandl.Database('ZEA').bulk_download_url()
 => "https://www.quandl.com/api/v3/databases/ZEA/data?api_key=tEsTkEy123456789"
 ```
 
-To bulk download all dataset data of a database:
+To bulk download all dataset data in a database:
 
 ```python
 quandl.Database('ZEA').bulk_download_to_file('/path/to/destination/folder_or_file_path')
@@ -157,20 +157,20 @@ See the `pandas` and `NumPy` documentation for a wealth of options on data manip
 
 ### Dataset
 
-To retrieve metadata about a dataset simply instantiate its object using it's quandl code:
+To retrieve metadata about a dataset simply instantiate its object using its Quandl code:
 
 ```python
 quandl.Dataset('WIKI/AAPL')
 ```
 
-Once instantiated you can then make data or metadata calls on it. A metadata call looks like.
+Once instantiated you can then make data or metadata calls on the object. A metadata call looks like:
 
 ```python
 quandl.Dataset('WIKI/AAPL').data_fields()
 => ['premium', 'name', 'frequency', 'description', 'column_names', 'database_code', 'type', 'refreshed_at', 'newest_available_date', 'dataset_code', 'oldest_available_date', 'database_id', 'id']
 ```
 
-Note that a call to any attribute such as `name` will trigger an api metadata call if the metadata has not been loaded yet.
+Note that a call to any attribute such as `name` will trigger an API metadata call if the metadata has not been loaded yet.
 
 ### Database
 
@@ -181,14 +181,14 @@ db = quandl.Database('WIKI')
 db.name
 ```
 
-You can also get other a database through other objects such as a dataset:
+You can also get data through other objects such as a dataset:
 
 ```python
 dataset = quandl.Dataset('WIKI/AAPL')
 dataset.database()
 ```
 
-You can also retrieve a list of databases by using:
+Retrieve a list of databases by using:
 
 ```python
 quandl.Database.all()
@@ -196,7 +196,7 @@ quandl.Database.all()
 
 By default, each list query will return page 1 of the first 100 results (please see the official [API Documentation](https://www.quandl.com/docs/api) for more detail).
 
-You can also retrieve the dataset through the database by using the helper method.
+Retrieve the dataset through the database by using the helper method.
 
 ```python
 quandl.Database('WIKI').datasets()
@@ -204,7 +204,7 @@ quandl.Database('WIKI').datasets()
 
 ### Datatable
 
-Much like databases and datasets you can retrieve datatable metadata via its quandl code 
+Much like databases and datasets you can retrieve datatable metadata via its Quandl code: 
 
 ```python
 dt = quandl.Datatable('ZACKS/FC')
@@ -223,7 +223,7 @@ database.data_fields()
 => ['name', 'downloads', 'id', 'premium', 'description', 'datasets_count', 'database_code', 'image']
 ```
 
-You can then uses these methods in your code. Additionally you can access the data by using the hash equalivalent lookup.
+You can then uses these methods in your code. Additionally you can access the data by using the hash equalivalent lookup:
 
 ```python
 database = quandl.Database('WIKI')
@@ -233,7 +233,7 @@ database['database_code']
 => 'WIKI'
 ```
 
-In some cases name of the fields returned by the API may not be compatible with the python language syntax. These will be converted into compatible field names.
+In some cases the names of the fields returned by the API may not be compatible with the Python language syntax. These will be converted into compatible field names.
 
 ```python
 data = quandl.Dataset('WIKI/AAPL').data(params={ 'limit': 1 })[0]
