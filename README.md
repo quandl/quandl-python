@@ -37,7 +37,7 @@ quandl.ApiConfig.api_version = '2015-04-09'
 
 ## Retrieving Data
 
-There are two methods for retrieving data in Python: the Quick method and the Detailed method. The latter more suitable to application programming. Both methods work with Quandl's two types of data structures: time-series (dataset) data and non-time series (datatable). 
+There are two methods for retrieving data in Python: the Quick method and the Detailed method. The latter is more suitable to application programming. Both methods work with Quandl's two types of data structures: time-series (dataset) data and non-time series (datatable). 
 
 The following quick call can be used to retrieve a dataset:
 
