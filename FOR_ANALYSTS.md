@@ -20,7 +20,7 @@ import quandl
 data = quandl.get('NSE/OIL')
 ```
 
-This finds all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with
+This finds all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with:
 
 ```python
 data.head()
@@ -50,9 +50,7 @@ For more information on how to use and manipulate the resulting data see the [pa
 
 #### Download Multiple Codes (Multiset)
 
-Sometimes you want to compare different codes. For example if you wanted to compare the closing prices for Apple and Microsoft, you can obtain both of their codes in one call.
-
-Delimit the codes you want with ',', and put them into an array. This will return a multiset.
+If you want to get multiple codes at once, delimit the codes with ',', and put them into an array. This will return a multiset.
 
 For example:
 ```python
