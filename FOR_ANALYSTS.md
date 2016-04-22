@@ -77,11 +77,11 @@ quandl.bulkdownload('EOD', filename='/my/path/EOD_DB.zip')
 
 Sometimes you want to compare two codes. For example if you wanted to compare the closing prices for Apple and Microsoft, you would obtain the two Quandl codes:
 
-`GOOG/NASDAQ_AAPL` vs. `GOOG/NASDAQ_MSFT`
+`WIKI/AAPL` vs. `WIKI/MSFT`
 
 Append the column you wish to get with a `.`, and put them into an array.
 
-`['GOOG/NASDAQ_AAPL.4','GOOG/NASDAQ_MSFT.4']`
+`['WIKI/AAPL.11','WIKI/MSFT.11']`
 
 Just make a normal get call with the array passed to get, and your multiset will be returned.
 
@@ -91,16 +91,16 @@ If you want to get multiple codes at once, delimit the codes with ',', and put t
 
 For example:
 ```python
-data = quandl.get(['GOOG/NASDAQ_AAPL.4','GOOG/NASDAQ_MSFT.4'])
+data = quandl.get(['WIKI/AAPL.11','WIKI/MSFT.11'])
 ```
 
 Which outputs:
 
 ```
 See www.quandl.com/docs/api for more information.
-Returning Dataframe for  ['GOOG.NASDAQ_AAPL.4', 'GOOG.NASDAQ_MSFT.4']
+Returning Dataframe for  ['WIKI.AAPL.11', 'WIKI.MSFT.11']
 
-        GOOG.NASDAQ_AAPL - Close  GOOG.NASDAQ_MSFT - Close
+        WIKI.AAPL - Close  WIKI.MSFT - Close
 Date                                                          
 1997-08-20        6.16                     17.57
 1997-08-21        6.00                     17.23
@@ -130,10 +130,10 @@ This will retrieve multiple pages of data and merge them together as if they wer
 
 ```python
 import quandl
-data = quandl.get_table('ZACKS/FC', paginate=True, m_ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}}, qopts={'columns':['m_ticker', 'per_end_date']})
+data = quandl.get_table('ZACKS/FC', paginate=True, ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}, qopts={'columns':['ticker', 'per_end_date']})
 ```
 
-In this query we are asking for more pages of data, `m_ticker` values of either `AAPL` or `MSFT` and a `per_end_date` that is greater than or equal to `2015-01-01`. We are also filtering the returned columns on `m_ticker`, `per_end_date` and `comp_name` rather than all available columns. The output format is `pandas`.
+In this query we are asking for more pages of data, `ticker` values of either `AAPL` or `MSFT` and a `per_end_date` that is greater than or equal to `2015-01-01`. We are also filtering the returned columns on `ticker`, `per_end_date` and `comp_name` rather than all available columns. The output format is `pandas`.
 
 #### Available parameters:
 
