@@ -56,7 +56,7 @@ Note that all parameter options are given under the kwarg `params`. These parame
 We also recommend using filters. This can help to reduce the number of pages returned in the result set. For example:
 
 ```python
-data = quandl.Datatable('ZACKS/FC').data(params={'m_ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': '2015-01-01'}, 'qopts': {'columns': ['m_ticker', 'comp_name']}})
+data = quandl.Datatable('ZACKS/FC').data(params={'ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': '2015-01-01'}, 'qopts': {'columns': ['ticker', 'comp_name']}}, qopts={'columns':['ticker', 'per_end_date']})
 ```
 
 This however may still result in multiple pages so be sure to check for a resulting `cursor_id`. An example code that retrieves all pages of data with a filter may look something like:
@@ -65,7 +65,7 @@ This however may still result in multiple pages so be sure to check for a result
 data_list = []
 cursor_id = None
 while True:
-    data = quandl.Datatable('ZACKS/FC').data(params={'m_ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': '2015-01-01'}, 'qopts': {'columns': ['m_ticker', 'comp_name'], 'cursor_id': cursor_id}})
+    data = quandl.Datatable('ZACKS/FC').data(params={'ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': '2015-01-01'}, 'qopts': {'columns': ['ticker', 'comp_name'], 'cursor_id': cursor_id}})
     cursor_id = data.meta['next_cursor_id']
     data_list.append(data)
     if cursor_id is None:
@@ -102,15 +102,15 @@ If `download_type` is not specified, a `complete` bulk download will be performe
 You can get a merged representation of multiple datasets.
 
 ```python
-merged_dataset = quandl.MergedDataset([('GOOG/NASDAQ_AAPL', {'column_index': [4]}),
-                                           ('GOOG/NASDAQ_MSFT', {'column_index': [1,4]}), 'GOOG/NYSE_TWTR'])
+merged_dataset = quandl.MergedDataset([('WIKI/AAPL', {'column_index': [11]}),
+                                           ('WIKI/MSFT', {'column_index': [9,11]}), 'WIKI/TWTR'])
 ```
 
 In the above example the following data will be merged together:
 
-* column 4 of dataset 'GOOG/NASDAQ_AAPL'
-* columns 1 and 4 of dataset 'GOOG/NASDAQ_MSFT'
-* all columns of 'GOOG/NYSE_TWTR' is requested
+* column 11 of dataset 'WIKI/AAPL'
+* columns 9 and 11 of dataset 'WIKI/MSFT'
+* all columns of 'WIKI/TWTR' is requested
 
 To get the data for the MergedDataset:
 
