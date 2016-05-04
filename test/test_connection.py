@@ -44,6 +44,16 @@ class ConnectionTest(unittest2.TestCase):
             QuandlError, lambda: Connection.request('get', 'databases'))
 
     @httpretty.activate
+    def test_non_quandl_error(self):
+        httpretty.register_uri(httpretty.GET,
+                               "https://www.quandl.com/api/v3/databases",
+                               body=json.dumps(
+                                {'foobar':
+                                 {'code': 'blah', 'message': 'something went wrong'}}), status=500)
+        self.assertRaises(
+            QuandlError, lambda: Connection.request('get', 'databases'))
+
+    @httpretty.activate
     @patch('quandl.connection.Connection.execute_request')
     def test_build_request(self, mock):
         ApiConfig.api_key = 'api_token'

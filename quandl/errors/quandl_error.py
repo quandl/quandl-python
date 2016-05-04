@@ -1,12 +1,16 @@
 class QuandlError(RuntimeError):
-    def __init__(self, quandl_message, http_status=None, http_body=None, http_headers=None,
+    GENERIC_ERROR_MESSAGE = 'Something went wrong. Please try again. \
+If you continue to have problems, please contact us at connect@quandl.com.'
+
+    def __init__(self, quandl_message=None, http_status=None, http_body=None, http_headers=None,
                  quandl_error_code=None, response_data=None):
         self.http_status = http_status
         self.http_body = http_body
         self.http_headers = http_headers if http_headers is not None else {}
 
         self.quandl_error_code = quandl_error_code
-        self.quandl_message = quandl_message
+        self.quandl_message = quandl_message if quandl_message is not None \
+            else self.GENERIC_ERROR_MESSAGE
         self.response_data = response_data
 
     def __str__(self):
