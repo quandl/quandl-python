@@ -36,13 +36,13 @@ That's it! The new package should be ready to use.
 
 If you wish to continue using the old package during this transitional period please follow the instructions below: 
 
-https://github.com/quandl/quandl-python/tree/v2.8.9
+https://github.com/quandl/quandl-python/tree/v2.8.7
 
 To continue using Quandl API version 2, do the following:
 
 1. Ensure you have [pip installed](https://pip.pypa.io/en/latest/installing.html)
 
-2. In your Python program's directory, execute `pip freeze > requirements.txt`. Alternatively, create the `requirements.txt` file and enter the desired Quandl package version, e.g., `Quandl==2.8.8`.
+2. In your Python program's directory, execute `pip freeze > requirements.txt`. Alternatively, create the `requirements.txt` file and enter the desired Quandl package version, e.g., `Quandl==2.8.7`.
 
 3. Execute `pip install -r requirements.txt` to ensure the desired Quandl package version is installed.
 
