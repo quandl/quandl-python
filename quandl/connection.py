@@ -53,12 +53,18 @@ class Connection:
     def parse(cls, response):
         try:
             return response.json()
-        except ValueError as e:
-            raise QuandlError(str(e), response.status_code, response.text)
+        except ValueError:
+            raise QuandlError(http_status=response.status_code, http_body=response.text)
 
     @classmethod
     def handle_api_error(cls, resp):
         error_body = cls.parse(resp)
+
+        # if our app does not form a proper quandl_error response
+        # throw generic error
+        if 'quandl_error' not in error_body:
+            raise QuandlError(http_status=resp.status_code, http_body=resp.text)
+
         code = error_body['quandl_error']['code']
         message = error_body['quandl_error']['message']
         prog = re.compile('^QE([a-zA-Z])x')
