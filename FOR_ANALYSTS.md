@@ -1,6 +1,6 @@
 # Quick Method Guide - Quandl-Python
 
-This quick guide offers convienent ways to retrieve individual datasets or datatables with the Python package without the need for complex commands.  
+This quick guide offers convenient ways to retrieve individual datasets or datatables with the Python package without the need for complex commands.  
 
 ## Retrieving Data
 
@@ -149,7 +149,7 @@ For more information on how to use and manipulate the resulting data see the [pa
 
 #### Things to note
 
-* Some datatables will return `sample` data if a valid api key is not used. If you are not recieving all of the expected data please double check your API key.
+* Some datatables will return `sample` data if a valid api key is not used. If you are not receiving all of the expected data please double check your API key.
 * When using the paginate=True option depending on the total number of rows in the result set you may receive an error indicating that there are more pages that have not been downloaded. This is due to a very large result sets that would be too large to send via the analyst method. If this happens we recommend you take one of two approaches:
   * *(recommended)* Refine your filter parameters to retrieve a smaller results set
   * Use the the [Detailed](./FOR_DEVELOPERS.md) method to iterate through more of the data.

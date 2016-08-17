@@ -1,6 +1,6 @@
 # Detailed Method Guide - Quandl/Python
 
-In addition to the Quick methods for retrieivng data, some additional commands may be used for more querying specificity. These include:
+In addition to the Quick methods for retrieving data, some additional commands may be used for more querying specificity. These include:
  
 * Retrieving metadata without data
 * Customizing how data is returned more granularly
