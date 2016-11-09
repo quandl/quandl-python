@@ -97,10 +97,6 @@ in pandas itself.
 
 See [this link](http://pandas.pydata.org/pandas-docs/dev/timeseries.html) for more information about timeseries in pandas.
 
-## Questions/Comments
-
-For any questions, comments or inquires about this package please open a ticket on the github repo or email the development team at <dev@quandl.com>. For any questions about data provided by the API please email connect@quandl.com.
-
 ## Additional Links
 
 * [Quandl](https://www.quandl.com)
