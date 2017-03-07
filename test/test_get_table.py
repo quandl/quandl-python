@@ -38,7 +38,7 @@ class GetDataTableTest(unittest2.TestCase):
         df = quandl.get_table('ZACKS/FC', params={})
         self.assertIsInstance(df, pandas.core.frame.DataFrame)
 
-
+    @patch('quandl.connection.Connection.request')
     def test_datatable_returns_datatable_object(self, mock):
         df = quandl.get_table('AR/MWCF', code="ICEP_WAC_Z2017_S")
         self.assertIsInstance(df, pandas.core.frame.DataFrame)
