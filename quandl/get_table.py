@@ -6,7 +6,7 @@ import copy
 import os
 
 
-def get_table(code, **options):
+def get_table(datatable_code, **options):
     if 'paginate' in options.keys():
         paginate = options.pop('paginate')
     else:
@@ -16,7 +16,7 @@ def get_table(code, **options):
     page_count = 0
     while True:
         next_options = copy.deepcopy(options)
-        next_data = Datatable(code).data(params=next_options)
+        next_data = Datatable(datatable_code).data(params=next_options)
 
         if data is None:
             data = next_data
