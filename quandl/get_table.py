@@ -6,7 +6,7 @@ import copy
 import os
 
 
-def get_table(code, **options):
+def get_table(datatable_code, **options):
     if 'paginate' in options.keys():
         paginate = options.pop('paginate')
     else:
