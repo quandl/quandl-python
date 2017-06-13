@@ -1,9 +1,9 @@
 from quandl.model.datatable import Datatable
+from quandl.errors.quandl_error import LimitExceededError
 from .api_config import ApiConfig
 from .message import Message
 import warnings
 import copy
-import os
 
 
 def get_table(datatable_code, **options):
@@ -24,17 +24,16 @@ def get_table(datatable_code, **options):
             data.extend(next_data)
 
         if page_count >= ApiConfig.page_limit:
-            if os.isatty(0):
-                warnings.warn(Message.WARN_DATA_LIMIT_EXCEEDED, UserWarning)
-            break
+            raise LimitExceededError(Message.WARN_DATA_LIMIT_EXCEEDED)
 
         next_cursor_id = next_data.meta['next_cursor_id']
+
         if next_cursor_id is None:
             break
         elif paginate is not True and next_cursor_id is not None:
-            if os.isatty(0):
-                warnings.warn(Message.WARN_PAGE_LIMIT_EXCEEDED, UserWarning)
+            warnings.warn(Message.WARN_PAGE_LIMIT_EXCEEDED, UserWarning)
             break
+
         page_count = page_count + 1
         options['qopts.cursor_id'] = next_cursor_id
     return data.to_pandas()
