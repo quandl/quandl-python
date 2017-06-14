@@ -30,10 +30,10 @@ def setupDatasetsTest(unit_test, httpretty):
     unit_test.nse_oil = {'dataset': DatasetFactory.build(
         database_code='NSE', dataset_code='OIL')}
 
-    unit_test.WIKI_aapl = {'dataset': DatasetFactory.build(
+    unit_test.wiki_aapl = {'dataset': DatasetFactory.build(
         database_code='WIKI', dataset_code='AAPL')}
 
-    unit_test.WIKI_msft = {'dataset': DatasetFactory.build(
+    unit_test.wiki_msft = {'dataset': DatasetFactory.build(
         database_code='WIKI', dataset_code='MSFT',
         newest_available_date='2015-07-30', oldest_available_date='2013-01-01')}
 
@@ -42,8 +42,8 @@ def setupDatasetsTest(unit_test, httpretty):
         newest_available_date='2015-07-30', oldest_available_date='2013-01-01')}
 
     unit_test.oil_obj = Dataset('NSE/OIL', unit_test.nse_oil['dataset'])
-    unit_test.aapl_obj = Dataset('WIKI/AAPL', unit_test.WIKI_aapl['dataset'])
-    unit_test.WIKI_obj = Dataset('WIKI/MSFT', unit_test.WIKI_msft['dataset'])
+    unit_test.aapl_obj = Dataset('WIKI/AAPL', unit_test.wiki_aapl['dataset'])
+    unit_test.wiki_obj = Dataset('WIKI/MSFT', unit_test.wiki_msft['dataset'])
     unit_test.single_col_obj = Dataset('SINGLE/COLUMN', unit_test.single_col['dataset'])
 
     httpretty.register_uri(httpretty.GET,
@@ -51,8 +51,8 @@ def setupDatasetsTest(unit_test, httpretty):
                                'https://www.quandl.com/api/v3/datasets/.*/metadata'),
                            responses=[httpretty.Response(body=json.dumps(dataset))
                                       for dataset in
-                                      [unit_test.nse_oil, unit_test.WIKI_aapl,
-                                       unit_test.WIKI_msft]])
+                                      [unit_test.nse_oil, unit_test.wiki_aapl,
+                                       unit_test.wiki_msft]])
     # mock our query param column_index request
     httpretty.register_uri(httpretty.GET,
                            "https://www.quandl.com/api/v3/datasets/SINGLE/COLUMN/data",
