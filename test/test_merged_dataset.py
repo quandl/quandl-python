@@ -28,14 +28,14 @@ class GetMergedDatasetTest(unittest2.TestCase):
         mock.return_value = self.oil_obj
         md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
-             ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
-             ('GOOG/NASDAQ_MSFT')])
+             ('WIKI/AAPL', {'column_index': [1]}),
+             ('WIKI/MSFT')])
         md.data_fields()
 
         expected_calls = [
             call(('NSE/OIL', {'column_index': [1, 2]})),
-            call(('GOOG/NASDAQ_AAPL', {'column_index': [1]})),
-            call('GOOG/NASDAQ_MSFT')
+            call(('WIKI/AAPL', {'column_index': [1]})),
+            call('WIKI/MSFT')
         ]
         self.assertEqual(mock.call_count, 3)
         for index, expected in enumerate(expected_calls):
@@ -54,18 +54,18 @@ class GetMergedDatasetTest(unittest2.TestCase):
     def test_sets_dataset_codes_for_the_datasets(self):
         md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
-             ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
-             ('GOOG/NASDAQ_MSFT')])
+             ('WIKI/AAPL', {'column_index': [1]}),
+             ('WIKI/MSFT')])
         self.assertEqual(md._datasets, None)
         self.assertItemsEqual([1, 2], md.dataset_codes[0][1]['column_index'])
         self.assertItemsEqual([1], md.dataset_codes[1][1]['column_index'])
-        self.assertEqual('O', md.dataset_codes[2][1])
+        self.assertEqual('I', md.dataset_codes[2][1])
 
     def test_sets_column_index_on_each_dataset(self):
         md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
-             ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
-             ('GOOG/NASDAQ_MSFT')])
+             ('WIKI/AAPL', {'column_index': [1]}),
+             ('WIKI/MSFT')])
         md.data_fields()
         self.assertItemsEqual([1, 2], md._datasets[0].requested_column_indexes)
         self.assertItemsEqual([1], md._datasets[1].requested_column_indexes)
@@ -74,44 +74,44 @@ class GetMergedDatasetTest(unittest2.TestCase):
     def test_merged_dataset_column_names(self):
         md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
-             ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
-             ('GOOG/NASDAQ_MSFT')])
+             ('WIKI/AAPL', {'column_index': [1]}),
+             ('WIKI/MSFT')])
         expected = [six.u('Date'), six.u('NSE/OIL - column.1'),
                     six.u('NSE/OIL - column.2'),
-                    six.u('GOOG/NASDAQ_AAPL - column.1'),
-                    six.u('GOOG/NASDAQ_MSFT - column.1'),
-                    six.u('GOOG/NASDAQ_MSFT - column.2'),
-                    six.u('GOOG/NASDAQ_MSFT - column.3')]
+                    six.u('WIKI/AAPL - column.1'),
+                    six.u('WIKI/MSFT - column.1'),
+                    six.u('WIKI/MSFT - column.2'),
+                    six.u('WIKI/MSFT - column.3')]
         self.assertItemsEqual(md.column_names, expected)
 
     def test_merged_dataset_oldest_available_date(self):
         md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
-             ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
-             ('GOOG/NASDAQ_MSFT')])
+             ('WIKI/AAPL', {'column_index': [1]}),
+             ('WIKI/MSFT')])
         self.assertEqual(md.oldest_available_date, datetime.date(2013, 1, 1))
 
     def test_merged_dataset_newest_available_date(self):
         md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
-             ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
-             ('GOOG/NASDAQ_MSFT')])
+             ('WIKI/AAPL', {'column_index': [1]}),
+             ('WIKI/MSFT')])
         self.assertEqual(md.newest_available_date, datetime.date(2015, 7, 30))
 
     def test_merged_dataset_database_codes(self):
         md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
-             ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
-             ('GOOG/NASDAQ_MSFT')])
-        self.assertItemsEqual(md.database_code, ['NSE', 'GOOG'])
+             ('WIKI/AAPL', {'column_index': [1]}),
+             ('WIKI/MSFT')])
+        self.assertItemsEqual(md.database_code, ['NSE', 'WIKI'])
 
     def test_merged_dataset_dataset_codes(self):
         md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
-             ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
-             ('GOOG/NASDAQ_MSFT')])
+             ('WIKI/AAPL', {'column_index': [1]}),
+             ('WIKI/MSFT')])
         self.assertItemsEqual(
-            md.dataset_code, ['OIL', 'NASDAQ_AAPL', 'NASDAQ_MSFT'])
+            md.dataset_code, ['OIL', 'AAPL', 'MSFT'])
 
     def test_get_returns_merged_dataset_obj(self):
         md = MergedDataset(['NSE/OIL'])
@@ -141,8 +141,8 @@ class GetMergedDatasetTest(unittest2.TestCase):
         mock_method.return_value = self.data_list_obj
         MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
-             ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
-             ('GOOG/NASDAQ_MSFT')]).data(params={'start_date': '2015-07-01'})
+             ('WIKI/AAPL', {'column_index': [1]}),
+             ('WIKI/MSFT')]).data(params={'start_date': '2015-07-01'})
         expected_calls = [call(params={'start_date': '2015-07-01'}),
                           call(params={'column_index': 1, 'start_date': '2015-07-01'}),
                           call(params={'start_date': '2015-07-01'})]
@@ -154,8 +154,8 @@ class GetMergedDatasetTest(unittest2.TestCase):
     def test_data_forwards_requests_to_datset_data(self, mock_method):
         mock_method.return_value = self.data_list_obj
         MergedDataset(
-            ['NSE/OIL', 'GOOG/NASDAQ_AAPL',
-             'GOOG/NASDAQ_MSFT']).data(params={'start_date': '2015-07-01'})
+            ['NSE/OIL', 'WIKI/AAPL',
+             'WIKI/MSFT']).data(params={'start_date': '2015-07-01'})
         self.assertEqual(mock_method.call_count, 3)
         for actual in mock_method.mock_calls:
             self.assertEqual(actual, call(params={'start_date': '2015-07-01'}))
@@ -163,41 +163,41 @@ class GetMergedDatasetTest(unittest2.TestCase):
     def test_get_merged_dataset_data_returns_correct_types(self):
         data = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
-             ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
-             ('GOOG/NASDAQ_MSFT')]).data()
+             ('WIKI/AAPL', {'column_index': [1]}),
+             ('WIKI/MSFT')]).data()
         self.assertIsInstance(data, MergedDataList)
         self.assertIsInstance(data[0], Data)
 
     def test_get_merged_dataset_creates_merged_pandas_dataframe(self):
         data = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
-             ('GOOG/NASDAQ_AAPL', {'column_index': [1]}),
-             ('GOOG/NASDAQ_MSFT')]).data()
+             ('WIKI/AAPL', {'column_index': [1]}),
+             ('WIKI/MSFT')]).data()
         self.assertIsInstance(data.to_pandas(), pandas.core.frame.DataFrame)
 
     def test_get_merged_dataset_data_returns_specified_columns(self):
         data = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('SINGLE/COLUMN', {'column_index': [1]}),
-             ('GOOG/NASDAQ_MSFT')]).data()
+             ('WIKI/MSFT')]).data()
         actual = data.to_pandas().columns.tolist()
         expected = [six.u('NSE/OIL - column.1'),
                     six.u('NSE/OIL - column.2'),
                     six.u('SINGLE/COLUMN - column.1'),
-                    six.u('GOOG/NASDAQ_MSFT - column.1'),
-                    six.u('GOOG/NASDAQ_MSFT - column.2'),
-                    six.u('GOOG/NASDAQ_MSFT - column.3')]
+                    six.u('WIKI/MSFT - column.1'),
+                    six.u('WIKI/MSFT - column.2'),
+                    six.u('WIKI/MSFT - column.3')]
         self.assertItemsEqual(actual, expected)
 
     def test_get_merged_dataset_data_to_list(self):
         data = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('SINGLE/COLUMN', {'column_index': [1]}),
-             'GOOG/NASDAQ_MSFT']).data()
+             'WIKI/MSFT']).data()
         results = data.to_list()
         # NSE/OIL two columns of data
         # SINGLE/COLUMN one column of data
-        # GOOG/NASDAQ_MSFT all 3 columns of data
+        # WIKI/MSFT all 3 columns of data
         expected = [[datetime.datetime(2015, 7, 11, 0, 0), 444.3, 10, 444.3, 444.3, 10, 3],
                     [datetime.datetime(2015, 7, 13, 0, 0), 433.3, 4, 433.3, 433.3, 4, 3],
                     [datetime.datetime(2015, 7, 14, 0, 0), 437.5, 3, 437.5, 437.5, 3, 3],
@@ -206,8 +206,8 @@ class GetMergedDatasetTest(unittest2.TestCase):
             self.assertItemsEqual(results[index], expected_item)
 
     def test_get_merged_dataset_data_is_descending_when_specified_in_params(self):
-        data = MergedDataset(['NSE/OIL', 'GOOG/NASDAQ_AAPL',
-                              'GOOG/NASDAQ_MSFT']).data(params={'order': 'desc'})
+        data = MergedDataset(['NSE/OIL', 'WIKI/AAPL',
+                              'WIKI/MSFT']).data(params={'order': 'desc'})
         results = data.to_list()
         dates = list([x[0] for x in results])
         self.assertTrue(all(dates[i] >= dates[i + 1]

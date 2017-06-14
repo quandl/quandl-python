@@ -162,7 +162,7 @@ class MergedDataset(ModelBase):
     def _build_dataset_object(self, dataset_code, **options):
         options_copy = options.copy()
         # data_codes are tuples
-        # e.g., ('GOOG/NASDAQ_AAPL', {'column_index": [1,2]})
+        # e.g., ('WIKI/AAPL', {'column_index": [1,2]})
         # or strings
         # e.g., 'NSE/OIL'
         code = self._get_request_dataset_code(dataset_code)

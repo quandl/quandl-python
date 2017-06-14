@@ -18,7 +18,7 @@ from version import VERSION  # NOQA
 install_requires = [
     'pandas >= 0.14',
     'numpy >= 1.8',
-    'requests >= 2.7.0',
+    'requests >= 2.7.0, < 2.18',  # Version 2.18 appears to break pulling data.
     'inflection >= 0.3.1',
     'python-dateutil',
     'six',

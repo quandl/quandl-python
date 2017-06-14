@@ -6,6 +6,7 @@ class DataMixin(object):
     # DataFrame will respect order of input list of list
     def to_pandas(self, keep_column_indexes=[]):
         data = self.to_list()
+
         # ensure pandas gets a list of lists
         if data and isinstance(data, list) and not isinstance(data[0], list):
             data = [data]
@@ -22,6 +23,7 @@ class DataMixin(object):
 
         # unfortunately to_records() cannot handle unicode in 2.7
         df.index.name = str(df.index.name)
+
         # keep_column_indexes are 0 based, 0 is the first column
         if len(keep_column_indexes) > 0:
             self._validate_col_index(df, keep_column_indexes)
@@ -29,7 +31,7 @@ class DataMixin(object):
             # Date is considered a column by our API, but in pandas,
             # it is the index, so column 0 is the first column after Date index
             keep_column_indexes = list([x - 1 for x in keep_column_indexes])
-            df = df[keep_column_indexes]
+            df = df.iloc[:, keep_column_indexes]
         return df
 
     def to_numpy(self):

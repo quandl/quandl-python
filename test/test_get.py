@@ -121,15 +121,15 @@ class GetMultipleDatasetsTest(unittest2.TestCase):
         # requested_column_indexes is a dynamically added attribute
         self.oil_obj.requested_column_indexes = []
         mock.return_value = self.oil_obj
-        get(['GOOG/NASDAQ_AAPL.1', 'GOOG/NASDAQ_MSFT.2', 'NSE/OIL'])
-        expected = [call(('GOOG/NASDAQ_AAPL', {'column_index': [1]})),
-                    call(('GOOG/NASDAQ_MSFT', {'column_index': [2]})),
+        get(['WIKI/AAPL.1', 'WIKI/MSFT.2', 'NSE/OIL'])
+        expected = [call(('WIKI/AAPL', {'column_index': [1]})),
+                    call(('WIKI/MSFT', {'column_index': [2]})),
                     call('NSE/OIL')]
         self.assertEqual(mock.call_args_list, expected)
 
     @patch.object(MergedDataset, 'data')
     def test_query_params_are_formed_with_old_arg_names(self, mock_method):
-        get(['GOOG/NASDAQ_AAPL.1', 'GOOG/NASDAQ_MSFT.2', 'NSE/OIL'],
+        get(['WIKI/AAPL.1', 'WIKI/MSFT.2', 'NSE/OIL'],
             authtoken='authtoken', trim_start='2001-01-01',
             trim_end='2010-01-01', collapse='annual',
             transformation='rdiff', rows=4, sort_order='desc')
@@ -143,7 +143,7 @@ class GetMultipleDatasetsTest(unittest2.TestCase):
 
     @patch.object(MergedDataset, 'data')
     def test_query_params_are_formed_with_new_arg_names(self, mock_method):
-        get(['GOOG/NASDAQ_AAPL.1', 'GOOG/NASDAQ_MSFT.2', 'NSE/OIL'],
+        get(['WIKI/AAPL.1', 'WIKI/MSFT.2', 'NSE/OIL'],
             api_key='authtoken', start_date='2001-01-01',
             end_date='2010-01-01', collapse='annual',
             transform='rdiff', rows=4, order='desc')
