@@ -24,7 +24,7 @@ def get_table(datatable_code, **options):
             data.extend(next_data)
 
         if page_count >= ApiConfig.page_limit:
-            raise LimitExceededError(Message.WARN_DATA_LIMIT_EXCEEDED)
+            raise LimitExceededError(Message.WARN_DATA_LIMIT_EXCEEDED % (datatable_code, ApiConfig.api_key))
 
         next_cursor_id = next_data.meta['next_cursor_id']
 
