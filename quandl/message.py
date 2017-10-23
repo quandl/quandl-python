@@ -24,7 +24,8 @@ class Message:
 
     WARN_DATA_LIMIT_EXCEEDED = 'This call exceeds the amount of data that quandl.get_table() allows. \
         Please use the following link in your browser, which will download the full results as \
-        a CSV file: https://www.quandl.com/api/v3/datatables/%s?qopts.export=true&api_key=%s. See our API documentation for more info: \
+        a CSV file: https://www.quandl.com/api/v3/datatables/%s?qopts.export=true&api_key=%s. See \
+        our API documentation for more info: \
         https://docs.quandl.com/docs/in-depth-usage-1#section-download-an-entire-table'
     WARN_PAGE_LIMIT_EXCEEDED = 'To request more pages, please set paginate=true in your \
         quandl.get_table() call. For more information see our documentation: \
