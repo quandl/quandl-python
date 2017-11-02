@@ -29,8 +29,7 @@ class ModelList(object):
         self.meta = meta
 
     def to_list(self):
-        l = list([x.to_list() for x in self.values])
-        return l
+        return list([x.to_list() for x in self.values])
 
     def __getattr__(self, k):
         if k in self.meta:
