@@ -1,3 +1,7 @@
+### 3.3.0 - 2017-12-20
+
+* Unlock the version of requests to allow use with other modern packages
+
 ### 3.2.1 - 2017-10-23
 
 * Provide a more actionable warning when asking for data over 1M rows
