@@ -1,4 +1,4 @@
-# Quandl Python Client 
+# Quandl Python Client
 [![Build Status](https://travis-ci.org/quandl/quandl-python.svg?branch=master)](https://travis-ci.org/quandl/quandl-python)
 [![PyPI version](https://badge.fury.io/py/quandl.svg)](https://badge.fury.io/py/quandl)
 
@@ -39,7 +39,7 @@ quandl.ApiConfig.api_version = '2015-04-09'
 
 ## Retrieving Data
 
-There are two methods for retrieving data in Python: the Quick method and the Detailed method. The latter is more suitable to application programming. Both methods work with Quandl's two types of data structures: time-series (dataset) data and non-time series (datatable). 
+There are two methods for retrieving data in Python: the Quick method and the Detailed method. The latter is more suitable to application programming. Both methods work with Quandl's two types of data structures: time-series (dataset) data and non-time series (datatable).
 
 The following quick call can be used to retrieve a dataset:
 
@@ -85,14 +85,14 @@ The following are instructions for running our tests:
 1. Make sure a version of python 2.7 or python 3.x is installed locally in your system. To avoid permission issues on OSX we recommend installing the packages from: https://www.python.org/downloads/
 2. Install `virtualenv` and `tox` using:
     `pip install tox virtualenv`
-3. Run following command (you may notice slow performance the first time): 
+3. Run following command (you may notice slow performance the first time):
     `python setup.py install`
 4. Run the following command to test the plugin in all versions of python we support:
     `tox`
 
 ## Recommended Usage
 
-We would suggest downloading the data in raw format in the highest frequency possible and preforming any data manipulation
+We would suggest downloading the data in raw format in the highest frequency possible and performing any data manipulation
 in pandas itself.
 
 See [this link](http://pandas.pydata.org/pandas-docs/dev/timeseries.html) for more information about timeseries in pandas.
