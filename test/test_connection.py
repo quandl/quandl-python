@@ -8,7 +8,7 @@ import unittest2
 from test.helpers.httpretty_extension import httpretty
 import json
 from mock import patch, call
-
+from quandl.version import *
 
 class ConnectionTest(unittest2.TestCase):
 
@@ -67,6 +67,6 @@ class ConnectionTest(unittest2.TestCase):
                                  'accept': ('application/json, '
                                             'application/vnd.quandl+json;version=2015-04-09'),
                                  'request-source': 'python',
-                                 'request-source-version': '3.3.0'},
+                                 'request-source-version': VERSION},
                         params={'per_page': 10, 'page': 2})
         self.assertEqual(mock.call_args, expected)
