@@ -1,5 +1,5 @@
 from .data_list import DataList
-
+import pandas
 
 class MergedDataList(DataList):
 
@@ -17,7 +17,9 @@ class MergedDataList(DataList):
         return self.__data_frame
 
     def _initialize_raw_data(self):
-        return self.to_numpy().tolist()
+        dataframe = self.to_pandas().copy()
+        dataframe.insert(0, 'date', pandas.to_datetime(dataframe.index))
+        return dataframe.as_matrix()
 
     def _column_names(self):
         return self.to_numpy().dtype.names
