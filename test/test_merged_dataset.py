@@ -199,9 +199,6 @@ class GetMergedDatasetTest(unittest2.TestCase):
                     [datetime.datetime(2015, 7, 13, 0, 0), 433.3, 4, 433.3, 433.3, 4, 3],
                     [datetime.datetime(2015, 7, 14, 0, 0), 437.5, 3, 437.5, 437.5, 3, 3],
                     [datetime.datetime(2015, 7, 15, 0, 0), 440.0, 2, 440.0, 440.0, 2, 3]]
-        print('Expected Data:')
-        for exp_result in expected:
-            print(exp_result)
         for index, expected_item in enumerate(expected):
             self.assertItemsEqual(results[index], expected_item)
 
