@@ -35,7 +35,7 @@ class DataMixin(object):
         return df
 
     def to_numpy(self):
-        return self.to_pandas().to_records()
+        return self.to_pandas().to_records(convert_datetime64=True)
 
     def to_csv(self):
         return self.to_pandas().to_csv()
