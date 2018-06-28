@@ -18,7 +18,7 @@ class MergedDataList(DataList):
 
     def _initialize_raw_data(self):
         numpy_results = self.to_numpy()
-        print(numpy_results)
+        print(numpy_results.dtype)
         numpy_dtypes = numpy_results.dtype.fields.items()
         print(numpy_dtypes)
 
