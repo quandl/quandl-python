@@ -20,7 +20,7 @@ class MergedDataList(DataList):
         numpy_results = self.to_numpy()
         print(numpy_results.dtype.fields)
         numpy_dtypes = numpy_results.dtype.fields.items()
-        print(numpy_dtypes)
+        print(numpy_results.dtype.names)
 
         if [dtype for _, dtype in numpy_dtypes if dtype[0].str == '<M8[ns]']:
             print('inside')
