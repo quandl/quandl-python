@@ -203,7 +203,7 @@ class GetMergedDatasetTest(unittest2.TestCase):
                     [datetime.datetime(2015, 7, 14, 0, 0), 437.5, 3, 437.5, 437.5, 3, 3],
                     [datetime.datetime(2015, 7, 15, 0, 0), 440.0, 2, 440.0, 440.0, 2, 3]]
         for index, expected_item in enumerate(expected):
-            self.assertItemsEqual(results[index], expected_item)
+            self.assertItemsEqual(expected_item, results[index])
 
     def test_get_merged_dataset_data_is_descending_when_specified_in_params(self):
         data = MergedDataset(['NSE/OIL', 'WIKI/AAPL',
