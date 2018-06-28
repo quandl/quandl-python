@@ -20,15 +20,19 @@ class MergedDataList(DataList):
         numpy_results = self.to_numpy()
         numpy_dtypes = numpy_results.dtype.fields.items()
 
-        python_compatible_dtypes = []
-        for name, dtype in numpy_dtypes:
-            if dtype[0].str == '<M8[ns]':
-                python_compatible_dtypes.append((name, '<M8[ms]'))
-            else:
-                python_compatible_dtypes.append((name, dtype[0].str))
+        if [dtype for _, dtype in numpy_dtypes if dtype[0].str == '<M8[ns]']:
+            print('inside')
+            python_compatible_dtypes = []
+            for name, dtype in numpy_dtypes:
+                if dtype[0].str == '<M8[ns]':
+                    python_compatible_dtypes.append((name, '<M8[ms]'))
+                else:
+                    python_compatible_dtypes.append((name, dtype[0].str))
 
-        print(python_compatible_dtypes)
-        return numpy_results.astype(python_compatible_dtypes).tolist()
+            print(python_compatible_dtypes)
+            return numpy_results.astype(python_compatible_dtypes).tolist()
+        else:
+            return numpy_results.tolist()
 
     def _column_names(self):
         return self.to_numpy().dtype.names
