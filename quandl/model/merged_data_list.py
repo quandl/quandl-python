@@ -29,6 +29,5 @@ class MergedDataList(DataList):
 
         return numpy_results.astype(python_compatible_dtypes).tolist()
 
-
     def _column_names(self):
         return self.to_numpy().dtype.names
