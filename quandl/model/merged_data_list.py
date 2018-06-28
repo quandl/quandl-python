@@ -27,6 +27,7 @@ class MergedDataList(DataList):
             else:
                 python_compatible_dtypes.append((name, dtype[0].str))
 
+        print(python_compatible_dtypes)
         return numpy_results.astype(python_compatible_dtypes).tolist()
 
     def _column_names(self):
