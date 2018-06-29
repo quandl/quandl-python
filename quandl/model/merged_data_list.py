@@ -25,12 +25,11 @@ class MergedDataList(DataList):
         if [dtype for _, dtype in numpy_dtypes if dtype[0].str == '<M8[ns]']:
             python_compatible_dtypes = []
             for name in numpy_dtype_names:
-                print(name)
                 print('Adding', name, numpy_results.dtype[name].str)
                 if numpy_results.dtype[name].str == '<M8[ns]':
-                    python_compatible_dtypes.append((name, np.dtype('<M8[ms]')))
+                    python_compatible_dtypes.append((str(name), np.dtype('<M8[ms]')))
                 else:
-                    python_compatible_dtypes.append((name, numpy_results.dtype[name]))
+                    python_compatible_dtypes.append((str(name), numpy_results.dtype[name]))
 
             print(python_compatible_dtypes)
             return numpy_results.astype(python_compatible_dtypes).tolist()
