@@ -18,19 +18,18 @@ class MergedDataList(DataList):
 
     def _initialize_raw_data(self):
         numpy_results = self.to_numpy()
-        print(numpy_results.dtype.fields)
+        numpy_dtype_names = numpy_results.dtype.names
         numpy_dtypes = numpy_results.dtype.fields.items()
-        print(numpy_results.dtype.names)
 
         if [dtype for _, dtype in numpy_dtypes if dtype[0].str == '<M8[ns]']:
-            print('inside')
             python_compatible_dtypes = []
-            for name, dtype in numpy_dtypes:
-                print('Adding', name, dtype[0].str)
-                if dtype[0].str == '<M8[ns]':
+            for name in numpy_dtype_names:
+                print(name)
+                print('Adding', name, numpy_results.dtype[name].str)
+                if numpy_results.dtype[name].str == '<M8[ns]':
                     python_compatible_dtypes.append((name, '<M8[ms]'))
                 else:
-                    python_compatible_dtypes.append((name, dtype[0].str))
+                    python_compatible_dtypes.append((name, numpy_results.dtype[name].str))
 
             print(python_compatible_dtypes)
             return numpy_results.astype(python_compatible_dtypes).tolist()
