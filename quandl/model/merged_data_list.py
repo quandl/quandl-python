@@ -1,4 +1,5 @@
 from .data_list import DataList
+import numpy as np
 
 
 class MergedDataList(DataList):
@@ -27,9 +28,9 @@ class MergedDataList(DataList):
                 print(name)
                 print('Adding', name, numpy_results.dtype[name].str)
                 if numpy_results.dtype[name].str == '<M8[ns]':
-                    python_compatible_dtypes.append((name, '<M8[ms]'))
+                    python_compatible_dtypes.append((name, np.dtype('<M8[ms]')))
                 else:
-                    python_compatible_dtypes.append((name, numpy_results.dtype[name].str))
+                    python_compatible_dtypes.append((name, numpy_results.dtype[name]))
 
             print(python_compatible_dtypes)
             return numpy_results.astype(python_compatible_dtypes).tolist()
