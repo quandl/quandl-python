@@ -1,3 +1,8 @@
+### 3.4.0 - 2018-07-03
+
+* When returning a list of data, in a Python friendly format, convert datetime64 to datetime
+* Numpy no longer supports Python v3.3, thus we are removing support for it
+
 ### 3.3.0 - 2017-12-20
 
 * Unlock the version of requests to allow use with other modern packages

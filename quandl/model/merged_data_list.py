@@ -1,4 +1,5 @@
 from .data_list import DataList
+import numpy as np
 
 
 class MergedDataList(DataList):
@@ -17,7 +18,17 @@ class MergedDataList(DataList):
         return self.__data_frame
 
     def _initialize_raw_data(self):
-        return self.to_numpy().tolist()
+        numpy_results = self.to_numpy()
+        numpy_dtype_names = numpy_results.dtype.names
+
+        python_compatible_dtypes = []
+        for name in numpy_dtype_names:
+            if numpy_results.dtype[name].str == '<M8[ns]':
+                python_compatible_dtypes.append((str(name), np.dtype('<M8[ms]')))
+            else:
+                python_compatible_dtypes.append((str(name), numpy_results.dtype[name]))
+
+        return numpy_results.astype(python_compatible_dtypes).tolist()
 
     def _column_names(self):
         return self.to_numpy().dtype.names
