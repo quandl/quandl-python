@@ -195,9 +195,6 @@ class GetMergedDatasetTest(unittest2.TestCase):
              ('SINGLE/COLUMN', {'column_index': [1]}),
              'WIKI/MSFT']).data()
         results = data.to_list()
-        # NSE/OIL two columns of data
-        # SINGLE/COLUMN one column of data
-        # WIKI/MSFT all 3 columns of data
         expected = [[datetime.datetime(2015, 7, 11, 0, 0), 444.3, 10, 444.3, 444.3, 10, 3],
                     [datetime.datetime(2015, 7, 13, 0, 0), 433.3, 4, 433.3, 433.3, 4, 3],
                     [datetime.datetime(2015, 7, 14, 0, 0), 437.5, 3, 437.5, 437.5, 3, 3],
