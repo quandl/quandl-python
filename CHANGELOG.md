@@ -1,3 +1,7 @@
+### 3.4.1 - unreleased
+
+* Include all documentation and test file in source distribution (sdist) tarballs
+
 ### 3.4.0 - 2018-07-03
 
 * When returning a list of data, in a Python friendly format, convert datetime64 to datetime
