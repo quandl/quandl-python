@@ -1,4 +1,8 @@
-### 3.4.1 - unreleased
+### 3.4.2 - 2018-08-21
+
+* Fix typos in our warning messages https://github.com/quandl/quandl-python/pull/114
+
+### 3.4.1 - 2018-07-25
 
 * Include all documentation and test file in source distribution (sdist) tarballs
 
