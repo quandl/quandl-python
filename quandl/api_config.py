@@ -7,7 +7,7 @@ class ApiConfig:
 
 def save_key(apikey, filename=None):
     if filename is None:
-        import pathlib 
+        import pathlib
         filename = str(pathlib.Path.home()) + "/.quandl_apikey"
 
     fileptr = open(filename, 'w')
@@ -18,7 +18,7 @@ def save_key(apikey, filename=None):
 
 def read_key(filename=None):
     if filename is None:
-        import pathlib 
+        import pathlib
         filename = str(pathlib.Path.home()) + "/.quandl_apikey"
 
     try:
@@ -29,6 +29,6 @@ def read_key(filename=None):
         if apikey:
             ApiConfig.api_key = apikey
         else:
-            raise Exception("File '{:s}' is empty. Please your 'quandl.save_key' before.".format(filename))
-    except: 
-        raise Exception("File '{:s}' not found. Please your 'quandl.save_key' before.".format(filename))
+            raise Exception("File '{:s}' is empty.".format(filename))
+    except ValueError:
+        raise Exception("File '{:s}' not found.".format(filename))
