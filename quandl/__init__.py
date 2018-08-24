@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .api_config import ApiConfig
+from .api_config import ApiConfig, save_key, read_key
 
 from .errors.quandl_error import *
 

@@ -37,6 +37,34 @@ quandl.ApiConfig.api_version = '2015-04-09'
 
 `quandl.ApiConfig.api_version` is optional however it is strongly recommended to avoid issues with rate-limiting. For premium databases, datasets and datatables `quandl.ApiConfig.api_key` will need to be set to identify you to our API. Please see [API Documentation](https://www.quandl.com/docs/api) for more detail.
 
+
+### Local API Key file
+Save local key to `$HOME/.quandl_apikey` file
+```
+import quandl
+quandl.save_key("supersecret")
+print(quandl.ApiConfig.api_key)
+```
+
+Load the API Key without exposing the key in the script or notebook
+```
+import quandl
+quandl.read_key()
+print(quandl.ApiConfig.api_key)
+```
+
+Set a custom location for the API key file, e.g. store the externally outside a docker container
+```
+import quandl
+quandl.save_key("ourcorporateapikey", filename="/srv/data/somecontainer/.corporatequandlapikey")
+```
+and call within the docker container with mount point at `/data`
+```
+import quandl
+quandl.read_key(filepath="/data/.corporatequandlapikey")
+```
+
+
 ## Retrieving Data
 
 There are two methods for retrieving data in Python: the Quick method and the Detailed method. The latter is more suitable to application programming. Both methods work with Quandl's two types of data structures: time-series (dataset) data and non-time series (datatable).
