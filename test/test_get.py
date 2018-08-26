@@ -1,4 +1,4 @@
-import unittest2
+import unittest
 from test.helpers.httpretty_extension import httpretty
 from test.helpers.merged_datasets_helper import setupDatasetsTest
 import pandas
@@ -11,7 +11,7 @@ from quandl.api_config import ApiConfig
 from quandl.connection import Connection
 
 
-class GetSingleDatasetTest(unittest2.TestCase):
+class GetSingleDatasetTest(unittest.TestCase):
     @classmethod
     def setUp(self):
         # ensure api key is not set
@@ -104,7 +104,7 @@ class GetSingleDatasetTest(unittest2.TestCase):
         self.assertRaises(ValueError, lambda: get('NSE/OIL.notanumber'))
 
 
-class GetMultipleDatasetsTest(unittest2.TestCase):
+class GetMultipleDatasetsTest(unittest.TestCase):
     @classmethod
     def setUp(self):
         # ensure api key is not set

@@ -1,5 +1,5 @@
 import re
-import unittest2
+import unittest
 from test.helpers.httpretty_extension import httpretty
 import json
 import datetime
@@ -12,7 +12,7 @@ from test.factories.dataset_data import DatasetDataFactory
 from quandl.errors.quandl_error import InvalidDataError
 
 
-class DataTest(unittest2.TestCase):
+class DataTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -48,7 +48,7 @@ class DataTest(unittest2.TestCase):
         self.assertIsNotNone(self.data_object.meta)
 
 
-class ListDataTest(unittest2.TestCase):
+class ListDataTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -99,24 +99,24 @@ class ListDataTest(unittest2.TestCase):
     def test_column_names_match(self):
         results = Data.all(
             params={'database_code': 'NSE', 'dataset_code': 'OIL'})
-        self.assertItemsEqual(
+        six.assertCountEqual(self,
             results.column_names, ['Date', 'column.1', 'column.2', 'column.3'])
 
     def test_raw_data_is_zip_of_column_names_and_data(self):
         results = Data.all(
             params={'database_code': 'NSE', 'dataset_code': 'OIL'})
-        self.assertItemsEqual(results[0].__get_raw_data__(), self.expected_list_values[0])
-        self.assertItemsEqual(results[1].__get_raw_data__(), self.expected_list_values[1])
-        self.assertItemsEqual(results[2].__get_raw_data__(), self.expected_list_values[2])
-        self.assertItemsEqual(results[3].__get_raw_data__(), self.expected_list_values[3])
+        six.assertCountEqual(self, results[0].__get_raw_data__(), self.expected_list_values[0])
+        six.assertCountEqual(self, results[1].__get_raw_data__(), self.expected_list_values[1])
+        six.assertCountEqual(self, results[2].__get_raw_data__(), self.expected_list_values[2])
+        six.assertCountEqual(self, results[3].__get_raw_data__(), self.expected_list_values[3])
 
     def test_data_to_list(self):
         list_data = Data.all(
             params={'database_code': 'NSE', 'dataset_code': 'OIL'}).to_list()
-        self.assertItemsEqual(list_data[0], self.expected_list_values[0])
-        self.assertItemsEqual(list_data[1], self.expected_list_values[1])
-        self.assertItemsEqual(list_data[2], self.expected_list_values[2])
-        self.assertItemsEqual(list_data[3], self.expected_list_values[3])
+        six.assertCountEqual(self, list_data[0], self.expected_list_values[0])
+        six.assertCountEqual(self, list_data[1], self.expected_list_values[1])
+        six.assertCountEqual(self, list_data[2], self.expected_list_values[2])
+        six.assertCountEqual(self, list_data[3], self.expected_list_values[3])
 
     def test_to_pandas_returns_pandas_dataframe_object(self):
         results = Data.all(

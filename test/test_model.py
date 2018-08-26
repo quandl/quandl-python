@@ -1,15 +1,16 @@
-import unittest2
+import unittest
 from quandl.model.model_base import ModelBase
 
+import six
 
-class ModelTest(unittest2.TestCase):
+class ModelTest(unittest.TestCase):
 
     def setUp(self):
         self.model = ModelBase('foo', {'foo': 'bar', 'here': 1})
 
     def test_data_fields_returns_list_of_attribute_keys(self):
         data_fields = self.model.data_fields()
-        self.assertItemsEqual(data_fields, ['foo', 'here'])
+        six.assertCountEqual(self, data_fields, ['foo', 'here'])
 
     def test_data_can_be_accessed_as_dict(self):
         self.assertEqual(self.model['foo'], 'bar')
@@ -24,4 +25,4 @@ class ModelTest(unittest2.TestCase):
 
     def test_to_list_returns_values(self):
         results = self.model.to_list()
-        self.assertItemsEqual(results, ['bar', 1])
+        six.assertCountEqual(self, results, ['bar', 1])

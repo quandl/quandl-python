@@ -4,14 +4,14 @@ from quandl.errors.quandl_error import (
     QuandlError, LimitExceededError, InternalServerError,
     AuthenticationError, ForbiddenError, InvalidRequestError,
     NotFoundError, ServiceUnavailableError)
-import unittest2
+import unittest
 from test.helpers.httpretty_extension import httpretty
 import json
 from mock import patch, call
 from quandl.version import VERSION
 
 
-class ConnectionTest(unittest2.TestCase):
+class ConnectionTest(unittest.TestCase):
 
     @httpretty.activate
     def test_quandl_exceptions(self):

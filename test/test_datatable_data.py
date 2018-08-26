@@ -1,5 +1,5 @@
 import re
-import unittest2
+import unittest
 import httpretty
 import json
 import pandas
@@ -12,7 +12,7 @@ from test.factories.datatable_data import DatatableDataFactory
 from test.factories.datatable_meta import DatatableMetaFactory
 
 
-class DatatableDataTest(unittest2.TestCase):
+class DatatableDataTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -52,7 +52,7 @@ class DatatableDataTest(unittest2.TestCase):
         self.assertIsNotNone(self.data_object.meta)
 
 
-class ListDatatableDataTest(unittest2.TestCase):
+class ListDatatableDataTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):

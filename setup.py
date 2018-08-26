@@ -56,7 +56,6 @@ setup(
     license='MIT',
     install_requires=install_requires,
     tests_require=[
-        'unittest2',
         'flake8',
         'nose',
         'httpretty',

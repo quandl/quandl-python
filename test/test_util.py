@@ -1,4 +1,4 @@
-import unittest2
+import unittest
 import datetime
 import six
 from quandl.util import Util
@@ -11,7 +11,7 @@ def cmp(a, b):
     return (a > b) - (a < b)
 
 
-class UtilTest(unittest2.TestCase):
+class UtilTest(unittest.TestCase):
 
     def test_methodize(self):
         self.assertEqual(
