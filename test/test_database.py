@@ -103,7 +103,7 @@ class ListDatabasesTest(unittest.TestCase):
         results = Database.all()
         self.assertEqual(len(results), 10)
         six.assertCountEqual(self, [x.id for x in results],
-                              [x['id'] for x in self.expected_databases['databases']])
+                             [x['id'] for x in self.expected_databases['databases']])
 
     def test_databases_has_more(self):
         results = Database.all()

@@ -50,7 +50,7 @@ class GetDatasetTest(unittest.TestCase):
     def test_dataset_column_names_match_expected(self):
         dataset = Dataset('NSE/OIL')
         six.assertCountEqual(self,
-            dataset.column_names, ['Date', 'column.1', 'column.2', 'column.3'])
+                             dataset.column_names, ['Date', 'column.1', 'column.2', 'column.3'])
 
     def test_dataset_database_gives_instance_of_database(self):
         database = self.dataset_instance.database()

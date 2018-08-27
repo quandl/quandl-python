@@ -111,7 +111,7 @@ class GetMergedDatasetTest(unittest.TestCase):
              ('WIKI/AAPL', {'column_index': [1]}),
              ('WIKI/MSFT')])
         six.assertCountEqual(self,
-            md.dataset_code, ['OIL', 'AAPL', 'MSFT'])
+                             md.dataset_code, ['OIL', 'AAPL', 'MSFT'])
 
     def test_get_returns_merged_dataset_obj(self):
         md = MergedDataset(['NSE/OIL'])

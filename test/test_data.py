@@ -100,7 +100,7 @@ class ListDataTest(unittest.TestCase):
         results = Data.all(
             params={'database_code': 'NSE', 'dataset_code': 'OIL'})
         six.assertCountEqual(self,
-            results.column_names, ['Date', 'column.1', 'column.2', 'column.3'])
+                             results.column_names, ['Date', 'column.1', 'column.2', 'column.3'])
 
     def test_raw_data_is_zip_of_column_names_and_data(self):
         results = Data.all(

@@ -47,4 +47,4 @@ class GetDatatableDatasetTest(unittest.TestCase):
     def test_dataset_column_names_match_expected(self):
         metadata = Datatable('ZACKS/FC').data_fields()
         six.assertCountEqual(self,
-            metadata, [u'datatable_code', u'id', u'name', u'vendor_code'])
+                             metadata, [u'datatable_code', u'id', u'name', u'vendor_code'])

@@ -3,6 +3,7 @@ from quandl.model.model_base import ModelBase
 
 import six
 
+
 class ModelTest(unittest.TestCase):
 
     def setUp(self):
