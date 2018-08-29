@@ -1,8 +1,9 @@
 import re
-import unittest2
+import unittest
 from test.helpers.httpretty_extension import httpretty
 import json
 import datetime
+import six
 from quandl.model.dataset import Dataset
 from quandl.model.database import Database
 from mock import patch, call
@@ -10,7 +11,7 @@ from test.factories.dataset import DatasetFactory
 from test.factories.meta import MetaFactory
 
 
-class GetDatasetTest(unittest2.TestCase):
+class GetDatasetTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -48,8 +49,8 @@ class GetDatasetTest(unittest2.TestCase):
 
     def test_dataset_column_names_match_expected(self):
         dataset = Dataset('NSE/OIL')
-        self.assertItemsEqual(
-            dataset.column_names, ['Date', 'column.1', 'column.2', 'column.3'])
+        six.assertCountEqual(self,
+                             dataset.column_names, ['Date', 'column.1', 'column.2', 'column.3'])
 
     def test_dataset_database_gives_instance_of_database(self):
         database = self.dataset_instance.database()
@@ -65,7 +66,7 @@ class GetDatasetTest(unittest2.TestCase):
         self.assertEqual(mock.call_args, expected)
 
 
-class ListDatasetsTest(unittest2.TestCase):
+class ListDatasetsTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):

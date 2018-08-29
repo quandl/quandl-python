@@ -1,5 +1,5 @@
 import re
-import unittest2
+import unittest
 import httpretty
 import json
 from quandl.model.datatable import Datatable
@@ -11,7 +11,7 @@ from test.factories.datatable_meta import DatatableMetaFactory
 import quandl
 
 
-class GetDataTableTest(unittest2.TestCase):
+class GetDataTableTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
