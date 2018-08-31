@@ -1,4 +1,4 @@
-import unittest2
+import unittest
 from test.helpers.httpretty_extension import httpretty
 import six
 import datetime
@@ -12,7 +12,7 @@ from quandl.errors.quandl_error import ColumnNotFound
 from test.helpers.merged_datasets_helper import setupDatasetsTest
 
 
-class GetMergedDatasetTest(unittest2.TestCase):
+class GetMergedDatasetTest(unittest.TestCase):
 
     @classmethod
     def setUp(self):
@@ -57,8 +57,8 @@ class GetMergedDatasetTest(unittest2.TestCase):
              ('WIKI/AAPL', {'column_index': [1]}),
              ('WIKI/MSFT')])
         self.assertEqual(md._datasets, None)
-        self.assertItemsEqual([1, 2], md.dataset_codes[0][1]['column_index'])
-        self.assertItemsEqual([1], md.dataset_codes[1][1]['column_index'])
+        six.assertCountEqual(self, [1, 2], md.dataset_codes[0][1]['column_index'])
+        six.assertCountEqual(self, [1], md.dataset_codes[1][1]['column_index'])
         self.assertEqual('I', md.dataset_codes[2][1])
 
     def test_sets_column_index_on_each_dataset(self):
@@ -67,9 +67,9 @@ class GetMergedDatasetTest(unittest2.TestCase):
              ('WIKI/AAPL', {'column_index': [1]}),
              ('WIKI/MSFT')])
         md.data_fields()
-        self.assertItemsEqual([1, 2], md._datasets[0].requested_column_indexes)
-        self.assertItemsEqual([1], md._datasets[1].requested_column_indexes)
-        self.assertItemsEqual([], md._datasets[2].requested_column_indexes)
+        six.assertCountEqual(self, [1, 2], md._datasets[0].requested_column_indexes)
+        six.assertCountEqual(self, [1], md._datasets[1].requested_column_indexes)
+        six.assertCountEqual(self, [], md._datasets[2].requested_column_indexes)
 
     def test_merged_dataset_column_names(self):
         md = MergedDataset(
@@ -82,7 +82,7 @@ class GetMergedDatasetTest(unittest2.TestCase):
                     six.u('WIKI/MSFT - column.1'),
                     six.u('WIKI/MSFT - column.2'),
                     six.u('WIKI/MSFT - column.3')]
-        self.assertItemsEqual(md.column_names, expected)
+        six.assertCountEqual(self, md.column_names, expected)
 
     def test_merged_dataset_oldest_available_date(self):
         md = MergedDataset(
@@ -103,15 +103,15 @@ class GetMergedDatasetTest(unittest2.TestCase):
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('WIKI/AAPL', {'column_index': [1]}),
              ('WIKI/MSFT')])
-        self.assertItemsEqual(md.database_code, ['NSE', 'WIKI'])
+        six.assertCountEqual(self, md.database_code, ['NSE', 'WIKI'])
 
     def test_merged_dataset_dataset_codes(self):
         md = MergedDataset(
             [('NSE/OIL', {'column_index': [1, 2]}),
              ('WIKI/AAPL', {'column_index': [1]}),
              ('WIKI/MSFT')])
-        self.assertItemsEqual(
-            md.dataset_code, ['OIL', 'AAPL', 'MSFT'])
+        six.assertCountEqual(self,
+                             md.dataset_code, ['OIL', 'AAPL', 'MSFT'])
 
     def test_get_returns_merged_dataset_obj(self):
         md = MergedDataset(['NSE/OIL'])
@@ -187,7 +187,7 @@ class GetMergedDatasetTest(unittest2.TestCase):
                     six.u('WIKI/MSFT - column.1'),
                     six.u('WIKI/MSFT - column.2'),
                     six.u('WIKI/MSFT - column.3')]
-        self.assertItemsEqual(actual, expected)
+        six.assertCountEqual(self, actual, expected)
 
     def test_get_merged_dataset_data_to_list(self):
         data = MergedDataset(
@@ -203,7 +203,7 @@ class GetMergedDatasetTest(unittest2.TestCase):
                     [datetime.datetime(2015, 7, 14, 0, 0), 437.5, 3, 437.5, 437.5, 3, 3],
                     [datetime.datetime(2015, 7, 15, 0, 0), 440.0, 2, 440.0, 440.0, 2, 3]]
         for index, expected_item in enumerate(expected):
-            self.assertItemsEqual(expected_item, results[index])
+            six.assertCountEqual(self, expected_item, results[index])
 
     def test_get_merged_dataset_data_is_descending_when_specified_in_params(self):
         data = MergedDataset(['NSE/OIL', 'WIKI/AAPL',

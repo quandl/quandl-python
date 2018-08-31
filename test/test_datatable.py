@@ -1,13 +1,14 @@
 import re
-import unittest2
+import unittest
 import httpretty
 import json
+import six
 from quandl.model.datatable import Datatable
 from mock import patch, call
 from test.factories.datatable import DatatableFactory
 
 
-class GetDatatableDatasetTest(unittest2.TestCase):
+class GetDatatableDatasetTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -45,5 +46,5 @@ class GetDatatableDatasetTest(unittest2.TestCase):
 
     def test_dataset_column_names_match_expected(self):
         metadata = Datatable('ZACKS/FC').data_fields()
-        self.assertItemsEqual(
-            metadata, [u'datatable_code', u'id', u'name', u'vendor_code'])
+        six.assertCountEqual(self,
+                             metadata, [u'datatable_code', u'id', u'name', u'vendor_code'])

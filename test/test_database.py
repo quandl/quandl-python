@@ -6,7 +6,7 @@ except ImportError:
     from cgi import parse_qs
 
 import re
-import unittest2
+import unittest
 from test.helpers.httpretty_extension import httpretty
 import json
 import six
@@ -19,7 +19,7 @@ from test.factories.database import DatabaseFactory
 from test.factories.meta import MetaFactory
 
 
-class GetDatabaseTest(unittest2.TestCase):
+class GetDatabaseTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -64,7 +64,7 @@ class GetDatabaseTest(unittest2.TestCase):
         self.assertEqual(mock.call_args, expected)
 
 
-class ListDatabasesTest(unittest2.TestCase):
+class ListDatabasesTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -102,15 +102,15 @@ class ListDatabasesTest(unittest2.TestCase):
     def test_databases_returns_expected_ids(self):
         results = Database.all()
         self.assertEqual(len(results), 10)
-        self.assertItemsEqual([x.id for x in results],
-                              [x['id'] for x in self.expected_databases['databases']])
+        six.assertCountEqual(self, [x.id for x in results],
+                             [x['id'] for x in self.expected_databases['databases']])
 
     def test_databases_has_more(self):
         results = Database.all()
         self.assertTrue(results.has_more_results())
 
 
-class BulkDownloadDatabaseTest(unittest2.TestCase):
+class BulkDownloadDatabaseTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
