@@ -35,12 +35,9 @@ class Datatable(GetOperation, ListOperation, ModelBase):
         if not isinstance(file_or_folder_path, str):
             raise QuandlError(Message.ERROR_FOLDER_ISSUE)
 
-        return self._url_request(file_or_folder_path, 0, **options)
+        return self._url_request(file_or_folder_path, **options)
 
-    def _url_request(self, file_or_folder_path, request_time, **options):
-        if request_time > 10:
-            raise QuandlError(Message.WARN_LONG_GENERATION_TIME)
-
+    def _url_request(self, file_or_folder_path, **options):
         url = self._download_request_path()
         code_name = self.code
         if 'params' not in options:
@@ -76,9 +73,9 @@ class Datatable(GetOperation, ListOperation, ModelBase):
 
             return file_path
         else:
-            sleep(10)
-            request_time += 1
-            self._url_request(file_or_folder_path, request_time, **options)
+            print(Message.LONG_GENERATION_TIME)
+            self._url_request(file_or_folder_path, **options)
+            sleep(30)
 
     def _download_request_path(self):
         url = self.default_path()
