@@ -90,3 +90,14 @@ class BulkDownloadDataTableTest(unittest.TestCase):
     def test_bulk_download_raises_exception_when_no_path(self):
         self.assertRaises(
             QuandlError, lambda: self.datatable.bulk_download_file(None))
+
+    def test_bulk_download_table_raises_exception_when_error_response(self):
+        httpretty.register_uri(httpretty.GET,
+                               re.compile(
+                                   'https://www.quandl.com/api/v3/datatables/*'),
+                               body=json.dumps(
+                                   {'quandl_error':
+                                    {'code': 'QEMx01', 'message': 'something went wrong'}}),
+                               status=500)
+        self.assertRaises(
+            InternalServerError, lambda: self.datatable.bulk_download_file('.'))

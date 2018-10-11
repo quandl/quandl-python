@@ -3,6 +3,7 @@ from .utils.api_key_util import ApiKeyUtil
 from .model.datatable import Datatable
 from .message import Message
 
+
 def bulkdownloadtable(datatable_code, **kwargs):
     """Downloads an entire table as a zip file.
     :param str datatable_code: The datatable code to download, such as MER/F1
