@@ -1,22 +1,14 @@
-try:
-    from urllib.parse import urlencode
-    from urllib.request import urlopen
-except ImportError:
-    from urllib import urlencode
-    from urllib import urlopen
-
 import re
 import unittest
 import httpretty
 import json
 import six
 from quandl.model.datatable import Datatable
-from mock import patch, call, mock_open
-from quandl.connection import Connection
+from mock import patch, call
 from test.factories.datatable import DatatableFactory
 from quandl.api_config import ApiConfig
 from quandl.errors.quandl_error import (InternalServerError, QuandlError)
-from test.helpers.httpretty_extension import httpretty
+
 
 class GetDatatableDatasetTest(unittest.TestCase):
 
