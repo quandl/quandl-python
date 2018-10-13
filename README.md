@@ -117,6 +117,8 @@ The following are instructions for running our tests:
     `python setup.py install`
 4. Run the following command to test the plugin in all versions of python we support:
     `tox`
+    
+Once you have all required package installed, you can run tests locally with `python -m unittest -v test.[test file name].[test case name].[individual test name]`.
 
 ## Recommended Usage
 

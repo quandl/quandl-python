@@ -1,3 +1,9 @@
+try:
+    from urllib.parse import parse_qs
+except ImportError:
+    from urlparse import urlparse
+    from cgi import parse_qs
+
 import re
 import unittest
 import httpretty
@@ -57,15 +63,13 @@ class BulkDownloadDataTableTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         httpretty.enable()
+        datatable = {'datatable': DatatableFactory.build(
+            vendor_code='AUSBS', datatable_code='D')}
         httpretty.register_uri(httpretty.GET,
                                re.compile(
                                    'https://www.quandl.com/api/v3/datatables/*'),
-                               adding_headers={
-                                   'Location': 'https://www.blah.com/download/db.zip'
-                               },
-                               body='{}', status=302)
-        httpretty.register_uri(httpretty.GET,
-                               re.compile('https://www.blah.com/'), body='{}')
+                               body=json.dumps(datatable))
+        cls.datatable_instance = Datatable(datatable['datatable'])
 
     @classmethod
     def tearDownClass(cls):
@@ -74,14 +78,22 @@ class BulkDownloadDataTableTest(unittest.TestCase):
 
     def setUp(self):
         datatable = {'datatable': DatatableFactory.build(
-            vendor_code='ZACKS', datatable_code='FC')}
-        self.datatable = Datatable(datatable['datatable']['datatable_code'], datatable['datatable'])
+            vendor_code='AUSBS', datatable_code='D')}
+        self.datatable = Datatable(datatable['datatable']['vendor_code'] + '/' +
+                                   datatable['datatable']['datatable_code'], datatable['datatable'])
         ApiConfig.api_key = 'api_token'
         ApiConfig.api_version = '2015-04-09'
 
+    def test_bulk_download_get_file_info(self):
+        url = self.datatable._download_request_path()
+        parsed_url = urlparse(url)
+        self.assertEqual(parsed_url.path, 'datatables/AUSBS/D.json')
+        self.assertDictEqual(parse_qs(parsed_url.query), {
+            'qopts.export': ['true']})
+
     def test_bulk_download_raises_exception_when_no_path(self):
-        self.assertRaises(
-            QuandlError, lambda: self.datatable.bulk_download_file(None))
+            self.assertRaises(
+                QuandlError, lambda: self.datatable.bulk_download_file(None))
 
     def test_bulk_download_table_raises_exception_when_error_response(self):
         httpretty.register_uri(httpretty.GET,

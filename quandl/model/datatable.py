@@ -1,14 +1,11 @@
 try:
-    from urllib.parse import urlencode
     from urllib.request import urlopen
 except ImportError:
-    from urllib import urlencode
     from urllib import urlopen
 
 from time import sleep
 import os
 
-from quandl.api_config import ApiConfig
 from quandl.connection import Connection
 from quandl.util import Util
 from quandl.errors.quandl_error import QuandlError
@@ -40,15 +37,6 @@ class Datatable(GetOperation, ListOperation, ModelBase):
     def _url_request(self, file_or_folder_path, **options):
         url = self._download_request_path()
         code_name = self.code
-        if 'params' not in options:
-            options['params'] = {}
-        if ApiConfig.api_key:
-            options['params']['api_key'] = ApiConfig.api_key
-        if ApiConfig.api_version:
-            options['params']['api_version'] = ApiConfig.api_version
-
-        if list(options.keys()):
-            url += '.json?qopts.export=true&' + urlencode(options['params'])
 
         r = Connection.request('get', url, **options)
         response_data = r.json()
@@ -60,7 +48,8 @@ class Datatable(GetOperation, ListOperation, ModelBase):
 
             file_path = file_or_folder_path
             if os.path.isdir(file_or_folder_path):
-                file_path = file_or_folder_path + '/' + code_name.replace('/', '_') + '.zip'
+                file_path = os.path.join(file_or_folder_path,
+                                         '{}.{}'.format(code_name.replace('/', '_'), 'zip'))
 
             res = urlopen(file_link)
 
@@ -74,10 +63,11 @@ class Datatable(GetOperation, ListOperation, ModelBase):
             return file_path
         else:
             print(Message.LONG_GENERATION_TIME)
-            self._url_request(file_or_folder_path, **options)
             sleep(30)
+            self._url_request(file_or_folder_path, **options)
 
     def _download_request_path(self):
         url = self.default_path()
         url = Util.constructed_path(url, {'id': self.code})
+        url += '.json?qopts.export=true&'
         return url
