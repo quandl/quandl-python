@@ -22,6 +22,7 @@ from .data import Data
 class Datatable(GetOperation, ListOperation, ModelBase):
     BULK_CHUNK_SIZE = 16 * 1024
     WAIT_GENERATION_INTERVAL = 30
+    IS_FILE_READY = False
 
     @classmethod
     def get_path(cls):
@@ -38,7 +39,10 @@ class Datatable(GetOperation, ListOperation, ModelBase):
         if 'params' not in options:
             options['params'] = {}
 
-        return self._request_file_info(file_or_folder_path, **options['params'])
+        while True:
+            self._request_file_info(file_or_folder_path, **options['params'])
+            if self.IS_FILE_READY:
+                break
 
     def _request_file_info(self, file_or_folder_path, **options):
         url = self._download_request_path(**options)
@@ -53,11 +57,11 @@ class Datatable(GetOperation, ListOperation, ModelBase):
 
         if status == 'fresh':
             file_link = file_info['link']
-            return self._download_file_with_link(file_or_folder_path, file_link, code_name)
+            self.IS_FILE_READY = True
+            self._download_file_with_link(file_or_folder_path, file_link, code_name)
         else:
             print(Message.LONG_GENERATION_TIME)
             sleep(self.WAIT_GENERATION_INTERVAL)
-            self._url_request(file_or_folder_path, **options)
 
     def _download_file_with_link(self, file_or_folder_path, file_link, code_name):
         file_path = file_or_folder_path
@@ -74,7 +78,7 @@ class Datatable(GetOperation, ListOperation, ModelBase):
                     break
                 fd.write(chunk)
 
-        return file_path
+        print(file_path)
 
     def _download_request_path(self, **options):
         url = self.default_path()
