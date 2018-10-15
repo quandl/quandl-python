@@ -158,7 +158,7 @@ quandl.export_table('MER/F1', params={'compnumber': '39102', 'mapcode':'-5370','
 
 After the download is finished, the filename of the downloaded zip file will be returned.
 
-Sometime it takes a while to generate the zip file, you'll get a message while the file is being generated. Once the file is generated, it will start download the zip file.
+Sometimes it takes a while to generate the zip file, you'll get a message while the file is being generated. Once the file is generated, it will start the download of the zip file.
 
 #### Available parameters:
 
