@@ -118,22 +118,24 @@ The following are instructions for running our tests:
 4. Run the following command to test the plugin in all versions of python we support:
     `tox`
     
-Once you have all required package installed, you can run tests locally with:
+Once you have all required packages installed, you can run tests locally with:
 
-```ptyhon
+Running all tests locally
 
-# running all tests locally
-
+```python
 python -W always setup.py -q test
+```
 
-# runnging an individual test
+Running an individual test
 
+```python
 python -m unittest test.[test file name].[class name].[individual test name]`
+```
 
-# such as
+Example:
 
+```python
 python -m unittest -v test.test_datatable.ExportDataTableTest.test_download_get_file_info
-
 ```
 
 ## Recommended Usage
