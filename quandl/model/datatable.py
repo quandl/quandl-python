@@ -21,6 +21,7 @@ from .data import Data
 
 class Datatable(GetOperation, ListOperation, ModelBase):
     BULK_CHUNK_SIZE = 16 * 1024
+    WAIT_GENERATION_INTERVAL = 30
 
     @classmethod
     def get_path(cls):
@@ -68,7 +69,7 @@ class Datatable(GetOperation, ListOperation, ModelBase):
             return file_path
         else:
             print(Message.LONG_GENERATION_TIME)
-            sleep(30)
+            sleep(self.WAIT_GENERATION_INTERVAL)
             self._url_request(file_or_folder_path, **options)
 
     def _download_request_path(self, **options):
