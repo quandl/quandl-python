@@ -59,7 +59,7 @@ class GetDatatableDatasetTest(unittest.TestCase):
                              metadata, [u'datatable_code', u'id', u'name', u'vendor_code'])
 
 
-class BulkDownloadDataTableTest(unittest.TestCase):
+class ExportDataTableTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -85,7 +85,7 @@ class BulkDownloadDataTableTest(unittest.TestCase):
         ApiConfig.api_key = 'api_token'
         ApiConfig.api_version = '2015-04-09'
 
-    def test_bulk_download_get_file_info(self):
+    def test_download_get_file_info(self):
         url = self.datatable._download_request_path()
         parsed_url = urlparse(url)
         self.assertEqual(parsed_url.path, 'datatables/AUSBS/D.json')
@@ -94,7 +94,7 @@ class BulkDownloadDataTableTest(unittest.TestCase):
 
     def test_bulk_download_raises_exception_when_no_path(self):
             self.assertRaises(
-                QuandlError, lambda: self.datatable.bulk_download_file(None))
+                QuandlError, lambda: self.datatable.download_file(None))
 
     def test_bulk_download_table_raises_exception_when_error_response(self):
         httpretty.register_uri(httpretty.GET,
@@ -105,4 +105,4 @@ class BulkDownloadDataTableTest(unittest.TestCase):
                                     {'code': 'QEMx01', 'message': 'something went wrong'}}),
                                status=500)
         self.assertRaises(
-            InternalServerError, lambda: self.datatable.bulk_download_file('.'))
+            InternalServerError, lambda: self.datatable.download_file('.'))

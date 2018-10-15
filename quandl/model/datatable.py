@@ -1,7 +1,9 @@
 try:
     from urllib.request import urlopen
+    from urllib.parse import urlencode
 except ImportError:
     from urllib import urlopen
+    from urllib import urlencode
 
 from time import sleep
 import os
@@ -28,14 +30,17 @@ class Datatable(GetOperation, ListOperation, ModelBase):
         updated_options = Util.convert_options(**options)
         return Data.page(self, **updated_options)
 
-    def bulk_download_file(self, file_or_folder_path, **options):
+    def download_file(self, file_or_folder_path, **options):
         if not isinstance(file_or_folder_path, str):
             raise QuandlError(Message.ERROR_FOLDER_ISSUE)
 
-        return self._url_request(file_or_folder_path, **options)
+        if 'params' not in options:
+            options['params'] = {}
+
+        return self._url_request(file_or_folder_path, **options['params'])
 
     def _url_request(self, file_or_folder_path, **options):
-        url = self._download_request_path()
+        url = self._download_request_path(**options)
         code_name = self.code
 
         r = Connection.request('get', url, **options)
@@ -66,8 +71,15 @@ class Datatable(GetOperation, ListOperation, ModelBase):
             sleep(30)
             self._url_request(file_or_folder_path, **options)
 
-    def _download_request_path(self):
+    def _download_request_path(self, **options):
         url = self.default_path()
         url = Util.constructed_path(url, {'id': self.code})
         url += '.json?qopts.export=true&'
+
+        if 'params' not in options:
+            options['params'] = {}
+
+        if options['params']:
+            url += urlencode(options['params'])
+
         return url

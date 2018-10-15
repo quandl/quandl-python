@@ -76,15 +76,23 @@ Download table data as a zip file. You can download all the table data in a data
 
 ```python
 import quandl
-data = quandl.bulkdownloadtable('MER/F1')
+data = quandl.export_table('MER/F1')
 ```
 
 You can also specify where to download the zip file:  
 
 ```python
 import quandl
-data = quandl.bulkdownloadtable('MER/F1', filename='/my/path/MER_F1_DB.zip')
+data = quandl.export_table('MER/F1', filename='/my/path/MER_F1_DB.zip')
 ```
+
+You can also specify what data you want to download with filters and parameters: 
+
+```python
+import quandl
+quandl.export_table('MER/F1', params={'compnumber': '39102', 'mapcode':'-5370','reporttype': 'A', 'qopts': {'columns': ['reportdate', 'amount']}})
+```
+
 After the download is finished, the filename of the downloaded zip file will be returned.
 
 Sometime it takes a while to generate the zip file, you'll get a message while the file is being generated. Once the file is generated, it will start download the zip file.
