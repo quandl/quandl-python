@@ -22,7 +22,6 @@ from .data import Data
 class Datatable(GetOperation, ListOperation, ModelBase):
     BULK_CHUNK_SIZE = 16 * 1024
     WAIT_GENERATION_INTERVAL = 30
-    IS_FILE_READY = False
 
     @classmethod
     def get_path(cls):
@@ -39,10 +38,13 @@ class Datatable(GetOperation, ListOperation, ModelBase):
         if 'params' not in options:
             options['params'] = {}
 
-        while True:
-            self._request_file_info(file_or_folder_path, **options['params'])
-            if self.IS_FILE_READY:
-                break
+        file_is_ready = False
+
+        while not file_is_ready:
+            file_is_ready = self._request_file_info(file_or_folder_path, **options['params'])
+            if not file_is_ready:
+                print(Message.LONG_GENERATION_TIME)
+                sleep(self.WAIT_GENERATION_INTERVAL)
 
     def _request_file_info(self, file_or_folder_path, **options):
         url = self._download_request_path(**options)
@@ -57,11 +59,10 @@ class Datatable(GetOperation, ListOperation, ModelBase):
 
         if status == 'fresh':
             file_link = file_info['link']
-            self.IS_FILE_READY = True
             self._download_file_with_link(file_or_folder_path, file_link, code_name)
+            return True
         else:
-            print(Message.LONG_GENERATION_TIME)
-            sleep(self.WAIT_GENERATION_INTERVAL)
+            return False
 
     def _download_file_with_link(self, file_or_folder_path, file_link, code_name):
         file_path = file_or_folder_path

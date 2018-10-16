@@ -11,7 +11,7 @@ import httpretty
 import json
 import six
 from quandl.model.datatable import Datatable
-from mock import patch, call
+from mock import patch, call, mock_open
 from test.factories.datatable import DatatableFactory
 from quandl.api_config import ApiConfig
 from quandl.errors.quandl_error import (InternalServerError, QuandlError)
@@ -91,6 +91,27 @@ class ExportDataTableTest(unittest.TestCase):
         self.assertEqual(parsed_url.path, 'datatables/AUSBS/D.json')
         self.assertDictEqual(parse_qs(parsed_url.query), {
             'qopts.export': ['true']})
+
+    def test_download_generated_file(self):
+        m = mock_open()
+
+        httpretty.register_uri(httpretty.GET,
+                               re.compile(
+                                   'https://www.quandl.com/api/v3/datatables/*'),
+                               body=json.dumps({
+                                   'datatable_bulk_download': {
+                                       'file': {
+                                           'status': 'fresh',
+                                           'link': 'https://www.blah.com/download/db.zip'
+                                       }
+                                   }
+                               }),
+                               status=200)
+
+        with patch('quandl.model.datatable.urlopen', m, create=True):
+            self.datatable.download_file('.')
+
+        self.assertEqual(m.call_count, 1)
 
     def test_bulk_download_raises_exception_when_no_path(self):
             self.assertRaises(
