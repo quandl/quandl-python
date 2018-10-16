@@ -149,6 +149,8 @@ import quandl
 data = quandl.export_table('MER/F1', filename='/my/path/MER_F1_DB.zip')
 ```
 
+Note that if you are downloading the whole table, it will take longer to generate the zip file.
+
 You can also specify what data you want to download with filters and parameters: 
 
 ```python
