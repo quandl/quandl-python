@@ -89,8 +89,6 @@ class ExportDataTableTest(unittest.TestCase):
         url = self.datatable._download_request_path()
         parsed_url = urlparse(url)
         self.assertEqual(parsed_url.path, 'datatables/AUSBS/D.json')
-        self.assertDictEqual(parse_qs(parsed_url.query), {
-            'qopts.export': ['true']})
 
     def test_download_generated_file(self):
         m = mock_open()

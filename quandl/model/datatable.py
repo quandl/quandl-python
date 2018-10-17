@@ -44,10 +44,14 @@ class Datatable(GetOperation, ListOperation, ModelBase):
                 sleep(self.WAIT_GENERATION_INTERVAL)
 
     def _request_file_info(self, file_or_folder_path, **options):
-        url = self._download_request_path(**options)
+        url = self._download_request_path()
+        updated_options = Util.convert_options(params=options)
         code_name = self.code
 
-        r = Connection.request('get', url)
+        updated_options['params']['qopts.export'] = 'true'
+
+        r = Connection.request('get', url, **updated_options)
+
         response_data = r.json()
 
         file_info = response_data['datatable_bulk_download']['file']
@@ -78,12 +82,8 @@ class Datatable(GetOperation, ListOperation, ModelBase):
 
         print(file_path)
 
-    def _download_request_path(self, **options):
+    def _download_request_path(self):
         url = self.default_path()
         url = Util.constructed_path(url, {'id': self.code})
-        url += '.json?qopts.export=true&'
-
-        if list(options.keys()):
-            url += urlencode(options)
-
+        url += '.json'
         return url
