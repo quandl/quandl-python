@@ -19,4 +19,4 @@ def export_table(datatable_code, **kwargs):
     ApiKeyUtil.init_api_key_from_args(kwargs)
 
     filename = kwargs.pop('filename', '.')
-    return Datatable(datatable_code).download_file(filename, params=kwargs)
+    return Datatable(datatable_code).download_file(filename, **kwargs)

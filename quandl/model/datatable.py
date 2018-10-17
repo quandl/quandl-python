@@ -35,13 +35,10 @@ class Datatable(GetOperation, ListOperation, ModelBase):
         if not isinstance(file_or_folder_path, str):
             raise QuandlError(Message.ERROR_FOLDER_ISSUE)
 
-        if 'params' not in options:
-            options['params'] = {}
-
         file_is_ready = False
 
         while not file_is_ready:
-            file_is_ready = self._request_file_info(file_or_folder_path, **options['params'])
+            file_is_ready = self._request_file_info(file_or_folder_path, **options)
             if not file_is_ready:
                 print(Message.LONG_GENERATION_TIME)
                 sleep(self.WAIT_GENERATION_INTERVAL)
@@ -50,7 +47,7 @@ class Datatable(GetOperation, ListOperation, ModelBase):
         url = self._download_request_path(**options)
         code_name = self.code
 
-        r = Connection.request('get', url, **options)
+        r = Connection.request('get', url)
         response_data = r.json()
 
         file_info = response_data['datatable_bulk_download']['file']
@@ -86,10 +83,7 @@ class Datatable(GetOperation, ListOperation, ModelBase):
         url = Util.constructed_path(url, {'id': self.code})
         url += '.json?qopts.export=true&'
 
-        if 'params' not in options:
-            options['params'] = {}
-
-        if options['params']:
-            url += urlencode(options['params'])
+        if list(options.keys()):
+            url += urlencode(options)
 
         return url

@@ -83,16 +83,16 @@ You can also specify where to download the zip file:
 
 ```python
 import quandl
-data = quandl.export_table('MER/F1', filename='/my/path/MER_F1_DB.zip')
+data = quandl.export_table('MER/F1', filename='/my/path/db.zip')
 ```
 
 Note that if you are downloading the whole table, it will take longer to generate the zip file.
 
-You can also specify what data you want to download with filters and parameters: 
+You can also specify what data you want to download with filters and parameters.(`cursor_id` and `paginate` are not supported for exporting table zip file): 
 
 ```python
 import quandl
-quandl.export_table('MER/F1', params={'compnumber': '39102', 'mapcode':'-5370','reporttype': 'A', 'qopts': {'columns': ['reportdate', 'amount']}})
+quandl.export_table('ZACKS/FC',  ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}, qopts={'columns':['ticker', 'per_end_date']})
 ```
 
 After the download is finished, the filename of the downloaded zip file will be printed.
