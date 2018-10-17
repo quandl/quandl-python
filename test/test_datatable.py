@@ -1,9 +1,7 @@
 try:
     from urllib.parse import urlparse
-    from urllib.parse import parse_qs
 except ImportError:
     from urlparse import urlparse
-    from cgi import parse_qs
 
 import re
 import unittest

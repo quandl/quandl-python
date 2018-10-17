@@ -1,9 +1,7 @@
 try:
     from urllib.request import urlopen
-    from urllib.parse import urlencode
 except ImportError:
     from urllib import urlopen
-    from urllib import urlencode
 
 from time import sleep
 import os
