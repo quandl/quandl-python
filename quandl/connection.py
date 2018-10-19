@@ -12,8 +12,6 @@ from quandl.errors.quandl_error import (
     AuthenticationError, ForbiddenError, InvalidRequestError,
     NotFoundError, ServiceUnavailableError)
 
-RETRY_STATUS_CODES = list(range(500, 512))
-
 
 class Connection:
     @classmethod
@@ -68,9 +66,12 @@ class Connection:
             return Retry(total=0)
 
         Retry.BACKOFF_MAX = ApiConfig.max_wait_between_retries
-        retries = Retry(total=ApiConfig.number_of_retries, connect=ApiConfig.number_of_retries,
-                        read=ApiConfig.number_of_retries, status_forcelist=RETRY_STATUS_CODES, raise_on_status=False,
-                        backoff_factor=0.1)
+        retries = Retry(total=ApiConfig.number_of_retries,
+                        connect=ApiConfig.number_of_retries,
+                        read=ApiConfig.number_of_retries,
+                        status_forcelist=ApiConfig.RETRY_STATUS_CODES,
+                        backoff_factor=ApiConfig.retry_backoff_factor,
+                        raise_on_status=False)
 
         return retries
 

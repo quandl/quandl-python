@@ -112,8 +112,7 @@ class ListDatabasesTest(unittest.TestCase):
 
 class BulkDownloadDatabaseTest(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
+    def setUp(self):
         httpretty.enable()
         httpretty.register_uri(httpretty.GET,
                                re.compile(
@@ -125,16 +124,14 @@ class BulkDownloadDatabaseTest(unittest.TestCase):
         httpretty.register_uri(httpretty.GET,
                                re.compile('https://www.blah.com/'), body='{}')
 
-    @classmethod
-    def tearDownClass(cls):
-        httpretty.disable()
-        httpretty.reset()
-
-    def setUp(self):
         database = {'database': DatabaseFactory.build(database_code='NSE')}
         self.database = Database(database['database']['database_code'], database['database'])
         ApiConfig.api_key = 'api_token'
         ApiConfig.api_version = '2015-04-09'
+
+    def tearDown(self):
+        httpretty.disable()
+        httpretty.reset()
 
     def test_get_bulk_downnload_url_with_download_type(self):
         url = self.database.bulk_download_url(params={'download_type': 'partial'})
@@ -179,6 +176,7 @@ class BulkDownloadDatabaseTest(unittest.TestCase):
             QuandlError, lambda: self.database.bulk_download_to_file(None))
 
     def test_bulk_download_raises_exception_when_error_response(self):
+        httpretty.reset()
         httpretty.register_uri(httpretty.GET,
                                re.compile(
                                    'https://www.quandl.com/api/v3/databases/*'),
@@ -186,5 +184,6 @@ class BulkDownloadDatabaseTest(unittest.TestCase):
                                    {'quandl_error':
                                     {'code': 'QEMx01', 'message': 'something went wrong'}}),
                                status=500)
+
         self.assertRaises(
             InternalServerError, lambda: self.database.bulk_download_to_file('.'))
