@@ -145,6 +145,10 @@ in pandas itself.
 
 See [this link](http://pandas.pydata.org/pandas-docs/dev/timeseries.html) for more information about timeseries in pandas.
 
+## Release the Package
+
+To release the package, you can follow the instructions on this [page](https://packaging.python.org/tutorials/packaging-projects/#packaging-python-projects)
+
 ## Additional Links
 
 * [Quandl](https://www.quandl.com)
