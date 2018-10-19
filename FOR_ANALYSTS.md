@@ -135,6 +135,33 @@ data = quandl.get_table('ZACKS/FC', paginate=True, ticker=['AAPL', 'MSFT'], per_
 
 In this query we are asking for more pages of data, `ticker` values of either `AAPL` or `MSFT` and a `per_end_date` that is greater than or equal to `2015-01-01`. We are also filtering the returned columns on `ticker`, `per_end_date` and `comp_name` rather than all available columns. The output format is `pandas`.
 
+Download table data as a zip file. You can download all the table data in a data table in a single call. The following will download the entire F1 table data as a zip file to your current working directory:  
+
+```python
+import quandl
+data = quandl.export_table('MER/F1')
+```
+
+You can also specify where to download the zip file:  
+
+```python
+import quandl
+data = quandl.export_table('MER/F1', filename='/my/path/db.zip')
+```
+
+Note that if you are downloading the whole table, it will take longer to generate the zip file.
+
+You can also specify what data you want to download with filters and parameters.(`cursor_id` and `paginate` are not supported for exporting table zip file): 
+
+```python
+import quandl
+quandl.export_table('ZACKS/FC',  ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}, qopts={'columns':['ticker', 'per_end_date']})
+```
+
+After the download is finished, the filename of the downloaded zip file will be printed.
+
+Sometimes it takes a while to generate the zip file, you'll get a message while the file is being generated. Once the file is generated, it will start the download of the zip file.
+
 #### Available parameters:
 
 The following additional parameters can be specified for a datatable call:
