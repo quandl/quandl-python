@@ -12,13 +12,13 @@ class RetriesTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        datatable = {'datatable': DatatableFactory.build(vendor_code='ZACKS', datatable_code='FC')}
+        cls.datatable = {'datatable': DatatableFactory.build(vendor_code='ZACKS', datatable_code='FC')}
 
         cls.error_response = httpretty.Response(
             body=json.dumps({'quandl_error': {'code': 'QEMx01', 'message':
                             'something went wrong'}}),
             status=500)
-        cls.success_response = httpretty.Response(body=json.dumps(datatable), status=200)
+        cls.success_response = httpretty.Response(body=json.dumps(cls.datatable), status=200)
 
     def setUp(self):
         self.default_use_retries = ApiConfig.use_retries
@@ -81,7 +81,7 @@ class TestRetries(RetriesTestCase):
                                responses=mock_responses)
 
         response = Connection.request('get', 'databases')
-        self.assertEqual(response.json(), json.loads(self.success_response.body))
+        self.assertEqual(response.json(), self.datatable)
         self.assertEqual(response.status_code, self.success_response.status)
 
     @httpretty.activate
