@@ -31,3 +31,4 @@ class Message:
         quandl.get_table() call. For more information see our documentation: \
         https://github.com/quandl/quandl-python/blob/master/FOR_ANALYSTS.md#things-to-note'
     WARN_PARAMS_NOT_SUPPORTED = '%s will no longer supported. Please use %s instead'
+    LONG_GENERATION_TIME = 'We are generating the zip file now, please wait...'

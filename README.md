@@ -117,6 +117,26 @@ The following are instructions for running our tests:
     `python setup.py install`
 4. Run the following command to test the plugin in all versions of python we support:
     `tox`
+    
+Once you have all required packages installed, you can run tests locally with:
+
+Running all tests locally
+
+```python
+python -W always setup.py -q test
+```
+
+Running an individual test
+
+```python
+python -m unittest test.[test file name].[class name].[individual test name]`
+```
+
+Example:
+
+```python
+python -m unittest -v test.test_datatable.ExportDataTableTest.test_download_get_file_info
+```
 
 ## Recommended Usage
 
@@ -124,6 +144,10 @@ We would suggest downloading the data in raw format in the highest frequency pos
 in pandas itself.
 
 See [this link](http://pandas.pydata.org/pandas-docs/dev/timeseries.html) for more information about timeseries in pandas.
+
+## Release the Package
+
+To release the package, you can follow the instructions on this [page](https://packaging.python.org/tutorials/packaging-projects/#packaging-python-projects)
 
 ## Additional Links
 
