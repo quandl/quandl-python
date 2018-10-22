@@ -8,7 +8,7 @@ from test.helpers.httpretty_extension import httpretty
 from quandl.errors.quandl_error import InternalServerError
 
 
-class RetriesTestCase(unittest.TestCase):
+class ModifyRetrySettingsTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -35,7 +35,7 @@ class RetriesTestCase(unittest.TestCase):
         ApiConfig.RETRY_STATUS_CODES = self.DEFAULT_RETRY_STATUS_CODES
 
 
-class TestRetries(RetriesTestCase):
+class TestRetries(ModifyRetrySettingsTestCase):
 
     def test_modifying_use_retries(self):
         ApiConfig.use_retries = False

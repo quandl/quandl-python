@@ -14,6 +14,7 @@ from quandl.errors.quandl_error import (InternalServerError, QuandlError)
 from quandl.api_config import ApiConfig
 from quandl.model.database import Database
 from quandl.connection import Connection
+from test.test_retries import ModifyRetrySettingsTestCase
 from mock import patch, call, mock_open
 from test.factories.database import DatabaseFactory
 from test.factories.meta import MetaFactory
@@ -110,7 +111,7 @@ class ListDatabasesTest(unittest.TestCase):
         self.assertTrue(results.has_more_results())
 
 
-class BulkDownloadDatabaseTest(unittest.TestCase):
+class BulkDownloadDatabaseTest(ModifyRetrySettingsTestCase):
 
     def setUp(self):
         httpretty.enable()
@@ -176,6 +177,7 @@ class BulkDownloadDatabaseTest(unittest.TestCase):
             QuandlError, lambda: self.database.bulk_download_to_file(None))
 
     def test_bulk_download_raises_exception_when_error_response(self):
+        ApiConfig.retry_backoff_factor = 0
         httpretty.reset()
         httpretty.register_uri(httpretty.GET,
                                re.compile(
