@@ -15,7 +15,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
 
     @httpretty.activate
     def test_quandl_exceptions_no_retries(self):
-        self.skipTest('Will revisit to work with retries')
+        ApiConfig.use_retries = False
         quandl_errors = [('QELx04', 429, LimitExceededError),
                          ('QEMx01', 500, InternalServerError),
                          ('QEAx01', 400, AuthenticationError),

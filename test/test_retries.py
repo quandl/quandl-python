@@ -10,16 +10,6 @@ from quandl.errors.quandl_error import InternalServerError
 
 class ModifyRetrySettingsTestCase(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        cls.datatable = {'datatable': DatatableFactory.build(vendor_code='ZACKS', datatable_code='FC')}
-
-        cls.error_response = httpretty.Response(
-            body=json.dumps({'quandl_error': {'code': 'QEMx01', 'message':
-                            'something went wrong'}}),
-            status=500)
-        cls.success_response = httpretty.Response(body=json.dumps(cls.datatable), status=200)
-
     def setUp(self):
         self.default_use_retries = ApiConfig.use_retries
         self.default_number_of_retries = ApiConfig.number_of_retries
@@ -36,6 +26,20 @@ class ModifyRetrySettingsTestCase(unittest.TestCase):
 
 
 class TestRetries(ModifyRetrySettingsTestCase):
+
+    def setUp(self):
+        ApiConfig.use_retries = True
+        super(TestRetries, self).setUp()
+
+    @classmethod
+    def setUpClass(cls):
+        cls.datatable = {'datatable': DatatableFactory.build(vendor_code='ZACKS', datatable_code='FC')}
+
+        cls.error_response = httpretty.Response(
+            body=json.dumps({'quandl_error': {'code': 'QEMx01', 'message':
+                'something went wrong'}}),
+            status=500)
+        cls.success_response = httpretty.Response(body=json.dumps(cls.datatable), status=200)
 
     def test_modifying_use_retries(self):
         ApiConfig.use_retries = False
@@ -89,6 +93,16 @@ class TestRetries(ModifyRetrySettingsTestCase):
         ApiConfig.number_of_retries = 2
         ApiConfig.RETRY_STATUS_CODES = [self.error_response.status]
         mock_responses = [self.error_response] * 3
+        httpretty.register_uri(httpretty.GET,
+                               "https://www.quandl.com/api/v3/databases",
+                               responses=mock_responses)
+
+        self.assertRaises(InternalServerError, Connection.request, 'get', 'databases')
+
+    @httpretty.activate
+    def test_correct_response_exception_raised_for_errors_not_in_retry_status_codes(self):
+        ApiConfig.RETRY_STATUS_CODES = []
+        mock_responses = [self.error_response]
         httpretty.register_uri(httpretty.GET,
                                "https://www.quandl.com/api/v3/databases",
                                responses=mock_responses)
