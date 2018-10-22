@@ -33,11 +33,13 @@ class TestRetries(ModifyRetrySettingsTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.datatable = {'datatable': DatatableFactory.build(vendor_code='ZACKS', datatable_code='FC')}
+        cls.datatable = {'datatable': DatatableFactory.build(
+            vendor_code='ZACKS',
+            datatable_code='FC')}
 
         cls.error_response = httpretty.Response(
-            body=json.dumps({'quandl_error': {'code': 'QEMx01', 'message':
-                'something went wrong'}}),
+            body=json.dumps({'quandl_error': {'code': 'QEMx01',
+                                              'message': 'something went wrong'}}),
             status=500)
         cls.success_response = httpretty.Response(body=json.dumps(cls.datatable), status=200)
 

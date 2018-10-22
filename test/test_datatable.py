@@ -11,11 +11,12 @@ import six
 from quandl.model.datatable import Datatable
 from mock import patch, call, mock_open
 from test.factories.datatable import DatatableFactory
+from test.test_retries import ModifyRetrySettingsTestCase
 from quandl.api_config import ApiConfig
 from quandl.errors.quandl_error import (InternalServerError, QuandlError)
 
 
-class GetDatatableDatasetTest(unittest.TestCase):
+class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -114,12 +115,17 @@ class ExportDataTableTest(unittest.TestCase):
                 QuandlError, lambda: self.datatable.download_file(None))
 
     def test_bulk_download_table_raises_exception_when_error_response(self):
+        httpretty.reset()
+        ApiConfig.number_of_retries = 2
+        error_responses = [httpretty.Response(
+            body=json.dumps({'quandl_error': {'code': 'QEMx01',
+                                              'message': 'something went wrong'}}),
+            status=500)]
+
         httpretty.register_uri(httpretty.GET,
                                re.compile(
                                    'https://www.quandl.com/api/v3/datatables/*'),
-                               body=json.dumps(
-                                   {'quandl_error':
-                                    {'code': 'QEMx01', 'message': 'something went wrong'}}),
-                               status=500)
+                               responses=error_responses)
+
         self.assertRaises(
             InternalServerError, lambda: self.datatable.download_file('.'))
