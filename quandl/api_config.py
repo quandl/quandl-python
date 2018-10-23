@@ -6,9 +6,9 @@ class ApiConfig:
     page_limit = 100
 
     use_retries = True
-    number_of_retries = 8
-    retry_backoff_factor = 0.1
-    max_wait_between_retries = 15
+    number_of_retries = 5
+    retry_backoff_factor = 0.4
+    max_wait_between_retries = 8
     RETRY_STATUS_CODES = list(range(500, 512))
 
 
