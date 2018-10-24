@@ -69,7 +69,7 @@ class Connection:
         retries = Retry(total=ApiConfig.number_of_retries,
                         connect=ApiConfig.number_of_retries,
                         read=ApiConfig.number_of_retries,
-                        status_forcelist=ApiConfig.RETRY_STATUS_CODES,
+                        status_forcelist=ApiConfig.retry_status_codes,
                         backoff_factor=ApiConfig.retry_backoff_factor,
                         raise_on_status=False,
                         respect_retry_after_header=False)

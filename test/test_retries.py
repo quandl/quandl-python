@@ -15,14 +15,14 @@ class ModifyRetrySettingsTestCase(unittest.TestCase):
         self.default_number_of_retries = ApiConfig.number_of_retries
         self.default_retry_backoff_factor = ApiConfig.retry_backoff_factor
         self.default_max_wait_between_retries = ApiConfig.max_wait_between_retries
-        self.DEFAULT_RETRY_STATUS_CODES = ApiConfig.RETRY_STATUS_CODES
+        self.default_retry_status_codes = ApiConfig.retry_status_codes
 
     def tearDown(self):
         ApiConfig.use_retries = self.default_use_retries
         ApiConfig.number_of_retries = self.default_number_of_retries
         ApiConfig.retry_backoff_factor = self.default_retry_backoff_factor
         ApiConfig.max_wait_between_retries = self.default_max_wait_between_retries
-        ApiConfig.RETRY_STATUS_CODES = self.DEFAULT_RETRY_STATUS_CODES
+        ApiConfig.retry_status_codes = self.default_retry_status_codes
 
 
 class TestRetries(ModifyRetrySettingsTestCase):
@@ -65,10 +65,10 @@ class TestRetries(ModifyRetrySettingsTestCase):
         self.assertEqual(retries.backoff_factor, ApiConfig.retry_backoff_factor)
 
     def test_modifying_retry_status_codes(self):
-        ApiConfig.RETRY_STATUS_CODES = [1, 2, 3]
+        ApiConfig.retry_status_codes = [1, 2, 3]
 
         retries = Connection.get_session().get_adapter(ApiConfig.api_protocol).max_retries
-        self.assertEqual(retries.status_forcelist, ApiConfig.RETRY_STATUS_CODES)
+        self.assertEqual(retries.status_forcelist, ApiConfig.retry_status_codes)
 
     def test_modifying_max_wait_between_retries(self):
         ApiConfig.max_wait_between_retries = 3000
@@ -79,7 +79,7 @@ class TestRetries(ModifyRetrySettingsTestCase):
     @httpretty.activate
     def test_correct_response_returned_if_retries_succeed(self):
         ApiConfig.number_of_retries = 3
-        ApiConfig.RETRY_STATUS_CODES = [self.error_response.status]
+        ApiConfig.retry_status_codes = [self.error_response.status]
 
         mock_responses = [self.error_response] + [self.error_response] + [self.success_response]
         httpretty.register_uri(httpretty.GET,
@@ -93,7 +93,7 @@ class TestRetries(ModifyRetrySettingsTestCase):
     @httpretty.activate
     def test_correct_response_exception_raised_if_retries_fail(self):
         ApiConfig.number_of_retries = 2
-        ApiConfig.RETRY_STATUS_CODES = [self.error_response.status]
+        ApiConfig.retry_status_codes = [self.error_response.status]
         mock_responses = [self.error_response] * 3
         httpretty.register_uri(httpretty.GET,
                                "https://www.quandl.com/api/v3/databases",
@@ -103,7 +103,7 @@ class TestRetries(ModifyRetrySettingsTestCase):
 
     @httpretty.activate
     def test_correct_response_exception_raised_for_errors_not_in_retry_status_codes(self):
-        ApiConfig.RETRY_STATUS_CODES = []
+        ApiConfig.retry_status_codes = []
         mock_responses = [self.error_response]
         httpretty.register_uri(httpretty.GET,
                                "https://www.quandl.com/api/v3/databases",
