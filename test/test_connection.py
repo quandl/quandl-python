@@ -73,6 +73,4 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
                                  'request-source': 'python',
                                  'request-source-version': VERSION},
                         params={'per_page': 10, 'page': 2})
-        print(mock.call_args)
-        print(expected)
         self.assertEqual(mock.call_args, expected)
