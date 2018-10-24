@@ -1,6 +1,14 @@
 ### unreleased
 * Remove dependency on unittest2, use unittest instead (#113)
 
+### 3.4.4 - 2018-10-24
+
+* Add functionality to automatically retry failed API calls https://github.com/quandl/quandl-python/pull/124
+
+### 3.4.3 - 2018-10-19
+
+* Allow for exporting of datatables https://github.com/quandl/quandl-python/pull/120
+
 ### 3.4.2 - 2018-08-21
 
 * Fix typos in our warning messages https://github.com/quandl/quandl-python/pull/114

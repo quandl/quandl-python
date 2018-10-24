@@ -1,6 +1,8 @@
 import re
 
 import requests
+from urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
 
 from .util import Util
 from .version import VERSION
@@ -37,9 +39,10 @@ class Connection:
 
     @classmethod
     def execute_request(cls, http_verb, url, **options):
+        session = cls.get_session()
+
         try:
-            func = getattr(requests, http_verb)
-            response = func(url, **options)
+            response = session.request(method=http_verb, url=url, **options)
             if response.status_code < 200 or response.status_code >= 300:
                 cls.handle_api_error(response)
             else:
@@ -48,6 +51,29 @@ class Connection:
             if e.response:
                 cls.handle_api_error(e.response)
             raise e
+
+    @classmethod
+    def get_session(cls):
+        session = requests.Session()
+        adapter = HTTPAdapter(max_retries=cls.get_retries())
+        session.mount(ApiConfig.api_protocol, adapter)
+
+        return session
+
+    @classmethod
+    def get_retries(cls):
+        if not ApiConfig.use_retries:
+            return Retry(total=0)
+
+        Retry.BACKOFF_MAX = ApiConfig.max_wait_between_retries
+        retries = Retry(total=ApiConfig.number_of_retries,
+                        connect=ApiConfig.number_of_retries,
+                        read=ApiConfig.number_of_retries,
+                        status_forcelist=ApiConfig.retry_status_codes,
+                        backoff_factor=ApiConfig.retry_backoff_factor,
+                        raise_on_status=False)
+
+        return retries
 
     @classmethod
     def parse(cls, response):

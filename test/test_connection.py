@@ -4,17 +4,18 @@ from quandl.errors.quandl_error import (
     QuandlError, LimitExceededError, InternalServerError,
     AuthenticationError, ForbiddenError, InvalidRequestError,
     NotFoundError, ServiceUnavailableError)
-import unittest
+from test.test_retries import ModifyRetrySettingsTestCase
 from test.helpers.httpretty_extension import httpretty
 import json
 from mock import patch, call
 from quandl.version import VERSION
 
 
-class ConnectionTest(unittest.TestCase):
+class ConnectionTest(ModifyRetrySettingsTestCase):
 
     @httpretty.activate
-    def test_quandl_exceptions(self):
+    def test_quandl_exceptions_no_retries(self):
+        ApiConfig.use_retries = False
         quandl_errors = [('QELx04', 429, LimitExceededError),
                          ('QEMx01', 500, InternalServerError),
                          ('QEAx01', 400, AuthenticationError),
@@ -38,6 +39,7 @@ class ConnectionTest(unittest.TestCase):
 
     @httpretty.activate
     def test_parse_error(self):
+        ApiConfig.retry_backoff_factor = 0
         httpretty.register_uri(httpretty.GET,
                                "https://www.quandl.com/api/v3/databases",
                                body="not json", status=500)
@@ -46,6 +48,7 @@ class ConnectionTest(unittest.TestCase):
 
     @httpretty.activate
     def test_non_quandl_error(self):
+        ApiConfig.retry_backoff_factor = 0
         httpretty.register_uri(httpretty.GET,
                                "https://www.quandl.com/api/v3/databases",
                                body=json.dumps(
@@ -70,6 +73,4 @@ class ConnectionTest(unittest.TestCase):
                                  'request-source': 'python',
                                  'request-source-version': VERSION},
                         params={'per_page': 10, 'page': 2})
-        print(mock.call_args)
-        print(expected)
         self.assertEqual(mock.call_args, expected)

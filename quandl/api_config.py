@@ -1,8 +1,15 @@
 class ApiConfig:
     api_key = None
-    api_base = 'https://www.quandl.com/api/v3'
+    api_protocol = 'https://'
+    api_base = '{}www.quandl.com/api/v3'.format(api_protocol)
     api_version = None
     page_limit = 100
+
+    use_retries = True
+    number_of_retries = 5
+    retry_backoff_factor = 0.5
+    max_wait_between_retries = 8
+    retry_status_codes = [429] + list(range(500, 512))
 
 
 def save_key(apikey, filename=None):

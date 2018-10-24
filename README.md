@@ -28,7 +28,12 @@ pip3 install quandl
 |---|---|---|
 | api_key | Your access key | `tEsTkEy123456789` | Used to identify who you are and provide full access. |
 | api_version | The API version you wish to use | 2015-04-09 | Can be used to test your code against the latest version without committing to it. |
-
+| use_retries | Whether API calls which return statuses in `retry_status_codes` should be automatically retried | True
+| number_of_retries | Maximum number of retries that should be attempted. Only used if `use_retries` is True | 5
+| max_wait_between_retries | Maximum amount of time in seconds that should be waited before attempting a retry. Only used if `use_retries` is True | 8
+| retry_backoff_factor | Determines the amount of time in seconds that should be waited before attempting another retry. Note that this factor is exponential so a `retry_backoff_factor` of 0.5 will cause waits of [0.5, 1, 2, 4, etc]. Only used if `use_retries` is True | 0.5
+| retry_status_codes | A list of HTTP status codes which will trigger a retry to occur. Only used if `use_retries` is True| [429, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511]
+    
 ```python
 import quandl
 quandl.ApiConfig.api_key = 'tEsTkEy123456789'
