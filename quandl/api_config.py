@@ -9,7 +9,7 @@ class ApiConfig:
     number_of_retries = 5
     retry_backoff_factor = 0.4
     max_wait_between_retries = 8
-    retry_status_codes = list(range(500, 512))
+    retry_status_codes = [429] + list(range(500, 512))
 
 
 def save_key(apikey, filename=None):

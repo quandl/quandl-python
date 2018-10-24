@@ -71,8 +71,7 @@ class Connection:
                         read=ApiConfig.number_of_retries,
                         status_forcelist=ApiConfig.retry_status_codes,
                         backoff_factor=ApiConfig.retry_backoff_factor,
-                        raise_on_status=False,
-                        respect_retry_after_header=False)
+                        raise_on_status=False)
 
         return retries
 
