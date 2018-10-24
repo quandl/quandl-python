@@ -7,7 +7,7 @@ class ApiConfig:
 
     use_retries = True
     number_of_retries = 5
-    retry_backoff_factor = 0.4
+    retry_backoff_factor = 0.5
     max_wait_between_retries = 8
     retry_status_codes = [429] + list(range(500, 512))
 
