@@ -4,6 +4,8 @@ from quandl.util import Util
 from quandl.model.paginated_list import PaginatedList
 from quandl.utils.request_type_util import RequestType
 
+import copy
+
 
 class ListOperation(Operation):
 
@@ -29,6 +31,8 @@ class ListOperation(Operation):
             updated_options = Util.convert_options(**options)
             r = Connection.request('get', path, **updated_options)
         else:
+            options['json'] = copy.deepcopy(options['params'])
+            del options['params']
             r = Connection.request('post', path, **options)
 
         response_data = r.json()

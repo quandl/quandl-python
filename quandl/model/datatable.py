@@ -5,6 +5,7 @@ except ImportError:
 
 from time import sleep
 import os
+import copy
 
 from quandl.connection import Connection
 from quandl.util import Util
@@ -54,6 +55,8 @@ class Datatable(GetOperation, ListOperation, ModelBase):
             updated_options = Util.convert_options(**options)
             r = Connection.request('get', url, **updated_options)
         else:
+            options['json'] = copy.deepcopy(options['params'])
+            del options['params']
             r = Connection.request('post', url, **options)
 
         response_data = r.json()
