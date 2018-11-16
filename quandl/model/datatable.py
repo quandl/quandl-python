@@ -26,8 +26,9 @@ class Datatable(GetOperation, ListOperation, ModelBase):
         return "%s/metadata" % cls.default_path()
 
     def data(self, **options):
-        updated_options = Util.convert_options(**options)
-        return Data.page(self, **updated_options)
+        if not options:
+            options = {'params': {}}
+        return Data.page(self, **options)
 
     def download_file(self, file_or_folder_path, **options):
         if not isinstance(file_or_folder_path, str):
