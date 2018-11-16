@@ -25,7 +25,7 @@ class ListOperation(Operation):
 
         request_type = RequestType.get_request_type(path, **options)
 
-        if request_type == 'get':
+        if request_type == 'GET':
             updated_options = Util.convert_options(**options)
             r = Connection.request('get', path, **updated_options)
         else:
