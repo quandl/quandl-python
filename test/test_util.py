@@ -47,22 +47,100 @@ class UtilTest(unittest.TestCase):
         self.assertEqual(result, '/hello/bar/world/1')
         self.assertDictEqual(params, {'another': 'a'})
 
-    def test_convert_options_for_get_request(self):
-        options = {'params': {'ticker': ['AAPL', 'MSFT'],
+    def test_convert_options_get_request_with_empty_params(self):
+        options = {'params': {}}
+        expected_result = options
+
+        result = Util.convert_options(request_type='get', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
+
+    def test_convert_options_get_request_with_simple_params(self):
+        options = {'params': {'foo': 'bar'}}
+        expected_result = options
+
+        result = Util.convert_options(request_type='get', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
+
+    def test_convert_options_get_request_with_array_params(self):
+        options = {'params': {'foo': ['bar', 'baz']}}
+        expected_result = {'params': {'foo[]': ['bar', 'baz']}}
+
+        result = Util.convert_options(request_type='get', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
+
+    def test_convert_options_get_request_with_dictionary_params(self):
+        options = {'params': {'foo': {'bar': 'baz'}}}
+        expected_result = {'params': {'foo.bar': 'baz'}}
+
+        result = Util.convert_options(request_type='get', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
+
+    def test_convert_options_get_request_with_dictionary_params_and_array_values(self):
+        options = {'params': {'foo': {'bar': ['baz', 'bax']}}}
+        expected_result = {'params': {'foo.bar[]': ['baz', 'bax']}}
+
+        result = Util.convert_options(request_type='get', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
+
+    def test_convert_options_get_request_all_param_types(self):
+        options = {'params': {'foo': 'bar',
+                              'ticker': ['AAPL', 'MSFT'],
                               'per_end_date': {'gte': {'2015-01-01'}},
                               'qopts': {'columns': ['ticker', 'per_end_date'],
                                         'per_page': 5}}}
-        expect_result = {'params': {'qopts.per_page': 5,
+        expected_result = {'params': {'foo': 'bar',
+                                    'qopts.per_page': 5,
                                     'per_end_date.gte': set(['2015-01-01']),
                                     'ticker[]': ['AAPL', 'MSFT'],
                                     'qopts.columns[]': ['ticker', 'per_end_date']}}
         result = Util.convert_options(request_type='get', **options)
-        self.assertEqual(cmp(result, expect_result), 0)
+        self.assertEqual(cmp(result, expected_result), 0)
 
-        options = {'params': {'ticker': 'AAPL', 'per_end_date': {'gte': {'2015-01-01'}},
-                              'qopts': {'columns': ['ticker', 'per_end_date']}}}
-        expect_result = {'params': {'per_end_date.gte': set(['2015-01-01']),
-                                    'ticker': 'AAPL',
-                                    'qopts.columns[]': ['ticker', 'per_end_date']}}
-        result = Util.convert_options(request_type='get', **options)
-        self.assertEqual(cmp(result, expect_result), 0)
+    def test_convert_options_post_request_with_empty_params(self):
+        options = {'params': {}}
+        expected_result = {'json': {}}
+
+        result = Util.convert_options(request_type='post', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
+
+    def test_convert_options_post_request_with_simple_params(self):
+        options = {'params': {'foo': 'bar'}}
+        expected_result = {'json': options['params']}
+
+        result = Util.convert_options(request_type='post', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
+
+    def test_convert_options_post_request_with_array_params(self):
+        options = {'params': {'foo': ['bar', 'baz']}}
+        expected_result = {'json': options['params']}
+
+        result = Util.convert_options(request_type='post', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
+
+    def test_convert_options_post_request_with_dictionary_params(self):
+        options = {'params': {'foo': {'bar': 'baz'}}}
+        expected_result = {'json': {'foo.bar': 'baz'}}
+
+        result = Util.convert_options(request_type='post', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
+
+    def test_convert_options_get_request_with_dictionary_params_and_array_values(self):
+        options = {'params': {'foo': {'bar': ['baz', 'bax']}}}
+        expected_result = {'json': {'foo.bar': ['baz', 'bax']}}
+
+        result = Util.convert_options(request_type='post', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
+
+    def test_convert_options_post_request_all_param_types(self):
+        options = {'params': {'foo': 'bar',
+                              'ticker': ['AAPL', 'MSFT'],
+                              'per_end_date': {'gte': {'2015-01-01'}},
+                              'qopts': {'columns': ['ticker', 'per_end_date'],
+                                        'per_page': 5}}}
+        expected_result = {'json': {'foo': 'bar',
+                                      'qopts.per_page': 5,
+                                      'per_end_date.gte': set(['2015-01-01']),
+                                      'ticker': ['AAPL', 'MSFT'],
+                                      'qopts.columns': ['ticker', 'per_end_date']}}
+        result = Util.convert_options(request_type='post', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
