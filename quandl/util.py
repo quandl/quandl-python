@@ -60,7 +60,14 @@ class Util(object):
             return value
 
     @staticmethod
-    def convert_options(**options):
+    def convert_options(request_type, **options):
+        if request_type == 'GET':
+            Util.convert_options_for_get_request(**options)
+        else:
+            Util.convert_options_for_post_request(**options)
+
+    @staticmethod
+    def _convert_options_for_get_request(**options):
         new_options = dict()
         if 'params' in options.keys():
             for key, value in options['params'].items():
@@ -84,6 +91,10 @@ class Util(object):
                 else:
                     new_options[key] = value
         return {'params': new_options}
+
+    @staticmethod
+    def _convert_options_for_post_request(**options):
+        return options
 
     @staticmethod
     def convert_to_columns_list(meta, type):

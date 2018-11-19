@@ -26,9 +26,9 @@ class ListOperation(Operation):
         path = Util.constructed_path(datatable.default_path(), params)
 
         request_type = RequestType.get_request_type(path, **options)
+        updated_options = Util.convert_options(request_type=request_type, **options)
 
         if request_type == 'GET':
-            updated_options = Util.convert_options(**options)
             r = Connection.request('get', path, **updated_options)
         else:
             options['json'] = copy.deepcopy(options['params'])

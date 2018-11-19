@@ -51,8 +51,9 @@ class Datatable(GetOperation, ListOperation, ModelBase):
 
         request_type = RequestType.get_request_type(url, **options)
 
+        updated_options = Util.convert_options(request_type=request_type, **options)
+
         if request_type == 'GET':
-            updated_options = Util.convert_options(**options)
             r = Connection.request('get', url, **updated_options)
         else:
             options['json'] = copy.deepcopy(options['params'])

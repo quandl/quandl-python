@@ -47,7 +47,7 @@ class UtilTest(unittest.TestCase):
         self.assertEqual(result, '/hello/bar/world/1')
         self.assertDictEqual(params, {'another': 'a'})
 
-    def test_convert_options(self):
+    def test_convert_options_for_get_request(self):
         options = {'params': {'ticker': ['AAPL', 'MSFT'],
                               'per_end_date': {'gte': {'2015-01-01'}},
                               'qopts': {'columns': ['ticker', 'per_end_date'],
@@ -56,7 +56,7 @@ class UtilTest(unittest.TestCase):
                                     'per_end_date.gte': set(['2015-01-01']),
                                     'ticker[]': ['AAPL', 'MSFT'],
                                     'qopts.columns[]': ['ticker', 'per_end_date']}}
-        result = Util.convert_options(**options)
+        result = Util.convert_options(request_type='GET', **options)
         self.assertEqual(cmp(result, expect_result), 0)
 
         options = {'params': {'ticker': 'AAPL', 'per_end_date': {'gte': {'2015-01-01'}},
@@ -64,5 +64,5 @@ class UtilTest(unittest.TestCase):
         expect_result = {'params': {'per_end_date.gte': set(['2015-01-01']),
                                     'ticker': 'AAPL',
                                     'qopts.columns[]': ['ticker', 'per_end_date']}}
-        result = Util.convert_options(**options)
+        result = Util.convert_options(request_type='GET', **options)
         self.assertEqual(cmp(result, expect_result), 0)
