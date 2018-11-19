@@ -1,5 +1,4 @@
 import unittest
-import random
 from quandl.utils.request_type_util import RequestType
 from test.helpers.string_helper import generate_random_string
 
