@@ -9,12 +9,19 @@ from test.helpers.httpretty_extension import httpretty
 import json
 from mock import patch, call
 from quandl.version import VERSION
+from parameterized import parameterized
 
 
 class ConnectionTest(ModifyRetrySettingsTestCase):
 
-    @httpretty.enabled
-    def test_quandl_exceptions_no_retries(self):
+    def setUp(self):
+        httpretty.enable()
+
+    def tearDown(self):
+        httpretty.disable()
+
+    @parameterized.expand(["GET", "POST"])
+    def test_quandl_exceptions_no_retries(self, request_method):
         ApiConfig.use_retries = False
         quandl_errors = [('QELx04', 429, LimitExceededError),
                          ('QEMx01', 500, InternalServerError),
@@ -25,7 +32,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
                          ('QEXx01', 503, ServiceUnavailableError),
                          ('QEZx02', 400, QuandlError)]
 
-        httpretty.register_uri(httpretty.GET,
+        httpretty.register_uri(getattr(httpretty, request_method),
                                "https://www.quandl.com/api/v3/databases",
                                responses=[httpretty.Response(body=json.dumps(
                                    {'quandl_error':
@@ -35,37 +42,37 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
 
         for expected_error in quandl_errors:
             self.assertRaises(
-                expected_error[2], lambda: Connection.request('get', 'databases'))
+                expected_error[2], lambda: Connection.request(request_method, 'databases'))
 
-    @httpretty.enabled
-    def test_parse_error(self):
+    @parameterized.expand(["GET", "POST"])
+    def test_parse_error(self, request_method):
         ApiConfig.retry_backoff_factor = 0
-        httpretty.register_uri(httpretty.GET,
+        httpretty.register_uri(getattr(httpretty, request_method),
                                "https://www.quandl.com/api/v3/databases",
                                body="not json", status=500)
         self.assertRaises(
-            QuandlError, lambda: Connection.request('get', 'databases'))
+            QuandlError, lambda: Connection.request(request_method, 'databases'))
 
-    @httpretty.enabled
-    def test_non_quandl_error(self):
+    @parameterized.expand(["GET", "POST"])
+    def test_non_quandl_error(self, request_method):
         ApiConfig.retry_backoff_factor = 0
-        httpretty.register_uri(httpretty.GET,
+        httpretty.register_uri(getattr(httpretty, request_method),
                                "https://www.quandl.com/api/v3/databases",
                                body=json.dumps(
                                 {'foobar':
                                  {'code': 'blah', 'message': 'something went wrong'}}), status=500)
         self.assertRaises(
-            QuandlError, lambda: Connection.request('get', 'databases'))
+            QuandlError, lambda: Connection.request(request_method, 'databases'))
 
-    @httpretty.enabled
+    @parameterized.expand(["GET", "POST"])
     @patch('quandl.connection.Connection.execute_request')
-    def test_build_request(self, mock):
+    def test_build_request(self, request_method, mock):
         ApiConfig.api_key = 'api_token'
         ApiConfig.api_version = '2015-04-09'
         params = {'per_page': 10, 'page': 2}
         headers = {'x-custom-header': 'header value'}
-        Connection.request('get', 'databases', headers=headers, params=params)
-        expected = call('get', 'https://www.quandl.com/api/v3/databases',
+        Connection.request(request_method, 'databases', headers=headers, params=params)
+        expected = call(request_method, 'https://www.quandl.com/api/v3/databases',
                         headers={'x-custom-header': 'header value',
                                  'x-api-token': 'api_token',
                                  'accept': ('application/json, '
