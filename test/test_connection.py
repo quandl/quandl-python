@@ -13,7 +13,7 @@ from quandl.version import VERSION
 
 class ConnectionTest(ModifyRetrySettingsTestCase):
 
-    @httpretty.activate
+    @httpretty.enabled
     def test_quandl_exceptions_no_retries(self):
         ApiConfig.use_retries = False
         quandl_errors = [('QELx04', 429, LimitExceededError),
@@ -37,7 +37,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
             self.assertRaises(
                 expected_error[2], lambda: Connection.request('get', 'databases'))
 
-    @httpretty.activate
+    @httpretty.enabled
     def test_parse_error(self):
         ApiConfig.retry_backoff_factor = 0
         httpretty.register_uri(httpretty.GET,
@@ -46,7 +46,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
         self.assertRaises(
             QuandlError, lambda: Connection.request('get', 'databases'))
 
-    @httpretty.activate
+    @httpretty.enabled
     def test_non_quandl_error(self):
         ApiConfig.retry_backoff_factor = 0
         httpretty.register_uri(httpretty.GET,
@@ -57,7 +57,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
         self.assertRaises(
             QuandlError, lambda: Connection.request('get', 'databases'))
 
-    @httpretty.activate
+    @httpretty.enabled
     @patch('quandl.connection.Connection.execute_request')
     def test_build_request(self, mock):
         ApiConfig.api_key = 'api_token'
