@@ -43,7 +43,6 @@ class Connection:
 
         try:
             response = session.request(method=http_verb, url=url, **options)
-            print('resp', response.request.path_url)
             if response.status_code < 200 or response.status_code >= 300:
                 cls.handle_api_error(response)
             else:

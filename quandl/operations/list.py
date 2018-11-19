@@ -26,14 +26,10 @@ class ListOperation(Operation):
         path = Util.constructed_path(datatable.default_path(), params)
 
         request_type = RequestType.get_request_type(path, **options)
+
         updated_options = Util.convert_options(request_type=request_type, **options)
 
-        if request_type == 'GET':
-            r = Connection.request('get', path, **updated_options)
-        else:
-            options['json'] = copy.deepcopy(options['params'])
-            del options['params']
-            r = Connection.request('post', path, **options)
+        r = Connection.request(request_type, path, **updated_options)
 
         response_data = r.json()
         Util.convert_to_dates(response_data)
