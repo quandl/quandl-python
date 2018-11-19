@@ -12,8 +12,10 @@ from quandl.model.datatable import Datatable
 from mock import patch, call, mock_open
 from test.factories.datatable import DatatableFactory
 from test.test_retries import ModifyRetrySettingsTestCase
+from test.helpers.random_data_helper import generate_random_dictionary
 from quandl.api_config import ApiConfig
 from quandl.errors.quandl_error import (InternalServerError, QuandlError)
+from parameterized import parameterized
 
 
 class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):
@@ -41,9 +43,16 @@ class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):
         self.assertEqual(mock.call_args, expected)
 
     @patch('quandl.connection.Connection.request')
-    def test_datatable_data_calls_connection(self, mock):
+    def test_datatable_data_calls_connection_for_get_request(self, mock):
         Datatable('ZACKS/FC').data()
         expected = call('get', 'datatables/ZACKS/FC', params={})
+        self.assertEqual(mock.call_args, expected)
+
+    @patch('quandl.connection.Connection.request')
+    def test_datatable_data_calls_connection_for_post_request(self, mock):
+        params = generate_random_dictionary(10000)
+        Datatable('ZACKS/FC').data(params=params)
+        expected = call('post', 'datatables/ZACKS/FC', json=params)
         self.assertEqual(mock.call_args, expected)
 
     def test_datatable_returns_datatable_object(self):
@@ -69,6 +78,11 @@ class ExportDataTableTest(unittest.TestCase):
                                re.compile(
                                    'https://www.quandl.com/api/v3/datatables/*'),
                                body=json.dumps(datatable))
+
+        httpretty.register_uri(httpretty.POST,
+                               re.compile(
+                                   'https://www.quandl.com/api/v3/datatables/*'),
+                               body=json.dumps(datatable))
         cls.datatable_instance = Datatable(datatable['datatable'])
 
     @classmethod
@@ -89,10 +103,11 @@ class ExportDataTableTest(unittest.TestCase):
         parsed_url = urlparse(url)
         self.assertEqual(parsed_url.path, 'datatables/AUSBS/D.json')
 
-    def test_download_generated_file(self):
+    @parameterized.expand(['GET', 'POST'])
+    def test_download_generated_file(self, request_method):
         m = mock_open()
 
-        httpretty.register_uri(httpretty.GET,
+        httpretty.register_uri(getattr(httpretty, request_method),
                                re.compile(
                                    'https://www.quandl.com/api/v3/datatables/*'),
                                body=json.dumps({
@@ -104,28 +119,33 @@ class ExportDataTableTest(unittest.TestCase):
                                    }
                                }),
                                status=200)
+        params = generate_random_dictionary(10000) if request_method == 'POST' else {}
 
         with patch('quandl.model.datatable.urlopen', m, create=True):
-            self.datatable.download_file('.')
+            self.datatable.download_file('.', params=params)
 
         self.assertEqual(m.call_count, 1)
 
-    def test_bulk_download_raises_exception_when_no_path(self):
-            self.assertRaises(
-                QuandlError, lambda: self.datatable.download_file(None))
+    @parameterized.expand(['GET', 'POST'])
+    def test_bulk_download_raises_exception_when_no_path(self, request_method):
+        params = generate_random_dictionary(10000) if request_method == 'POST' else {}
+        self.assertRaises(
+            QuandlError, lambda: self.datatable.download_file(None, params=params))
 
-    def test_bulk_download_table_raises_exception_when_error_response(self):
+    @parameterized.expand(['GET', 'POST'])
+    def test_bulk_download_table_raises_exception_when_error_response(self, request_method):
         httpretty.reset()
         ApiConfig.number_of_retries = 2
+        params = generate_random_dictionary(10000) if request_method == 'POST' else {}
         error_responses = [httpretty.Response(
             body=json.dumps({'quandl_error': {'code': 'QEMx01',
                                               'message': 'something went wrong'}}),
             status=500)]
 
-        httpretty.register_uri(httpretty.GET,
+        httpretty.register_uri(getattr(httpretty, request_method),
                                re.compile(
                                    'https://www.quandl.com/api/v3/datatables/*'),
                                responses=error_responses)
 
         self.assertRaises(
-            InternalServerError, lambda: self.datatable.download_file('.'))
+            InternalServerError, lambda: self.datatable.download_file('.', params=params))

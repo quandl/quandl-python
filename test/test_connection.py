@@ -20,7 +20,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
     def tearDown(self):
         httpretty.disable()
 
-    @parameterized.expand(["GET", "POST"])
+    @parameterized.expand(['GET', 'POST'])
     def test_quandl_exceptions_no_retries(self, request_method):
         ApiConfig.use_retries = False
         quandl_errors = [('QELx04', 429, LimitExceededError),
@@ -44,7 +44,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
             self.assertRaises(
                 expected_error[2], lambda: Connection.request(request_method, 'databases'))
 
-    @parameterized.expand(["GET", "POST"])
+    @parameterized.expand(['GET', 'POST'])
     def test_parse_error(self, request_method):
         ApiConfig.retry_backoff_factor = 0
         httpretty.register_uri(getattr(httpretty, request_method),
@@ -53,7 +53,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
         self.assertRaises(
             QuandlError, lambda: Connection.request(request_method, 'databases'))
 
-    @parameterized.expand(["GET", "POST"])
+    @parameterized.expand(['GET', 'POST'])
     def test_non_quandl_error(self, request_method):
         ApiConfig.retry_backoff_factor = 0
         httpretty.register_uri(getattr(httpretty, request_method),
@@ -64,7 +64,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
         self.assertRaises(
             QuandlError, lambda: Connection.request(request_method, 'databases'))
 
-    @parameterized.expand(["GET", "POST"])
+    @parameterized.expand(['GET', 'POST'])
     @patch('quandl.connection.Connection.execute_request')
     def test_build_request(self, request_method, mock):
         ApiConfig.api_key = 'api_token'
