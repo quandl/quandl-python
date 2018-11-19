@@ -35,7 +35,7 @@ class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):
         httpretty.reset()
 
     @patch('quandl.connection.Connection.request')
-    def test_datatable_meatadata_calls_connection(self, mock):
+    def test_datatable_metadata_calls_connection(self, mock):
         Datatable('ZACKS/FC').data_fields()
         expected = call('get', 'datatables/ZACKS/FC/metadata', params={})
         self.assertEqual(mock.call_args, expected)

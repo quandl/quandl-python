@@ -56,7 +56,7 @@ class UtilTest(unittest.TestCase):
                                     'per_end_date.gte': set(['2015-01-01']),
                                     'ticker[]': ['AAPL', 'MSFT'],
                                     'qopts.columns[]': ['ticker', 'per_end_date']}}
-        result = Util.convert_options(request_type='GET', **options)
+        result = Util.convert_options(request_type='get', **options)
         self.assertEqual(cmp(result, expect_result), 0)
 
         options = {'params': {'ticker': 'AAPL', 'per_end_date': {'gte': {'2015-01-01'}},
@@ -64,5 +64,5 @@ class UtilTest(unittest.TestCase):
         expect_result = {'params': {'per_end_date.gte': set(['2015-01-01']),
                                     'ticker': 'AAPL',
                                     'qopts.columns[]': ['ticker', 'per_end_date']}}
-        result = Util.convert_options(request_type='GET', **options)
+        result = Util.convert_options(request_type='get', **options)
         self.assertEqual(cmp(result, expect_result), 0)

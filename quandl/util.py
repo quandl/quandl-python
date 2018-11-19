@@ -61,10 +61,12 @@ class Util(object):
 
     @staticmethod
     def convert_options(request_type, **options):
-        if request_type == 'GET':
+        if request_type == 'get':
             return Util._convert_options_for_get_request(**options)
-        else:
+        elif request_type == 'post':
             return Util._convert_options_for_post_request(**options)
+        else:
+            raise Exception('Can only convert options for get or post requests')
 
     @staticmethod
     def _convert_options_for_get_request(**options):
