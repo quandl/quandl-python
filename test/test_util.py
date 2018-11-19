@@ -89,10 +89,10 @@ class UtilTest(unittest.TestCase):
                               'qopts': {'columns': ['ticker', 'per_end_date'],
                                         'per_page': 5}}}
         expected_result = {'params': {'foo': 'bar',
-                                    'qopts.per_page': 5,
-                                    'per_end_date.gte': set(['2015-01-01']),
-                                    'ticker[]': ['AAPL', 'MSFT'],
-                                    'qopts.columns[]': ['ticker', 'per_end_date']}}
+                                      'qopts.per_page': 5,
+                                      'per_end_date.gte': set(['2015-01-01']),
+                                      'ticker[]': ['AAPL', 'MSFT'],
+                                      'qopts.columns[]': ['ticker', 'per_end_date']}}
         result = Util.convert_options(request_type='get', **options)
         self.assertEqual(cmp(result, expected_result), 0)
 
@@ -124,7 +124,7 @@ class UtilTest(unittest.TestCase):
         result = Util.convert_options(request_type='post', **options)
         self.assertEqual(cmp(result, expected_result), 0)
 
-    def test_convert_options_get_request_with_dictionary_params_and_array_values(self):
+    def test_convert_options_post_request_with_dictionary_params_and_array_values(self):
         options = {'params': {'foo': {'bar': ['baz', 'bax']}}}
         expected_result = {'json': {'foo.bar': ['baz', 'bax']}}
 
@@ -138,9 +138,9 @@ class UtilTest(unittest.TestCase):
                               'qopts': {'columns': ['ticker', 'per_end_date'],
                                         'per_page': 5}}}
         expected_result = {'json': {'foo': 'bar',
-                                      'qopts.per_page': 5,
-                                      'per_end_date.gte': set(['2015-01-01']),
-                                      'ticker': ['AAPL', 'MSFT'],
-                                      'qopts.columns': ['ticker', 'per_end_date']}}
+                                    'qopts.per_page': 5,
+                                    'per_end_date.gte': set(['2015-01-01']),
+                                    'ticker': ['AAPL', 'MSFT'],
+                                    'qopts.columns': ['ticker', 'per_end_date']}}
         result = Util.convert_options(request_type='post', **options)
         self.assertEqual(cmp(result, expected_result), 0)

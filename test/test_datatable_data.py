@@ -78,9 +78,10 @@ class ListDatatableDataTest(unittest.TestCase):
         Data.page(datatable, params={'ticker': ['AAPL', 'MSFT'],
                                      'per_end_date': {'gte': {'2015-01-01'}},
                                      'qopts': {'columns': ['ticker', 'per_end_date']}})
-        expected = call('get', 'datatables/ZACKS/FC', params={'ticker[]': ['AAPL', 'MSFT'],
-                                                              'per_end_date.gte': {'2015-01-01'},
-                                                              'qopts.columns[]': ['ticker', 'per_end_date']})
+        expected = call('get', 'datatables/ZACKS/FC',
+                        params={'ticker[]': ['AAPL', 'MSFT'],
+                                'per_end_date.gte': {'2015-01-01'},
+                                'qopts.columns[]': ['ticker', 'per_end_date']})
         self.assertEqual(mock.call_args, expected)
 
     def test_values_and_meta_exist(self):

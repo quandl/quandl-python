@@ -5,7 +5,6 @@ except ImportError:
 
 from time import sleep
 import os
-import copy
 
 from quandl.connection import Connection
 from quandl.util import Util

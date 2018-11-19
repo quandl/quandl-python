@@ -4,8 +4,6 @@ from quandl.util import Util
 from quandl.model.paginated_list import PaginatedList
 from quandl.utils.request_type_util import RequestType
 
-import copy
-
 
 class ListOperation(Operation):
 
