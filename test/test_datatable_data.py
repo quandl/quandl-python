@@ -79,11 +79,8 @@ class ListDatatableDataTest(unittest.TestCase):
         httpretty.disable()
         httpretty.reset()
 
-    def setUp(self):
-        self.default_request_type = RequestType.MAX_URL_LENGTH_FOR_GET
-
     def tearDown(self):
-        RequestType.MAX_URL_LENGTH_FOR_GET = self.default_request_type
+        RequestType.USE_GET_REQUEST = True
 
     @patch('quandl.connection.Connection.request')
     def test_data_calls_connection_get(self, mock):
@@ -99,7 +96,7 @@ class ListDatatableDataTest(unittest.TestCase):
 
     @patch('quandl.connection.Connection.request')
     def test_data_calls_connection_post(self, mock):
-        RequestType.MAX_URL_LENGTH_FOR_GET = 0
+        RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         Data.page(datatable, params={'ticker': ['AAPL', 'MSFT'],
                                      'per_end_date': {'gte': {'2015-01-01'}},
@@ -112,8 +109,8 @@ class ListDatatableDataTest(unittest.TestCase):
 
     @parameterized.expand(['GET', 'POST'])
     def test_values_and_meta_exist(self, request_method):
-        if request_method == 'post':
-            RequestType.MAX_URL_LENGTH_FOR_GET = 0
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         self.assertIsNotNone(results.values)
@@ -121,8 +118,8 @@ class ListDatatableDataTest(unittest.TestCase):
 
     @parameterized.expand(['GET', 'POST'])
     def test_to_pandas_returns_pandas_dataframe_object(self, request_method):
-        if request_method == 'post':
-            RequestType.MAX_URL_LENGTH_FOR_GET = 0
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         df = results.to_pandas()
@@ -131,8 +128,8 @@ class ListDatatableDataTest(unittest.TestCase):
     # no index is set for datatable.to_pandas
     @parameterized.expand(['GET', 'POST'])
     def test_pandas_dataframe_index_is_none(self, request_method):
-        if request_method == 'post':
-            RequestType.MAX_URL_LENGTH_FOR_GET = 0
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         df = results.to_pandas()
@@ -141,8 +138,8 @@ class ListDatatableDataTest(unittest.TestCase):
     # if datatable has Date field then it should be convert to pandas datetime
     @parameterized.expand(['GET', 'POST'])
     def test_pandas_dataframe_date_field_is_datetime(self, request_method):
-        if request_method == 'post':
-            RequestType.MAX_URL_LENGTH_FOR_GET = 0
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         df = results.to_pandas()
@@ -153,8 +150,8 @@ class ListDatatableDataTest(unittest.TestCase):
 
     @parameterized.expand(['GET', 'POST'])
     def test_to_numpy_returns_numpy_object(self, request_method):
-        if request_method == 'post':
-            RequestType.MAX_URL_LENGTH_FOR_GET = 0
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         data = results.to_numpy()
@@ -162,8 +159,8 @@ class ListDatatableDataTest(unittest.TestCase):
 
     @parameterized.expand(['GET', 'POST'])
     def test_to_csv_returns_expected_csv(self, request_method):
-        if request_method == 'post':
-            RequestType.MAX_URL_LENGTH_FOR_GET = 0
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         data = results.to_csv()

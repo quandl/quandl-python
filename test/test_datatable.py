@@ -12,8 +12,8 @@ from quandl.model.datatable import Datatable
 from mock import patch, call, mock_open
 from test.factories.datatable import DatatableFactory
 from test.test_retries import ModifyRetrySettingsTestCase
-from test.helpers.random_data_helper import generate_random_dictionary
 from quandl.api_config import ApiConfig
+from quandl.utils.request_type_util import RequestType
 from quandl.errors.quandl_error import (InternalServerError, QuandlError)
 from parameterized import parameterized
 
@@ -36,6 +36,9 @@ class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):
         httpretty.disable()
         httpretty.reset()
 
+    def tearDown(self):
+        RequestType.USE_GET_REQUEST = True
+
     @patch('quandl.connection.Connection.request')
     def test_datatable_metadata_calls_connection(self, mock):
         Datatable('ZACKS/FC').data_fields()
@@ -50,9 +53,9 @@ class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):
 
     @patch('quandl.connection.Connection.request')
     def test_datatable_data_calls_connection_for_post_request(self, mock):
-        params = generate_random_dictionary(10000)
-        Datatable('ZACKS/FC').data(params=params)
-        expected = call('post', 'datatables/ZACKS/FC', json=params)
+        RequestType.USE_GET_REQUEST = False
+        Datatable('ZACKS/FC').data()
+        expected = call('post', 'datatables/ZACKS/FC', json={})
         self.assertEqual(mock.call_args, expected)
 
     def test_datatable_returns_datatable_object(self):
@@ -98,6 +101,9 @@ class ExportDataTableTest(unittest.TestCase):
         ApiConfig.api_key = 'api_token'
         ApiConfig.api_version = '2015-04-09'
 
+    def tearDown(self):
+        RequestType.USE_GET_REQUEST = True
+
     def test_download_get_file_info(self):
         url = self.datatable._download_request_path()
         parsed_url = urlparse(url)
@@ -119,24 +125,25 @@ class ExportDataTableTest(unittest.TestCase):
                                    }
                                }),
                                status=200)
-        params = generate_random_dictionary(10000) if request_method == 'POST' else {}
 
         with patch('quandl.model.datatable.urlopen', m, create=True):
-            self.datatable.download_file('.', params=params)
+            self.datatable.download_file('.', params={})
 
         self.assertEqual(m.call_count, 1)
 
     @parameterized.expand(['GET', 'POST'])
     def test_bulk_download_raises_exception_when_no_path(self, request_method):
-        params = generate_random_dictionary(10000) if request_method == 'POST' else {}
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         self.assertRaises(
-            QuandlError, lambda: self.datatable.download_file(None, params=params))
+            QuandlError, lambda: self.datatable.download_file(None, params={}))
 
     @parameterized.expand(['GET', 'POST'])
     def test_bulk_download_table_raises_exception_when_error_response(self, request_method):
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         httpretty.reset()
         ApiConfig.number_of_retries = 2
-        params = generate_random_dictionary(10000) if request_method == 'POST' else {}
         error_responses = [httpretty.Response(
             body=json.dumps({'quandl_error': {'code': 'QEMx01',
                                               'message': 'something went wrong'}}),
@@ -148,4 +155,4 @@ class ExportDataTableTest(unittest.TestCase):
                                responses=error_responses)
 
         self.assertRaises(
-            InternalServerError, lambda: self.datatable.download_file('.', params=params))
+            InternalServerError, lambda: self.datatable.download_file('.', params={}))
