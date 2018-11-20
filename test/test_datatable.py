@@ -46,16 +46,57 @@ class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):
         self.assertEqual(mock.call_args, expected)
 
     @patch('quandl.connection.Connection.request')
-    def test_datatable_data_calls_connection_for_get_request(self, mock):
+    def test_datatable_data_calls_connection_with_no_params_for_get_request(self, mock):
         Datatable('ZACKS/FC').data()
         expected = call('get', 'datatables/ZACKS/FC', params={})
         self.assertEqual(mock.call_args, expected)
 
     @patch('quandl.connection.Connection.request')
-    def test_datatable_data_calls_connection_for_post_request(self, mock):
+    def test_datatable_data_calls_connection_with_no_params_for_post_request(self, mock):
         RequestType.USE_GET_REQUEST = False
         Datatable('ZACKS/FC').data()
         expected = call('post', 'datatables/ZACKS/FC', json={})
+        self.assertEqual(mock.call_args, expected)
+
+    @patch('quandl.connection.Connection.request')
+    def test_datatable_calls_connection_with_params_for_get_request(self, mock):
+        params = {'ticker': ['AAPL', 'MSFT'],
+                  'per_end_date': {'gte': {'2015-01-01'}},
+                  'qopts': {'columns': ['ticker', 'per_end_date']},
+                  'foo': 'bar',
+                  'baz': 4
+                  }
+
+        expected_params = {'ticker[]': ['AAPL', 'MSFT'],
+                           'per_end_date.gte': {'2015-01-01'},
+                            'qopts.columns[]': ['ticker', 'per_end_date'],
+                            'foo': 'bar',
+                            'baz': 4
+                            }
+
+        Datatable('ZACKS/FC').data(params=params)
+        expected = call('get', 'datatables/ZACKS/FC', params=expected_params)
+        self.assertEqual(mock.call_args, expected)
+
+    @patch('quandl.connection.Connection.request')
+    def test_datatable_calls_connection_with_params_for_post_request(self, mock):
+        RequestType.USE_GET_REQUEST = False
+        params = {'ticker': ['AAPL', 'MSFT'],
+                  'per_end_date': {'gte': {'2015-01-01'}},
+                  'qopts': {'columns': ['ticker', 'per_end_date']},
+                  'foo': 'bar',
+                  'baz': 4
+                  }
+
+        expected_params = {'ticker': ['AAPL', 'MSFT'],
+                           'per_end_date.gte': {'2015-01-01'},
+                           'qopts.columns': ['ticker', 'per_end_date'],
+                           'foo': 'bar',
+                           'baz': 4
+                           }
+
+        Datatable('ZACKS/FC').data(params=params)
+        expected = call('post', 'datatables/ZACKS/FC', json=expected_params)
         self.assertEqual(mock.call_args, expected)
 
     def test_datatable_returns_datatable_object(self):
