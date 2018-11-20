@@ -86,11 +86,11 @@ class ListDatatableDataTest(unittest.TestCase):
     def test_data_calls_connection_get(self, mock):
         datatable = Datatable('ZACKS/FC')
         Data.page(datatable, params={'ticker': ['AAPL', 'MSFT'],
-                                     'per_end_date': {'gte': {'2015-01-01'}},
+                                     'per_end_date': {'gte': '2015-01-01'},
                                      'qopts': {'columns': ['ticker', 'per_end_date']}})
         expected = call('get', 'datatables/ZACKS/FC',
                         params={'ticker[]': ['AAPL', 'MSFT'],
-                                'per_end_date.gte': {'2015-01-01'},
+                                'per_end_date.gte': '2015-01-01',
                                 'qopts.columns[]': ['ticker', 'per_end_date']})
         self.assertEqual(mock.call_args, expected)
 
@@ -99,11 +99,11 @@ class ListDatatableDataTest(unittest.TestCase):
         RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         Data.page(datatable, params={'ticker': ['AAPL', 'MSFT'],
-                                     'per_end_date': {'gte': {'2015-01-01'}},
+                                     'per_end_date': {'gte': '2015-01-01'},
                                      'qopts': {'columns': ['ticker', 'per_end_date']}})
         expected = call('post', 'datatables/ZACKS/FC',
                         json={'ticker': ['AAPL', 'MSFT'],
-                                'per_end_date.gte': {'2015-01-01'},
+                                'per_end_date.gte': '2015-01-01',
                                 'qopts.columns': ['ticker', 'per_end_date']})
         self.assertEqual(mock.call_args, expected)
 

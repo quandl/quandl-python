@@ -85,12 +85,12 @@ class UtilTest(unittest.TestCase):
     def test_convert_options_get_request_all_param_types(self):
         options = {'params': {'foo': 'bar',
                               'ticker': ['AAPL', 'MSFT'],
-                              'per_end_date': {'gte': {'2015-01-01'}},
+                              'per_end_date': {'gte': '2015-01-01'},
                               'qopts': {'columns': ['ticker', 'per_end_date'],
                                         'per_page': 5}}}
         expected_result = {'params': {'foo': 'bar',
                                       'qopts.per_page': 5,
-                                      'per_end_date.gte': set(['2015-01-01']),
+                                      'per_end_date.gte': '2015-01-01',
                                       'ticker[]': ['AAPL', 'MSFT'],
                                       'qopts.columns[]': ['ticker', 'per_end_date']}}
         result = Util.convert_options(request_type='get', **options)
@@ -134,12 +134,12 @@ class UtilTest(unittest.TestCase):
     def test_convert_options_post_request_all_param_types(self):
         options = {'params': {'foo': 'bar',
                               'ticker': ['AAPL', 'MSFT'],
-                              'per_end_date': {'gte': {'2015-01-01'}},
+                              'per_end_date': {'gte': '2015-01-01'},
                               'qopts': {'columns': ['ticker', 'per_end_date'],
                                         'per_page': 5}}}
         expected_result = {'json': {'foo': 'bar',
                                     'qopts.per_page': 5,
-                                    'per_end_date.gte': set(['2015-01-01']),
+                                    'per_end_date.gte': '2015-01-01',
                                     'ticker': ['AAPL', 'MSFT'],
                                     'qopts.columns': ['ticker', 'per_end_date']}}
         result = Util.convert_options(request_type='post', **options)

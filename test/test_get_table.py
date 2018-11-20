@@ -64,14 +64,14 @@ class GetDataTableTest(unittest.TestCase):
     @patch('quandl.connection.Connection.request')
     def test_get_table_calls_connection_with_params_for_get_request(self, mock):
         params = {'ticker': ['AAPL', 'MSFT'],
-                  'per_end_date': {'gte': {'2015-01-01'}},
+                  'per_end_date': {'gte': '2015-01-01'},
                   'qopts': {'columns': ['ticker', 'per_end_date']},
                   'foo': 'bar',
                   'baz': 4
                   }
 
         expected_params = {'ticker[]': ['AAPL', 'MSFT'],
-                           'per_end_date.gte': {'2015-01-01'},
+                           'per_end_date.gte': '2015-01-01',
                            'qopts.columns[]': ['ticker', 'per_end_date'],
                            'foo': 'bar',
                            'baz': 4
@@ -85,14 +85,14 @@ class GetDataTableTest(unittest.TestCase):
     def test_get_table_calls_connection_with_params_for_post_request(self, mock):
         RequestType.USE_GET_REQUEST = False
         params = {'ticker': ['AAPL', 'MSFT'],
-                  'per_end_date': {'gte': {'2015-01-01'}},
+                  'per_end_date': {'gte': '2015-01-01'},
                   'qopts': {'columns': ['ticker', 'per_end_date']},
                   'foo': 'bar',
                   'baz': 4
                   }
 
         expected_params = {'ticker': ['AAPL', 'MSFT'],
-                           'per_end_date.gte': {'2015-01-01'},
+                           'per_end_date.gte': '2015-01-01',
                            'qopts.columns': ['ticker', 'per_end_date'],
                            'foo': 'bar',
                            'baz': 4

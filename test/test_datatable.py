@@ -61,18 +61,18 @@ class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):
     @patch('quandl.connection.Connection.request')
     def test_datatable_calls_connection_with_params_for_get_request(self, mock):
         params = {'ticker': ['AAPL', 'MSFT'],
-                  'per_end_date': {'gte': {'2015-01-01'}},
+                  'per_end_date': {'gte': '2015-01-01'},
                   'qopts': {'columns': ['ticker', 'per_end_date']},
                   'foo': 'bar',
                   'baz': 4
                   }
 
         expected_params = {'ticker[]': ['AAPL', 'MSFT'],
-                           'per_end_date.gte': {'2015-01-01'},
-                            'qopts.columns[]': ['ticker', 'per_end_date'],
-                            'foo': 'bar',
-                            'baz': 4
-                            }
+                           'per_end_date.gte': '2015-01-01',
+                           'qopts.columns[]': ['ticker', 'per_end_date'],
+                           'foo': 'bar',
+                           'baz': 4
+                           }
 
         Datatable('ZACKS/FC').data(params=params)
         expected = call('get', 'datatables/ZACKS/FC', params=expected_params)
@@ -82,14 +82,14 @@ class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):
     def test_datatable_calls_connection_with_params_for_post_request(self, mock):
         RequestType.USE_GET_REQUEST = False
         params = {'ticker': ['AAPL', 'MSFT'],
-                  'per_end_date': {'gte': {'2015-01-01'}},
+                  'per_end_date': {'gte': '2015-01-01'},
                   'qopts': {'columns': ['ticker', 'per_end_date']},
                   'foo': 'bar',
                   'baz': 4
                   }
 
         expected_params = {'ticker': ['AAPL', 'MSFT'],
-                           'per_end_date.gte': {'2015-01-01'},
+                           'per_end_date.gte': '2015-01-01',
                            'qopts.columns': ['ticker', 'per_end_date'],
                            'foo': 'bar',
                            'baz': 4
