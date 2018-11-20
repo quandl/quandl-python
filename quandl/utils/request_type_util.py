@@ -7,7 +7,7 @@ from quandl.api_config import ApiConfig
 
 
 class RequestType(object):
-    MAX_URL_LENGTH_FOR_GET = 8000
+    MAX_URL_LENGTH_FOR_GET = 8000  # Most webservers have a maximum get request url length of 8000 characters
     USE_GET_REQUEST = True  # This is used to simplify testing code
 
     @classmethod
