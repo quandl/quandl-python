@@ -1,19 +1,17 @@
-try:
-    from urllib.parse import urlparse
-except ImportError:
-    from urlparse import urlparse
-
+import json
 import re
 import unittest
+
 import httpretty
-import json
 import six
-from quandl.model.datatable import Datatable
-from mock import patch, call, mock_open
-from test.factories.datatable import DatatableFactory
-from test.test_retries import ModifyRetrySettingsTestCase
+from mock import call, mock_open, patch
+from six.moves.urllib.parse import urlparse
+
 from quandl.api_config import ApiConfig
 from quandl.errors.quandl_error import (InternalServerError, QuandlError)
+from quandl.model.datatable import Datatable
+from test.factories.datatable import DatatableFactory
+from test.test_retries import ModifyRetrySettingsTestCase
 
 
 class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):

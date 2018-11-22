@@ -1,20 +1,16 @@
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib import urlopen
-
-from time import sleep
 import os
+from time import sleep
+
+from six.moves.urllib.request import urlopen
 
 from quandl.connection import Connection
-from quandl.util import Util
 from quandl.errors.quandl_error import QuandlError
+from quandl.message import Message
 from quandl.operations.get import GetOperation
 from quandl.operations.list import ListOperation
-
-from .model_base import ModelBase
-from quandl.message import Message
+from quandl.util import Util
 from .data import Data
+from .model_base import ModelBase
 
 
 class Datatable(GetOperation, ListOperation, ModelBase):
