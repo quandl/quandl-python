@@ -60,7 +60,16 @@ class Util(object):
             return value
 
     @staticmethod
-    def convert_options(**options):
+    def convert_options(request_type, **options):
+        if request_type == 'get':
+            return Util._convert_options_for_get_request(**options)
+        elif request_type == 'post':
+            return Util._convert_options_for_post_request(**options)
+        else:
+            raise Exception('Can only convert options for get or post requests')
+
+    @staticmethod
+    def _convert_options_for_get_request(**options):
         new_options = dict()
         if 'params' in options.keys():
             for key, value in options['params'].items():
@@ -84,6 +93,28 @@ class Util(object):
                 else:
                     new_options[key] = value
         return {'params': new_options}
+
+    @staticmethod
+    def _convert_options_for_post_request(**options):
+        new_options = dict()
+        if 'params' in options.keys():
+            for key, value in options['params'].items():
+                if isinstance(value, dict) and value != {}:
+                    new_value = dict()
+                    is_dict = True
+                    old_key = key
+                    for k, v in value.items():
+                        key = key + '.' + k
+                        new_value[key] = v
+                        key = old_key
+                else:
+                    is_dict = False
+
+                if is_dict:
+                    new_options.update(new_value)
+                else:
+                    new_options[key] = value
+        return {'json': new_options}
 
     @staticmethod
     def convert_to_columns_list(meta, type):

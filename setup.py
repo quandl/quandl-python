@@ -61,7 +61,8 @@ setup(
         'httpretty',
         'mock',
         'factory_boy',
-        'jsondate'
+        'jsondate',
+        'parameterized'
     ],
     test_suite="nose.collector",
     packages=packages
