@@ -14,7 +14,7 @@ class Message:
     ERROR_DATASETS_CODE_MUST_IN_LIST = 'dataset codes must be specified in a list'
     ERROR_FOLDER_ISSUE = 'The folder path specified is incorrect or you do not have \
         permission to access to the folder. Check your settings and try again.'
-    ERROR_INVALID_DATABASE_CODE_FROMAT = 'Invalid format used for Quandl database code. \
+    ERROR_INVALID_DATABASE_CODE_FORMAT = 'Invalid format used for Quandl database code. \
         The correct format is: `DATABASE_CODE/DATASET_CODE`'
     ERROR_INVALID_DATASET = 'Invalid dataset. Your data set must be specified as a string that \
         contains a Quandl code or as a tuple with multiple Quandl codes'
