@@ -1,3 +1,5 @@
+import os
+
 class ApiConfig:
     api_key = None
     api_protocol = 'https://'
@@ -14,8 +16,7 @@ class ApiConfig:
 
 def save_key(apikey, filename=None):
     if filename is None:
-        import pathlib
-        filename = str(pathlib.Path.home()) + "/.quandl_apikey"
+        filename = os.path.join(os.path.expanduser('~'), '.quandl_apikey')
 
     fileptr = open(filename, 'w')
     fileptr.write(apikey)
@@ -25,8 +26,7 @@ def save_key(apikey, filename=None):
 
 def read_key(filename=None):
     if filename is None:
-        import pathlib
-        filename = str(pathlib.Path.home()) + "/.quandl_apikey"
+        filename = os.path.join(os.path.expanduser('~'), '.quandl_apikey')
 
     try:
         fileptr = open(filename, 'r')
