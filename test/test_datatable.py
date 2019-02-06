@@ -12,9 +12,7 @@ from quandl.errors.quandl_error import (InternalServerError, QuandlError)
 from quandl.model.datatable import Datatable
 from test.factories.datatable import DatatableFactory
 from test.test_retries import ModifyRetrySettingsTestCase
-from quandl.api_config import ApiConfig
 from quandl.utils.request_type_util import RequestType
-from quandl.errors.quandl_error import (InternalServerError, QuandlError)
 from parameterized import parameterized
 
 
