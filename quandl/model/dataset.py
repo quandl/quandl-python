@@ -25,7 +25,7 @@ class Dataset(GetOperation, ListOperation, ModelBase):
 
         parsed_code = self.code.split("/")
         if len(parsed_code) < 2:
-            raise SyntaxError(Message.ERROR_INVALID_DATABASE_CODE_FROMAT)
+            raise SyntaxError(Message.ERROR_INVALID_DATABASE_CODE_FORMAT)
 
         self.database_code = parsed_code[0]
         self.dataset_code = parsed_code[1]

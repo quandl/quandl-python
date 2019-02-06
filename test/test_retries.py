@@ -76,7 +76,7 @@ class TestRetries(ModifyRetrySettingsTestCase):
         retries = Connection.get_session().get_adapter(ApiConfig.api_protocol).max_retries
         self.assertEqual(retries.BACKOFF_MAX, ApiConfig.max_wait_between_retries)
 
-    @httpretty.activate
+    @httpretty.enabled
     def test_correct_response_returned_if_retries_succeed(self):
         ApiConfig.number_of_retries = 3
         ApiConfig.retry_status_codes = [self.error_response.status]
@@ -90,7 +90,7 @@ class TestRetries(ModifyRetrySettingsTestCase):
         self.assertEqual(response.json(), self.datatable)
         self.assertEqual(response.status_code, self.success_response.status)
 
-    @httpretty.activate
+    @httpretty.enabled
     def test_correct_response_exception_raised_if_retries_fail(self):
         ApiConfig.number_of_retries = 2
         ApiConfig.retry_status_codes = [self.error_response.status]
@@ -101,7 +101,7 @@ class TestRetries(ModifyRetrySettingsTestCase):
 
         self.assertRaises(InternalServerError, Connection.request, 'get', 'databases')
 
-    @httpretty.activate
+    @httpretty.enabled
     def test_correct_response_exception_raised_for_errors_not_in_retry_status_codes(self):
         ApiConfig.retry_status_codes = []
         mock_responses = [self.error_response]

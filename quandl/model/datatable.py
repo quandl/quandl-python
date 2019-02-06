@@ -9,6 +9,7 @@ from quandl.message import Message
 from quandl.operations.get import GetOperation
 from quandl.operations.list import ListOperation
 from quandl.util import Util
+from quandl.utils.request_type_util import RequestType
 from .data import Data
 from .model_base import ModelBase
 
@@ -22,8 +23,9 @@ class Datatable(GetOperation, ListOperation, ModelBase):
         return "%s/metadata" % cls.default_path()
 
     def data(self, **options):
-        updated_options = Util.convert_options(**options)
-        return Data.page(self, **updated_options)
+        if not options:
+            options = {'params': {}}
+        return Data.page(self, **options)
 
     def download_file(self, file_or_folder_path, **options):
         if not isinstance(file_or_folder_path, str):
@@ -32,19 +34,21 @@ class Datatable(GetOperation, ListOperation, ModelBase):
         file_is_ready = False
 
         while not file_is_ready:
-            file_is_ready = self._request_file_info(file_or_folder_path, **options)
+            file_is_ready = self._request_file_info(file_or_folder_path, params=options)
             if not file_is_ready:
                 print(Message.LONG_GENERATION_TIME)
                 sleep(self.WAIT_GENERATION_INTERVAL)
 
     def _request_file_info(self, file_or_folder_path, **options):
         url = self._download_request_path()
-        updated_options = Util.convert_options(params=options)
         code_name = self.code
+        options['params']['qopts.export'] = 'true'
 
-        updated_options['params']['qopts.export'] = 'true'
+        request_type = RequestType.get_request_type(url, **options)
 
-        r = Connection.request('get', url, **updated_options)
+        updated_options = Util.convert_options(request_type=request_type, **options)
+
+        r = Connection.request(request_type, url, **updated_options)
 
         response_data = r.json()
 

@@ -2,6 +2,7 @@ from .operation import Operation
 from quandl.connection import Connection
 from quandl.util import Util
 from quandl.model.paginated_list import PaginatedList
+from quandl.utils.request_type_util import RequestType
 
 
 class ListOperation(Operation):
@@ -21,7 +22,13 @@ class ListOperation(Operation):
     def page(cls, datatable, **options):
         params = {'id': str(datatable.code)}
         path = Util.constructed_path(datatable.default_path(), params)
-        r = Connection.request('get', path, **options)
+
+        request_type = RequestType.get_request_type(path, **options)
+
+        updated_options = Util.convert_options(request_type=request_type, **options)
+
+        r = Connection.request(request_type, path, **updated_options)
+
         response_data = r.json()
         Util.convert_to_dates(response_data)
         resource = cls.create_datatable_list_from_response(response_data)

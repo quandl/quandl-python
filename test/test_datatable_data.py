@@ -7,9 +7,11 @@ import numpy
 import six
 from quandl.model.data import Data
 from quandl.model.datatable import Datatable
+from quandl.utils.request_type_util import RequestType
 from mock import patch, call
 from test.factories.datatable_data import DatatableDataFactory
 from test.factories.datatable_meta import DatatableMetaFactory
+from parameterized import parameterized
 
 
 class DatatableDataTest(unittest.TestCase):
@@ -64,6 +66,11 @@ class ListDatatableDataTest(unittest.TestCase):
                                re.compile(
                                    'https://www.quandl.com/api/v3/datatables/*'),
                                body=json.dumps(datatable_data))
+
+        httpretty.register_uri(httpretty.POST,
+                               re.compile(
+                                   'https://www.quandl.com/api/v3/datatables/*'),
+                               body=json.dumps(datatable_data))
         cls.expected_raw_data = []
         cls.expected_list_values = []
 
@@ -72,41 +79,67 @@ class ListDatatableDataTest(unittest.TestCase):
         httpretty.disable()
         httpretty.reset()
 
+    def tearDown(self):
+        RequestType.USE_GET_REQUEST = True
+
     @patch('quandl.connection.Connection.request')
-    def test_data_calls_connection(self, mock):
+    def test_data_calls_connection_get(self, mock):
         datatable = Datatable('ZACKS/FC')
         Data.page(datatable, params={'ticker': ['AAPL', 'MSFT'],
-                                     'per_end_date': {'gte': {'2015-01-01'}},
+                                     'per_end_date': {'gte': '2015-01-01'},
                                      'qopts': {'columns': ['ticker', 'per_end_date']}})
-        expected = call('get', 'datatables/ZACKS/FC', params={'ticker': ['AAPL', 'MSFT'],
-                                                              'per_end_date':
-                                                              {'gte': {'2015-01-01'}},
-                                                              'qopts': {'columns':
-                                                                        ['ticker',
-                                                                         'per_end_date']}})
+        expected = call('get', 'datatables/ZACKS/FC',
+                        params={'ticker[]': ['AAPL', 'MSFT'],
+                                'per_end_date.gte': '2015-01-01',
+                                'qopts.columns[]': ['ticker', 'per_end_date']})
         self.assertEqual(mock.call_args, expected)
 
-    def test_values_and_meta_exist(self):
+    @patch('quandl.connection.Connection.request')
+    def test_data_calls_connection_post(self, mock):
+        RequestType.USE_GET_REQUEST = False
+        datatable = Datatable('ZACKS/FC')
+        Data.page(datatable, params={'ticker': ['AAPL', 'MSFT'],
+                                     'per_end_date': {'gte': '2015-01-01'},
+                                     'qopts': {'columns': ['ticker', 'per_end_date']}})
+        expected = call('post', 'datatables/ZACKS/FC',
+                        json={'ticker': ['AAPL', 'MSFT'],
+                                'per_end_date.gte': '2015-01-01',
+                                'qopts.columns': ['ticker', 'per_end_date']})
+        self.assertEqual(mock.call_args, expected)
+
+    @parameterized.expand(['GET', 'POST'])
+    def test_values_and_meta_exist(self, request_method):
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         self.assertIsNotNone(results.values)
         self.assertIsNotNone(results.meta)
 
-    def test_to_pandas_returns_pandas_dataframe_object(self):
+    @parameterized.expand(['GET', 'POST'])
+    def test_to_pandas_returns_pandas_dataframe_object(self, request_method):
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         df = results.to_pandas()
         self.assertIsInstance(df, pandas.core.frame.DataFrame)
 
     # no index is set for datatable.to_pandas
-    def test_pandas_dataframe_index_is_none(self):
+    @parameterized.expand(['GET', 'POST'])
+    def test_pandas_dataframe_index_is_none(self, request_method):
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         df = results.to_pandas()
         self.assertEqual(df.index.name, 'None')
 
     # if datatable has Date field then it should be convert to pandas datetime
-    def test_pandas_dataframe_date_field_is_datetime(self):
+    @parameterized.expand(['GET', 'POST'])
+    def test_pandas_dataframe_date_field_is_datetime(self, request_method):
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         df = results.to_pandas()
@@ -115,13 +148,19 @@ class ListDatatableDataTest(unittest.TestCase):
         self.assertIsInstance(df['per_end_date'][2], pandas.datetime)
         self.assertIsInstance(df['per_end_date'][3], pandas.datetime)
 
-    def test_to_numpy_returns_numpy_object(self):
+    @parameterized.expand(['GET', 'POST'])
+    def test_to_numpy_returns_numpy_object(self, request_method):
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         data = results.to_numpy()
         self.assertIsInstance(data, numpy.core.records.recarray)
 
-    def test_to_csv_returns_expected_csv(self):
+    @parameterized.expand(['GET', 'POST'])
+    def test_to_csv_returns_expected_csv(self, request_method):
+        if request_method == 'POST':
+            RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')
         results = Data.page(datatable, params={})
         data = results.to_csv()
