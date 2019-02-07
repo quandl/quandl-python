@@ -1,3 +1,6 @@
+import os
+
+
 class ApiConfig:
     api_key = None
     api_protocol = 'https://'
@@ -14,8 +17,7 @@ class ApiConfig:
 
 def save_key(apikey, filename=None):
     if filename is None:
-        import pathlib
-        filename = str(pathlib.Path.home()) + "/.quandl_apikey"
+        filename = os.path.join(os.path.expanduser('~'), '.quandl_apikey')
 
     fileptr = open(filename, 'w')
     fileptr.write(apikey)
@@ -25,17 +27,12 @@ def save_key(apikey, filename=None):
 
 def read_key(filename=None):
     if filename is None:
-        import pathlib
-        filename = str(pathlib.Path.home()) + "/.quandl_apikey"
+        filename = os.path.join(os.path.expanduser('~'), '.quandl_apikey')
 
-    try:
-        fileptr = open(filename, 'r')
-        apikey = fileptr.read()
-        fileptr.close()
+    with open(filename, 'r') as f:
+        apikey = f.read()
 
-        if apikey:
-            ApiConfig.api_key = apikey
-        else:
-            raise Exception("File '{:s}' is empty.".format(filename))
-    except ValueError:
-        raise Exception("File '{:s}' not found.".format(filename))
+    if not apikey:
+        raise ValueError("File '{:s}' is empty.".format(filename))
+
+    ApiConfig.api_key = apikey
