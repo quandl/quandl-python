@@ -1,23 +1,19 @@
-try:
-    from urllib.parse import urlparse
-    from urllib.parse import parse_qs
-except ImportError:
-    from urlparse import urlparse
-    from cgi import parse_qs
-
+import json
 import re
 import unittest
-from test.helpers.httpretty_extension import httpretty
-import json
+
 import six
-from quandl.errors.quandl_error import (InternalServerError, QuandlError)
+from mock import call, mock_open, patch
+from six.moves.urllib.parse import parse_qs, urlparse
+
 from quandl.api_config import ApiConfig
-from quandl.model.database import Database
 from quandl.connection import Connection
-from test.test_retries import ModifyRetrySettingsTestCase
-from mock import patch, call, mock_open
+from quandl.errors.quandl_error import (InternalServerError, QuandlError)
+from quandl.model.database import Database
 from test.factories.database import DatabaseFactory
 from test.factories.meta import MetaFactory
+from test.helpers.httpretty_extension import httpretty
+from test.test_retries import ModifyRetrySettingsTestCase
 
 
 class GetDatabaseTest(unittest.TestCase):

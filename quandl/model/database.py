@@ -1,21 +1,16 @@
-try:
-    from urllib.parse import urlparse
-    from urllib.parse import urlencode
-except ImportError:
-    from urlparse import urlparse
-    from urllib import urlencode
-
 import os
 
+from six.moves.urllib.parse import urlencode, urlparse
+
+import quandl.model.dataset
 from quandl.api_config import ApiConfig
 from quandl.connection import Connection
-from quandl.util import Util
 from quandl.errors.quandl_error import QuandlError
+from quandl.message import Message
 from quandl.operations.get import GetOperation
 from quandl.operations.list import ListOperation
+from quandl.util import Util
 from .model_base import ModelBase
-from quandl.message import Message
-import quandl.model.dataset
 
 
 class Database(GetOperation, ListOperation, ModelBase):

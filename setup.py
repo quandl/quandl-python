@@ -54,6 +54,13 @@ setup(
     maintainer_email='connect@quandl.com',
     url='https://github.com/quandl/quandl-python',
     license='MIT',
+    classifiers=[
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+    ],
     install_requires=install_requires,
     tests_require=[
         'flake8',
