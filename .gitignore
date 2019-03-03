@@ -9,3 +9,5 @@
 /tmp/
 .idea/*
 venv
+
+.vscode/

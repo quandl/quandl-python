@@ -7,6 +7,8 @@ import copy
 
 
 def get_table(datatable_code, **options):
+    """Similar to quandl.get(), except this function returns a pandas DataFrame object.
+    See the quandl.get docstring for information about the **options."""
     if 'paginate' in options.keys():
         paginate = options.pop('paginate')
     else:
