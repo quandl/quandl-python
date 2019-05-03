@@ -33,11 +33,15 @@ pip3 install quandl
 | max_wait_between_retries | Maximum amount of time in seconds that should be waited before attempting a retry. Only used if `use_retries` is True | 8
 | retry_backoff_factor | Determines the amount of time in seconds that should be waited before attempting another retry. Note that this factor is exponential so a `retry_backoff_factor` of 0.5 will cause waits of [0.5, 1, 2, 4, etc]. Only used if `use_retries` is True | 0.5
 | retry_status_codes | A list of HTTP status codes which will trigger a retry to occur. Only used if `use_retries` is True| [429, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511]
-    
+
 ```python
 import quandl
 quandl.ApiConfig.api_key = 'tEsTkEy123456789'
 quandl.ApiConfig.api_version = '2015-04-09'
+```
+By default, SSL verification is enabled. To bypass SSL verification
+```python
+quandl.ApiConfig.verify_ssl = False
 ```
 
 `quandl.ApiConfig.api_version` is optional however it is strongly recommended to avoid issues with rate-limiting. For premium databases, datasets and datatables `quandl.ApiConfig.api_key` will need to be set to identify you to our API. Please see [API Documentation](https://www.quandl.com/docs/api) for more detail.
@@ -122,7 +126,7 @@ The following are instructions for running our tests:
     `python setup.py install`
 4. Run the following command to test the plugin in all versions of python we support:
     `tox`
-    
+
 Once you have all required packages installed, you can run tests locally with:
 
 Running all tests locally
