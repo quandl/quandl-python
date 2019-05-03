@@ -42,7 +42,10 @@ class Connection:
         session = cls.get_session()
 
         try:
-            response = session.request(method=http_verb, url=url, verify=ApiConfig.verify_ssl, **options)
+            response = session.request(method=http_verb,
+                                       url=url,
+                                       verify=ApiConfig.verify_ssl,
+                                       **options)
             if response.status_code < 200 or response.status_code >= 300:
                 cls.handle_api_error(response)
             else:
