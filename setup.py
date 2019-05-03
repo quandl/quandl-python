@@ -22,7 +22,7 @@ install_requires = [
     'inflection >= 0.3.1',
     'python-dateutil',
     'six',
-    'more-itertools'
+    'more-itertools <= 5.0.0'
 ]
 
 installs_for_two = [
@@ -64,7 +64,7 @@ setup(
     install_requires=install_requires,
     tests_require=[
         'flake8',
-        'nose',
+        'nose <= 1.3.7',
         'httpretty',
         'mock',
         'factory_boy',
