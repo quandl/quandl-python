@@ -22,7 +22,7 @@ install_requires = [
     'inflection >= 0.3.1',
     'python-dateutil',
     'six',
-    'more-itertools <= 5.0.0'
+    'more-itertools'
 ]
 
 installs_for_two = [
