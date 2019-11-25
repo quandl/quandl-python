@@ -1,5 +1,13 @@
-### unreleased
-* Remove dependency on unittest2, use unittest instead (#113)
+### 3.4.8 - 2019-05-03
+
+* Add config to verify SSL certs. Verification on by default. (#135)
+
+### 3.4.6 - 2019-02-07
+
+* Fix typo in invalid database code message (#128)
+* Use six.moves instead of try/catch on imports (#129)
+* Add classifiers metadata to setup.py (#132)
+* Update how we find local api key file (#131)
 
 ### 3.4.5 - 2018-11-21
 
@@ -12,6 +20,8 @@
 ### 3.4.3 - 2018-10-19
 
 * Allow for exporting of datatables https://github.com/quandl/quandl-python/pull/120
+* Add support to save/read api key from file (#117)
+* Remove dependency on unittest2, use unittest instead (#113)
 
 ### 3.4.2 - 2018-08-21
 
