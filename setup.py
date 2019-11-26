@@ -22,7 +22,7 @@ INSTALL_REQUIRES = [
     'inflection >= 0.3.1',
     'python-dateutil',
     'six',
-    'more-itertools <= 5.0.0'
+    'more-itertools'
 ]
 
 INSTALLS_FOR_TWO = [
@@ -36,7 +36,7 @@ if sys.version_info[0] < 3:
 
 TEST_REQUIRES = [
         'flake8',
-        'nose <= 1.3.7',
+        'nose',
         'httpretty',
         'mock',
         'factory_boy',
