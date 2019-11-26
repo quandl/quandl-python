@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'quandl'))
 from version import VERSION  # NOQA
 
 INSTALL_REQUIRES = [
-    'pandas >= 0.14',
+    'pandas >= 0.14, < 0.25',
     'numpy >= 1.8',
     'requests >= 2.7.0',
     'inflection >= 0.3.1',
