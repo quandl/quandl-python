@@ -37,15 +37,6 @@ INSTALL_REQUIRES = [
     'more-itertools'
 ]
 
-INSTALLS_FOR_TWO = [
-    'pyOpenSSL',
-    'ndg-httpsclient',
-    'pyasn1'
-]
-
-if sys.version_info[0] < 3:
-    INSTALL_REQUIRES += INSTALLS_FOR_TWO
-
 TEST_REQUIRES = [
         'flake8',
         'nose',
