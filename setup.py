@@ -75,6 +75,7 @@ setup(
         "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
     ],
+    python_requires='>= 2.7, < 3.5',
     install_requires=INSTALL_REQUIRES,
     tests_require=TEST_REQUIRES,
     test_suite="nose.collector",
