@@ -36,7 +36,7 @@ if sys.version_info[0] < 3:
 
 TEST_REQUIRES = [
         'flake8',
-        'nose <= 1.3.7',
+        'nose',
         'httpretty',
         'mock',
         'factory_boy',
