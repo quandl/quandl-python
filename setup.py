@@ -17,7 +17,7 @@ from version import VERSION  # NOQA
 
 INSTALL_REQUIRES = [
     'pandas >= 0.14, < 0.25',
-    'numpy >= 1.8',
+    'numpy >= 1.8, < 1.17',
     'requests >= 2.7.0',
     'inflection >= 0.3.1',
     'python-dateutil',
