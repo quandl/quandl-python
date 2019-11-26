@@ -44,7 +44,7 @@ PACKAGES = [
 
 TEST_REQUIRES = [
     'flake8',
-    'nose <= 1.3.7',
+    'nose',
     'httpretty',
     'mock',
     'factory_boy',
