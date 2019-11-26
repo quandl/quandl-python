@@ -1,6 +1,18 @@
 import os
 import sys
 
+if sys.version_info[:2] < (3, 5):
+    raise ImportError("""
+    This version of quandl-python no longer supports python versions less than 3.5.0. If you're reading this message
+    your pip and/or setuptools are outdated. Please run the following to update them:
+    
+    pip install pip setuptools --upgrade
+    
+    Then try to reinstall quandl-python
+    
+    pip install quandl
+    """)
+
 try:
     from setuptools import setup
 except ImportError:
