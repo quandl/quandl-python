@@ -1,3 +1,16 @@
+### 3.5.0 - 2019-12-03
+
+  Drop support for Python 2 and Python < 3.5. See [here for more info](./DROP_PYTHON_EOL_SUPPORT.md).
+
+### 3.4.9 - 2019-12-03
+
+* This version is the last `quandl` version to support Python 2 or < 3.5. All future `quandl` package releases will only support Python >= 3.5.
+
+  If you're still using Python 2 or < 3.5, you'll need to stay at this version. 
+
+  If you're using Python >= 3.5, its recommended you perform a `pip install --upgrade quandl` to grab the newest
+  version.
+
 ### 3.4.8 - 2019-05-03
 
 * Add config to verify SSL certs. Verification on by default. (#135)
