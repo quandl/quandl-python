@@ -36,7 +36,6 @@ class Datatable(GetOperation, ListOperation, ModelBase):
         while not file_is_ready:
             file_is_ready = self._request_file_info(file_or_folder_path, params=options)
             if not file_is_ready:
-                print(Message.LONG_GENERATION_TIME)
                 sleep(self.WAIT_GENERATION_INTERVAL)
 
     def _request_file_info(self, file_or_folder_path, **options):
@@ -77,8 +76,6 @@ class Datatable(GetOperation, ListOperation, ModelBase):
                 if not chunk:
                     break
                 fd.write(chunk)
-
-        print(file_path)
 
     def _download_request_path(self):
         url = self.default_path()
