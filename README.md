@@ -98,6 +98,24 @@ This example retrieves all rows for `ZACKS/FC` where `ticker='AAPL'` and stores 
 
 Note that in both examples if an `api_key` has not been set you may receive limited or sample data. You can find more details on these quick calls and others in our [Quick Method Guide](./FOR_ANALYSTS.md).
 
+### Logging
+
+Currently debug logging is limited.  However to enable debug logs you can use
+the following snippet.
+
+```python
+import quandl
+import logging
+
+logging.basicConfig()
+# logging.getLogger().setLevel(logging.DEBUG)  # optionally set level for
+everything.  Useful to see dependency debug info as well.
+
+quandl_log = logging.getLogger("quandl")
+quandl_log.setLevel(logging.DEBUG)
+```
+
+
 ### Detailed Usage
 
 Our API can provide more than just data. It can also be used to search and provide metadata or to programatically retrieve data. For these more advanced techniques please follow our [Detailed Method Guide](./FOR_DEVELOPERS.md).

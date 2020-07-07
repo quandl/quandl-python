@@ -13,6 +13,9 @@ from quandl.utils.request_type_util import RequestType
 from .data import Data
 from .model_base import ModelBase
 
+import logging
+log = logging.getLogger(__name__)
+
 
 class Datatable(GetOperation, ListOperation, ModelBase):
     BULK_CHUNK_SIZE = 16 * 1024
@@ -36,6 +39,7 @@ class Datatable(GetOperation, ListOperation, ModelBase):
         while not file_is_ready:
             file_is_ready = self._request_file_info(file_or_folder_path, params=options)
             if not file_is_ready:
+                log.debug(Message.LONG_GENERATION_TIME)
                 sleep(self.WAIT_GENERATION_INTERVAL)
 
     def _request_file_info(self, file_or_folder_path, **options):
@@ -76,6 +80,11 @@ class Datatable(GetOperation, ListOperation, ModelBase):
                 if not chunk:
                     break
                 fd.write(chunk)
+
+        log.debug(
+            "File path: %s",
+            file_path
+        )
 
     def _download_request_path(self):
         url = self.default_path()
