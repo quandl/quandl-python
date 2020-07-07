@@ -1,3 +1,7 @@
+### 3.5.1 - 2020-07-07
+
+* Removes pointless print statements from datatable model.
+
 ### 3.5.0 - 2019-12-03
 
   Drop support for Python 2 and Python < 3.5. See [here for more info](./DROP_PYTHON_EOL_SUPPORT.md).
