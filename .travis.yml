@@ -7,6 +7,7 @@ python:
   - "3.8"
 install:
   - pip install flake8
+  - pip install -r requirements.txt
 script:
   - flake8
   - python -W always setup.py -q test
