@@ -87,21 +87,21 @@ data = quandl.get('NSE/OIL')
 
 This example finds all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with data.head().
 
-A similiar quick call can be used to retrieve a datatable:
+A similar quick call can be used to retrieve a datatable:
 
 ```python
 import quandl
 data = quandl.get_table('ZACKS/FC', ticker='AAPL')
 ```
 
-This example retrieves all rows for `ZACKS/FC` where `ticker='AAPL'` and stores them in a pandas dataframe. Similarily you can then view the dataframe with data.head().
+This example retrieves all rows for `ZACKS/FC` where `ticker='AAPL'` and stores them in a pandas dataframe. Similarly you can then view the dataframe with data.head().
 
 Note that in both examples if an `api_key` has not been set you may receive limited or sample data. You can find more details on these quick calls and others in our [Quick Method Guide](./FOR_ANALYSTS.md).
 
 ### Logging
 
-Currently debug logging is limited.  However to enable debug logs you can use
-the following snippet.
+Currently, Quandl debug logging is limited in scope.  However, to enable debug
+logs you can use the following snippet.
 
 ```python
 import quandl
@@ -118,7 +118,7 @@ quandl_log.setLevel(logging.DEBUG)
 
 ### Detailed Usage
 
-Our API can provide more than just data. It can also be used to search and provide metadata or to programatically retrieve data. For these more advanced techniques please follow our [Detailed Method Guide](./FOR_DEVELOPERS.md).
+Our API can provide more than just data. It can also be used to search and provide metadata or to programmatically retrieve data. For these more advanced techniques please follow our [Detailed Method Guide](./FOR_DEVELOPERS.md).
 
 ## Local Development
 
