@@ -1,3 +1,6 @@
+### 3.5.2 - 2020-07-24
+* Adjust the max length limit for GET request URL.
+
 ### 3.5.1 - 2020-07-07
 
 * Removes pointless print statements from datatable model.
