@@ -27,7 +27,6 @@ pip3 install quandl
 | Option | Explanation | Example |
 |---|---|---|
 | api_key | Your access key | `tEsTkEy123456789` | Used to identify who you are and provide full access. |
-| api_version | The API version you wish to use | 2015-04-09 | Can be used to test your code against the latest version without committing to it. |
 | use_retries | Whether API calls which return statuses in `retry_status_codes` should be automatically retried | True
 | number_of_retries | Maximum number of retries that should be attempted. Only used if `use_retries` is True | 5
 | max_wait_between_retries | Maximum amount of time in seconds that should be waited before attempting a retry. Only used if `use_retries` is True | 8
@@ -37,15 +36,11 @@ pip3 install quandl
 ```python
 import quandl
 quandl.ApiConfig.api_key = 'tEsTkEy123456789'
-quandl.ApiConfig.api_version = '2015-04-09'
 ```
 By default, SSL verification is enabled. To bypass SSL verification
 ```python
 quandl.ApiConfig.verify_ssl = False
 ```
-
-`quandl.ApiConfig.api_version` is optional however it is strongly recommended to avoid issues with rate-limiting. For premium databases, datasets and datatables `quandl.ApiConfig.api_key` will need to be set to identify you to our API. Please see [API Documentation](https://www.quandl.com/docs/api) for more detail.
-
 
 ### Local API Key file
 Save local key to `$HOME/.quandl_apikey` file
