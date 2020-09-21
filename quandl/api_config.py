@@ -5,7 +5,7 @@ class ApiConfig:
     api_key = None
     api_protocol = 'https://'
     api_base = '{}www.quandl.com/api/v3'.format(api_protocol)
-    api_version = None
+    api_version = None # This is not used but keeping for backwards compatibility 
     page_limit = 100
 
     use_retries = True
