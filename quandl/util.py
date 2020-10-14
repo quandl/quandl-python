@@ -1,6 +1,7 @@
 from inflection import parameterize
 import dateutil.parser
 import re
+import pandas
 from six import string_types
 
 
@@ -74,7 +75,7 @@ class Util(object):
         if 'params' in options.keys():
             for key, value in options['params'].items():
                 is_dict = False
-                if isinstance(value, list):
+                if isinstance(value, (list, pandas.Series)):
                     key = key + '[]'
                 else:
                     if isinstance(value, dict) and value != {}:
