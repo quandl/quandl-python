@@ -1,6 +1,7 @@
 import unittest
 import datetime
 import six
+import pandas
 from quandl.util import Util
 
 
@@ -75,6 +76,13 @@ class UtilTest(unittest.TestCase):
         result = Util.convert_options(request_type='get', **options)
         self.assertEqual(cmp(result, expected_result), 0)
 
+    def test_convert_options_get_request_with_series_params(self):
+        options = {'params': {'foo': pandas.Series(['bar', 'baz'])}}
+        expected_result = {'params': {'foo[]': ['bar', 'baz']}}
+
+        result = Util.convert_options(request_type='get', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
+
     def test_convert_options_get_request_with_dictionary_params_and_array_values(self):
         options = {'params': {'foo': {'bar': ['baz', 'bax']}}}
         expected_result = {'params': {'foo.bar[]': ['baz', 'bax']}}
@@ -112,6 +120,13 @@ class UtilTest(unittest.TestCase):
 
     def test_convert_options_post_request_with_array_params(self):
         options = {'params': {'foo': ['bar', 'baz']}}
+        expected_result = {'json': options['params']}
+
+        result = Util.convert_options(request_type='post', **options)
+        self.assertEqual(cmp(result, expected_result), 0)
+
+    def test_convert_options_post_request_with_series_params(self):
+        options = {'params': {'foo': pandas.Series(['bar', 'baz'])}}
         expected_result = {'json': options['params']}
 
         result = Util.convert_options(request_type='post', **options)
