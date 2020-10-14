@@ -1,3 +1,7 @@
+### 3.5.3 - 2020-10-14
+
+* Support passing a pandas Series to `get_table`
+
 ### 3.5.2 - 2020-07-24
 * Adjust the max length limit for GET request URL.
 
