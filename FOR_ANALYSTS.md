@@ -1,10 +1,10 @@
 # Quick Method Guide - Quandl-Python
 
-This quick guide offers convenient ways to retrieve individual datasets or datatables with the Python package without the need for complex commands.  
+This quick guide offers convenient ways to retrieve individual datasets or datatables with the Python package without the need for complex commands.
 
 ## Retrieving Data
 
-Retrieving data can be achieved easily using the two methods `quandl.get` for datasets and `quandl.get_table` for datatables. In both cases we strongly recommend that you set your api key via:
+Retrieving data can be achieved easily using these methods `quandl.get` for datasets, `quandl.get_table` for datatables and `quandl.get_point_in_time` for point in time data. In all cases we strongly recommend that you set your api key via:
 
  ```python
 import quandl
@@ -42,7 +42,7 @@ This revised query will find all data points annually for the dataset `NSE/OIL` 
 The following additional parameters can be specified for a dataset call:
 
 | Option | Explanation | Example | Description |
-|---|---|---|---|
+|--------|-------------|---------|-------------|
 | api_key | Your access key | `api_key='tEsTkEy123456789'` | Used to identify who you are and provide more access. Only required if not set via `quandl.ApiConfig.api_key=` |
 | \<filter / transformation parameter\> | A parameter which filters or transforms the resulting data | `start_date='2010-01-01` | For a full list see our [api docs](https://www.quandl.com/docs/api#data) |
 
@@ -57,7 +57,7 @@ import quandl
 quandl.bulkdownload('EOD')
 ```
 
-After the download is finished, the `quandl.bulkdownload` will return the filename of the downloaded zip file. 
+After the download is finished, the `quandl.bulkdownload` will return the filename of the downloaded zip file.
 
 To download database data from the previous day, use the download_type option:
 
@@ -101,7 +101,7 @@ See www.quandl.com/docs/api for more information.
 Returning Dataframe for  ['WIKI.AAPL.11', 'WIKI.MSFT.11']
 
         WIKI.AAPL - Close  WIKI.MSFT - Close
-Date                                                          
+Date
 1997-08-20        6.16                     17.57
 1997-08-21        6.00                     17.23
 1997-08-22        5.91                     17.16
@@ -135,14 +135,14 @@ data = quandl.get_table('ZACKS/FC', paginate=True, ticker=['AAPL', 'MSFT'], per_
 
 In this query we are asking for more pages of data, `ticker` values of either `AAPL` or `MSFT` and a `per_end_date` that is greater than or equal to `2015-01-01`. We are also filtering the returned columns on `ticker`, `per_end_date` and `comp_name` rather than all available columns. The output format is `pandas`.
 
-Download table data as a zip file. You can download all the table data in a data table in a single call. The following will download the entire F1 table data as a zip file to your current working directory:  
+Download table data as a zip file. You can download all the table data in a data table in a single call. The following will download the entire F1 table data as a zip file to your current working directory:
 
 ```python
 import quandl
 data = quandl.export_table('MER/F1')
 ```
 
-You can also specify where to download the zip file:  
+You can also specify where to download the zip file:
 
 ```python
 import quandl
@@ -151,7 +151,7 @@ data = quandl.export_table('MER/F1', filename='/my/path/db.zip')
 
 Note that if you are downloading the whole table, it will take longer to generate the zip file.
 
-You can also specify what data you want to download with filters and parameters.(`cursor_id` and `paginate` are not supported for exporting table zip file): 
+You can also specify what data you want to download with filters and parameters.(`cursor_id` and `paginate` are not supported for exporting table zip file):
 
 ```python
 import quandl
@@ -181,6 +181,23 @@ For more information on how to use and manipulate the resulting data see the [pa
   * *(recommended)* Refine your filter parameters to retrieve a smaller results set
   * Use the the [Detailed](./FOR_DEVELOPERS.md) method to iterate through more of the data.
 
+### Point in Time
+
+PointInTime works similarly to datatables but filtering the data based on dates. For example, a simple way to retrieve datatable information for a specific date would be:
+
+```python
+import quandl
+data = quandl.get_point_in_time('DATABASE/CODE', interval='asofdate', date='2020-01-01')
+```
+
+#### Available options
+
+| Interval | Explanation | Required params | Example |
+|----------|-------------|-----------------|---------|
+| asofdate | Returns data as of a specific date | date | `quandl.get_point_in_time('DATABASE/CODE', interval='asofdate', date='2020-01-01')` |
+| from | Returns data from `start` up to but excluding `end`; [start, end)  | start_date, end_date  | `quandl.get_point_in_time('DATABASE/CODE', interval='from', start_date='2020-01-01', end_date='2020-02-01')` |
+| between | Returns data inclusively between dates; [start, end] | start_end, end_date  | `quandl.get_point_in_time('DATABASE/CODE', interval='between', start_date='2020-01-01', end_date='2020-01-31')` |
+
 ## More usages
 
-For even more advanced usage please see our [Detailed Method Guide] (./FOR_DEVELOPERS.md).
+For even more advanced usage please see our [Detailed Method Guide](./FOR_DEVELOPERS.md).
