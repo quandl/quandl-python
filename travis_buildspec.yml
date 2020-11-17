@@ -1,0 +1,22 @@
+version: 0.2
+
+cache:
+  paths:
+    - 'pip'
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+
+  pre_build:
+    commands:
+      - pip install tox
+
+  build:
+    commands:
+      - tox
+
+  post_build:
+    commands:
+      - echo Build successful.
