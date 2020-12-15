@@ -1,3 +1,7 @@
+### 3.6.0 - 2020-12-15
+
+* Add access to Point in Time API.
+
 ### 3.5.3 - 2020-10-14
 
 * Support passing a pandas Series to `get_table`
