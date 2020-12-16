@@ -1,9 +1,9 @@
 import os
 import sys
 
-if sys.version_info[:2] < (3, 5):
+if sys.version_info[:2] < (3, 6):
     raise ImportError("""
-    This version of quandl no longer supports python versions less than 3.5.0. If you're
+    This version of quandl no longer supports python versions less than 3.6.0. If you're
     reading this message your pip and/or setuptools are outdated. Please run the following to
     update them:
 
@@ -72,14 +72,13 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8"
     ],
     install_requires=INSTALL_REQUIRES,
     tests_require=TEST_REQUIRES,
-    python_requires='>= 3.5',
+    python_requires='>= 3.6',
     test_suite="nose.collector",
     packages=PACKAGES
 )
