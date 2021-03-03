@@ -39,6 +39,12 @@ class GetPointInTimeTest(unittest.TestCase):
         self.assertEqual(mock.call_args, expected)
 
     @patch('quandl.connection.Connection.request')
+    def test_asofdate_call_connection_with_datetimes(self, mock):
+        quandl.get_point_in_time('ZACKS/FC', interval='asofdate', date='2020-01-01T12:55')
+        expected = call('get', 'pit/ZACKS/FC/asofdate/2020-01-01T12:55', params={})
+        self.assertEqual(mock.call_args, expected)
+
+    @patch('quandl.connection.Connection.request')
     def test_asofdate_call_without_date(self, mock):
         quandl.get_point_in_time('ZACKS/FC', interval='asofdate')
         expected = call('get', "pit/ZACKS/FC/asofdate/%s" % date.today(), params={})
@@ -56,6 +62,17 @@ class GetPointInTimeTest(unittest.TestCase):
         self.assertEqual(mock.call_args, expected)
 
     @patch('quandl.connection.Connection.request')
+    def test_from_call_connection_with_datetimes(self, mock):
+        quandl.get_point_in_time(
+            'ZACKS/FC',
+            interval='from',
+            start_date='2020-01-01T12:00',
+            end_date='2020-01-02T14:00'
+        )
+        expected = call('get', 'pit/ZACKS/FC/from/2020-01-01T12:00/to/2020-01-02T14:00', params={})
+        self.assertEqual(mock.call_args, expected)
+
+    @patch('quandl.connection.Connection.request')
     def test_between_call_connection(self, mock):
         quandl.get_point_in_time(
             'ZACKS/FC',
@@ -64,6 +81,17 @@ class GetPointInTimeTest(unittest.TestCase):
             end_date='2020-01-02'
         )
         expected = call('get', 'pit/ZACKS/FC/between/2020-01-01/2020-01-02', params={})
+        self.assertEqual(mock.call_args, expected)
+
+    @patch('quandl.connection.Connection.request')
+    def test_between_call_connection_with_datetimes(self, mock):
+        quandl.get_point_in_time(
+            'ZACKS/FC',
+            interval='between',
+            start_date='2020-01-01T12:00',
+            end_date='2020-01-02T14:00'
+        )
+        expected = call('get', 'pit/ZACKS/FC/between/2020-01-01T12:00/2020-01-02T14:00', params={})
         self.assertEqual(mock.call_args, expected)
 
     @patch('quandl.connection.Connection.request')

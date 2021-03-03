@@ -190,6 +190,19 @@ import quandl
 data = quandl.get_point_in_time('DATABASE/CODE', interval='asofdate', date='2020-01-01')
 ```
 
+#### Date Format
+
+Dates provided to `get_point_int_time` calls should be a valid ISO8601 formatted string. For example, the following are all valid:
+
+- `2021-03-02`
+- `2021-03-02T13:45:00`
+- `2021-03-02T12:55:00-05:00`
+
+While the following are invalid:
+
+- `2021-03-02 13:45:00` (missing `T` between date and time)
+- `March 2nd, 2021` (not `ISO 8601` compliant)
+
 #### Available options
 
 | Interval | Explanation | Required params | Example |
