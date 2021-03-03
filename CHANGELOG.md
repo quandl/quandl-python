@@ -1,3 +1,7 @@
+### 3.6.1 - 2021-03-03
+
+* Add documentation/tests for supporting Point In Time datetime values
+
 ### 3.6.0 - 2020-12-15
 
 * Add access to Point in Time API.
