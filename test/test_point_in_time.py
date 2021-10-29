@@ -15,7 +15,7 @@ class GetPointInTimeTest(ModifyRetrySettingsTestCase):
     def setUpClass(cls):
         httpretty.enable()
         httpretty.register_uri(httpretty.GET,
-                               re.compile('https://www.quandl.com/api/v3/pit/*'),
+                               re.compile('https://data.nasdaq.com/api/v3/pit/*'),
                                body=json.dumps({}))
 
     @classmethod

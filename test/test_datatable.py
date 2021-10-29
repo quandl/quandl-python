@@ -25,7 +25,7 @@ class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):
             vendor_code='ZACKS', datatable_code='FC')}
         httpretty.register_uri(httpretty.GET,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/datatables/*'),
+                                   'https://data.nasdaq.com/api/v3/datatables/*'),
                                body=json.dumps(datatable))
         cls.datatable_instance = Datatable(datatable['datatable'])
 
@@ -118,12 +118,12 @@ class ExportDataTableTest(unittest.TestCase):
             vendor_code='AUSBS', datatable_code='D')}
         httpretty.register_uri(httpretty.GET,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/datatables/*'),
+                                   'https://data.nasdaq.com/api/v3/datatables/*'),
                                body=json.dumps(datatable))
 
         httpretty.register_uri(httpretty.POST,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/datatables/*'),
+                                   'https://data.nasdaq.com/api/v3/datatables/*'),
                                body=json.dumps(datatable))
         cls.datatable_instance = Datatable(datatable['datatable'])
 
@@ -154,7 +154,7 @@ class ExportDataTableTest(unittest.TestCase):
 
         httpretty.register_uri(getattr(httpretty, request_method),
                                re.compile(
-                                   'https://www.quandl.com/api/v3/datatables/*'),
+                                   'https://data.nasdaq.com/api/v3/datatables/*'),
                                body=json.dumps({
                                    'datatable_bulk_download': {
                                        'file': {
@@ -190,7 +190,7 @@ class ExportDataTableTest(unittest.TestCase):
 
         httpretty.register_uri(getattr(httpretty, request_method),
                                re.compile(
-                                   'https://www.quandl.com/api/v3/datatables/*'),
+                                   'https://data.nasdaq.com/api/v3/datatables/*'),
                                responses=error_responses)
 
         self.assertRaises(

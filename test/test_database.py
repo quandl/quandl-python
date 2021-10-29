@@ -24,7 +24,7 @@ class GetDatabaseTest(unittest.TestCase):
         database = {'database': DatabaseFactory.build(database_code='NSE')}
         httpretty.register_uri(httpretty.GET,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/databases/*'),
+                                   'https://data.nasdaq.com/api/v3/databases/*'),
                                body=json.dumps(database))
         cls.db_instance = Database(Database.get_code_from_meta(
             database['database']), database['database'])
@@ -71,7 +71,7 @@ class ListDatabasesTest(unittest.TestCase):
         databases.update(meta)
         httpretty.register_uri(httpretty.GET,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/databases*'),
+                                   'https://data.nasdaq.com/api/v3/databases*'),
                                body=json.dumps(databases))
         cls.expected_databases = databases
 
@@ -113,7 +113,7 @@ class BulkDownloadDatabaseTest(ModifyRetrySettingsTestCase):
         httpretty.enable()
         httpretty.register_uri(httpretty.GET,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/databases/*'),
+                                   'https://data.nasdaq.com/api/v3/databases/*'),
                                adding_headers={
                                    'Location': 'https://www.blah.com/download/db.zip'
                                },
@@ -134,7 +134,7 @@ class BulkDownloadDatabaseTest(ModifyRetrySettingsTestCase):
         url = self.database.bulk_download_url(params={'download_type': 'partial'})
         parsed_url = urlparse(url)
         self.assertEqual(parsed_url.scheme, 'https')
-        self.assertEqual(parsed_url.netloc, 'www.quandl.com')
+        self.assertEqual(parsed_url.netloc, 'data.nasdaq.com')
         self.assertEqual(parsed_url.path, '/api/v3/databases/NSE/data')
         self.assertDictEqual(parse_qs(parsed_url.query), {
                              'download_type': ['partial'],
@@ -177,7 +177,7 @@ class BulkDownloadDatabaseTest(ModifyRetrySettingsTestCase):
         httpretty.reset()
         httpretty.register_uri(httpretty.GET,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/databases/*'),
+                                   'https://data.nasdaq.com/api/v3/databases/*'),
                                body=json.dumps(
                                    {'quandl_error':
                                     {'code': 'QEMx01', 'message': 'something went wrong'}}),

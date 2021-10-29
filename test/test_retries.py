@@ -83,7 +83,7 @@ class TestRetries(ModifyRetrySettingsTestCase):
 
         mock_responses = [self.error_response] + [self.error_response] + [self.success_response]
         httpretty.register_uri(httpretty.GET,
-                               "https://www.quandl.com/api/v3/databases",
+                               "https://data.nasdaq.com/api/v3/databases",
                                responses=mock_responses)
 
         response = Connection.request('get', 'databases')
@@ -96,7 +96,7 @@ class TestRetries(ModifyRetrySettingsTestCase):
         ApiConfig.retry_status_codes = [self.error_response.status]
         mock_responses = [self.error_response] * 3
         httpretty.register_uri(httpretty.GET,
-                               "https://www.quandl.com/api/v3/databases",
+                               "https://data.nasdaq.com/api/v3/databases",
                                responses=mock_responses)
 
         self.assertRaises(InternalServerError, Connection.request, 'get', 'databases')
@@ -106,7 +106,7 @@ class TestRetries(ModifyRetrySettingsTestCase):
         ApiConfig.retry_status_codes = []
         mock_responses = [self.error_response]
         httpretty.register_uri(httpretty.GET,
-                               "https://www.quandl.com/api/v3/databases",
+                               "https://data.nasdaq.com/api/v3/databases",
                                responses=mock_responses)
 
         self.assertRaises(InternalServerError, Connection.request, 'get', 'databases')

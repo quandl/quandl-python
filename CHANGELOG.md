@@ -1,3 +1,7 @@
+### 3.6.2 - 2021-11-01
+
+* Switch base URL from www.quandl.com to data.nasdaq.com
+
 ### 3.6.1 - 2021-03-03
 
 * Add documentation/tests for supporting Point In Time datetime values
@@ -25,7 +29,7 @@
 
 * This version is the last `quandl` version to support Python 2 or < 3.5. All future `quandl` package releases will only support Python >= 3.5.
 
-  If you're still using Python 2 or < 3.5, you'll need to stay at this version. 
+  If you're still using Python 2 or < 3.5, you'll need to stay at this version.
 
   If you're using Python >= 3.5, its recommended you perform a `pip install --upgrade quandl` to grab the newest
   version.
