@@ -2,14 +2,14 @@ import os
 
 from six.moves.urllib.parse import urlencode, urlparse
 
-import quandl.model.dataset
-from quandl.api_config import ApiConfig
-from quandl.connection import Connection
-from quandl.errors.quandl_error import QuandlError
-from quandl.message import Message
-from quandl.operations.get import GetOperation
-from quandl.operations.list import ListOperation
-from quandl.util import Util
+import datalink.model.dataset
+from datalink.api_config import ApiConfig
+from datalink.connection import Connection
+from datalink.errors.datalink_error import DatalinkError
+from datalink.message import Message
+from datalink.operations.get import GetOperation
+from datalink.operations.list import ListOperation
+from datalink.util import Util
 from .model_base import ModelBase
 
 
@@ -38,7 +38,7 @@ class Database(GetOperation, ListOperation, ModelBase):
 
     def bulk_download_to_file(self, file_or_folder_path, **options):
         if not isinstance(file_or_folder_path, str):
-            raise QuandlError(Message.ERROR_FOLDER_ISSUE)
+            raise DatalinkError(Message.ERROR_FOLDER_ISSUE)
 
         path_url = self._bulk_download_path()
 
@@ -61,4 +61,4 @@ class Database(GetOperation, ListOperation, ModelBase):
     def datasets(self, **options):
         params = {'database_code': self.code, 'query': '', 'page': 1}
         options = Util.merge_options('params', params, **options)
-        return quandl.model.dataset.Dataset.all(**options)
+        return datalink.model.dataset.Dataset.all(**options)

@@ -7,12 +7,12 @@ import six
 from mock import call, mock_open, patch
 from six.moves.urllib.parse import urlparse
 
-from quandl.api_config import ApiConfig
-from quandl.errors.quandl_error import (InternalServerError, QuandlError)
-from quandl.model.datatable import Datatable
+from datalink.api_config import ApiConfig
+from datalink.errors.datalink_error import (InternalServerError, DatalinkError)
+from datalink.model.datatable import Datatable
 from test.factories.datatable import DatatableFactory
 from test.test_retries import ModifyRetrySettingsTestCase
-from quandl.utils.request_type_util import RequestType
+from datalink.utils.request_type_util import RequestType
 from parameterized import parameterized
 
 
@@ -37,26 +37,26 @@ class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):
     def tearDown(self):
         RequestType.USE_GET_REQUEST = True
 
-    @patch('quandl.connection.Connection.request')
+    @patch('datalink.connection.Connection.request')
     def test_datatable_metadata_calls_connection(self, mock):
         Datatable('ZACKS/FC').data_fields()
         expected = call('get', 'datatables/ZACKS/FC/metadata', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('quandl.connection.Connection.request')
+    @patch('datalink.connection.Connection.request')
     def test_datatable_data_calls_connection_with_no_params_for_get_request(self, mock):
         Datatable('ZACKS/FC').data()
         expected = call('get', 'datatables/ZACKS/FC', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('quandl.connection.Connection.request')
+    @patch('datalink.connection.Connection.request')
     def test_datatable_data_calls_connection_with_no_params_for_post_request(self, mock):
         RequestType.USE_GET_REQUEST = False
         Datatable('ZACKS/FC').data()
         expected = call('post', 'datatables/ZACKS/FC', json={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('quandl.connection.Connection.request')
+    @patch('datalink.connection.Connection.request')
     def test_datatable_calls_connection_with_params_for_get_request(self, mock):
         params = {'ticker': ['AAPL', 'MSFT'],
                   'per_end_date': {'gte': '2015-01-01'},
@@ -76,7 +76,7 @@ class GetDatatableDatasetTest(ModifyRetrySettingsTestCase):
         expected = call('get', 'datatables/ZACKS/FC', params=expected_params)
         self.assertEqual(mock.call_args, expected)
 
-    @patch('quandl.connection.Connection.request')
+    @patch('datalink.connection.Connection.request')
     def test_datatable_calls_connection_with_params_for_post_request(self, mock):
         RequestType.USE_GET_REQUEST = False
         params = {'ticker': ['AAPL', 'MSFT'],
@@ -165,7 +165,7 @@ class ExportDataTableTest(unittest.TestCase):
                                }),
                                status=200)
 
-        with patch('quandl.model.datatable.urlopen', m, create=True):
+        with patch('datalink.model.datatable.urlopen', m, create=True):
             self.datatable.download_file('.', params={})
 
         self.assertEqual(m.call_count, 1)
@@ -175,7 +175,7 @@ class ExportDataTableTest(unittest.TestCase):
         if request_method == 'POST':
             RequestType.USE_GET_REQUEST = False
         self.assertRaises(
-            QuandlError, lambda: self.datatable.download_file(None, params={}))
+            DatalinkError, lambda: self.datatable.download_file(None, params={}))
 
     @parameterized.expand(['GET', 'POST'])
     def test_bulk_download_table_raises_exception_when_error_response(self, request_method):
@@ -184,7 +184,7 @@ class ExportDataTableTest(unittest.TestCase):
         httpretty.reset()
         ApiConfig.number_of_retries = 2
         error_responses = [httpretty.Response(
-            body=json.dumps({'quandl_error': {'code': 'QEMx01',
+            body=json.dumps({'datalink_error': {'code': 'QEMx01',
                                               'message': 'something went wrong'}}),
             status=500)]
 

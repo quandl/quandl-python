@@ -1,4 +1,4 @@
-from quandl.util import Util
+from datalink.util import Util
 
 
 class ModelList(object):

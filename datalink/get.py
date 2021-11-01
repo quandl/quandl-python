@@ -1,4 +1,4 @@
-from quandl.errors.quandl_error import InvalidRequestError
+from datalink.errors.datalink_error import InvalidRequestError
 from .model.dataset import Dataset
 from .model.merged_dataset import MergedDataset
 from .utils.api_key_util import ApiKeyUtil
@@ -12,9 +12,9 @@ OLD_TO_NEW_PARAMS = {'authtoken': 'api_key', 'trim_start': 'start_date',
 
 
 def get(dataset, **kwargs):
-    """Return dataframe of requested dataset from Quandl.
+    """Return dataframe of requested dataset from Nasdaq Data Link.
     :param dataset: str or list, depending on single dataset usage or multiset usage
-            Dataset codes are available on the Quandl website
+            Dataset codes are available on the Nasdaq Data Link website
     :param str api_key: Downloads are limited to 50 unless api_key is specified
     :param str start_date, end_date: Optional datefilers, otherwise entire
            dataset is returned
@@ -27,7 +27,7 @@ def get(dataset, **kwargs):
     :returns: :class:`pandas.DataFrame` or :class:`numpy.ndarray`
     Note that Pandas expects timeseries data to be sorted ascending for most
     timeseries functionality to work.
-    Any other `kwargs` passed to `get` are sent as field/value params to Quandl
+    Any other `kwargs` passed to `get` are sent as field/value params to Nasdaq Data Link
     with no interference.
     """
 

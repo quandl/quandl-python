@@ -1,8 +1,8 @@
 from inflection import singularize
 
 from .operation import Operation
-from quandl.connection import Connection
-from quandl.util import Util
+from datalink.connection import Connection
+from datalink.util import Util
 
 
 class GetOperation(Operation):

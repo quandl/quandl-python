@@ -1,5 +1,5 @@
 import unittest
-from quandl.utils.request_type_util import RequestType
+from datalink.utils.request_type_util import RequestType
 from test.helpers.random_data_helper import generate_random_dictionary
 
 

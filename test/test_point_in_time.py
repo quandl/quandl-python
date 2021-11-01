@@ -4,9 +4,9 @@ import re
 import httpretty
 from mock import call, patch
 
-from quandl.model.point_in_time import PointInTime
+from datalink.model.point_in_time import PointInTime
 from test.test_retries import ModifyRetrySettingsTestCase
-from quandl.utils.request_type_util import RequestType
+from datalink.utils.request_type_util import RequestType
 
 
 class GetPointInTimeTest(ModifyRetrySettingsTestCase):
@@ -26,7 +26,7 @@ class GetPointInTimeTest(ModifyRetrySettingsTestCase):
     def tearDown(self):
         RequestType.USE_GET_REQUEST = True
 
-    @patch('quandl.connection.Connection.request')
+    @patch('datalink.connection.Connection.request')
     def test_asofdate_call_connection(self, mock):
         PointInTime(
             'ZACKS/FC',
@@ -38,7 +38,7 @@ class GetPointInTimeTest(ModifyRetrySettingsTestCase):
         expected = call('get', 'pit/ZACKS/FC/asofdate/2020-01-01', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('quandl.connection.Connection.request')
+    @patch('datalink.connection.Connection.request')
     def test_from_call_connection(self, mock):
         PointInTime(
             'ZACKS/FC',
@@ -51,7 +51,7 @@ class GetPointInTimeTest(ModifyRetrySettingsTestCase):
         expected = call('get', 'pit/ZACKS/FC/from/2020-01-01/to/2020-01-02', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('quandl.connection.Connection.request')
+    @patch('datalink.connection.Connection.request')
     def test_between_call_connection(self, mock):
         PointInTime(
             'ZACKS/FC',

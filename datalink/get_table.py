@@ -1,5 +1,5 @@
-from quandl.model.datatable import Datatable
-from quandl.errors.quandl_error import LimitExceededError
+from datalink.model.datatable import Datatable
+from datalink.errors.datalink_error import LimitExceededError
 from .api_config import ApiConfig
 from .message import Message
 import warnings

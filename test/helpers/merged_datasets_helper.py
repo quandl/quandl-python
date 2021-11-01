@@ -2,9 +2,9 @@ import re
 import jsondate as json
 import six
 
-from quandl.model.dataset import Dataset
-from quandl.model.data import Data
-from quandl.model.data_list import DataList
+from datalink.model.dataset import Dataset
+from datalink.model.data import Data
+from datalink.model.data_list import DataList
 from test.factories.dataset import DatasetFactory
 from test.factories.dataset_data import DatasetDataFactory
 

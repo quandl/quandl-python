@@ -1,13 +1,13 @@
-from quandl.operations.get import GetOperation
-from quandl.operations.list import ListOperation
-from quandl.util import Util
+from datalink.operations.get import GetOperation
+from datalink.operations.list import ListOperation
+from datalink.util import Util
 from .model_base import ModelBase
 from .data import Data
 from .data_list import DataList
-import quandl.model.database
+import datalink.model.database
 import six
-from quandl.errors.quandl_error import (NotFoundError, ColumnNotFound)
-from quandl.message import Message
+from datalink.errors.datalink_error import (NotFoundError, ColumnNotFound)
+from datalink.message import Message
 
 
 class Dataset(GetOperation, ListOperation, ModelBase):
@@ -55,4 +55,4 @@ class Dataset(GetOperation, ListOperation, ModelBase):
             raise
 
     def database(self):
-        return quandl.model.database.Database(self.database_code)
+        return datalink.model.database.Database(self.database_code)

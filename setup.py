@@ -3,15 +3,15 @@ import sys
 
 if sys.version_info[:2] < (3, 5):
     raise ImportError("""
-    This version of quandl no longer supports python versions less than 3.5.0. If you're
+    This version of Nasdaq Data Link no longer supports python versions less than 3.5.0. If you're
     reading this message your pip and/or setuptools are outdated. Please run the following to
     update them:
 
     pip install pip setuptools --upgrade
 
-    Then try to reinstall quandl:
+    Then try to reinstall nasdaq-data-link:
 
-    pip install quandl
+    pip install nasdaq-data-link
     """)
 
 try:
@@ -22,8 +22,8 @@ except ImportError:
 with open('LONG_DESCRIPTION.rst') as f:
     LONG_DESCRIPTION = f.read()
 
-# Don't import quandl module here, since deps may not be installed
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'quandl'))
+# Don't import datalink module here, since deps may not be installed
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'datalink'))
 # can only import VERSION successfully after the above line
 # ignore flake8 warning that requires imports to be at the top
 from version import VERSION  # NOQA
@@ -49,23 +49,23 @@ TEST_REQUIRES = [
 ]
 
 PACKAGES = [
-    'quandl',
-    'quandl.errors',
-    'quandl.model',
-    'quandl.operations',
-    'quandl.utils'
+    'datalink',
+    'datalink.errors',
+    'datalink.model',
+    'datalink.operations',
+    'datalink.utils'
 ]
 
 setup(
-    name='Quandl',
-    description='Package for quandl API access',
-    keywords=['quandl', 'API', 'data', 'financial', 'economic'],
+    name='Nasdaq Data Link',
+    description='Package for Nasdaq Data Link API access',
+    keywords=['nasdaq', 'datalink', 'API', 'data', 'financial', 'economic'],
     long_description=LONG_DESCRIPTION,
     version=VERSION,
-    author='Quandl',
-    author_email='connect@quandl.com',
-    maintainer='Quandl Development Team',
-    maintainer_email='connect@quandl.com',
+    author='Nasdaq Data Link',
+    author_email='connect@data.nasdaq.com',
+    maintainer='Nasdaq Data Link Development Team',
+    maintainer_email='connect@data.nasdaq.com',
     url='https://github.com/quandl/quandl-python',
     license='MIT',
     classifiers=[

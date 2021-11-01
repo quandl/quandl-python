@@ -2,10 +2,10 @@ from more_itertools import unique_everseen
 import pandas as pd
 from six import string_types
 from .model_base import ModelBase
-from quandl.util import Util
+from datalink.util import Util
 from .merged_data_list import MergedDataList
 from .data import Data
-from quandl.message import Message
+from datalink.message import Message
 from .dataset import Dataset
 
 

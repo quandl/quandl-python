@@ -3,7 +3,7 @@
 
 /.tox/
 /.eggs
-/quandl.egg-info
+/Nasdaq_Data_Link.egg-info
 /build
 /dist
 /tmp/

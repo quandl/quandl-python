@@ -4,8 +4,8 @@ from test.helpers.httpretty_extension import httpretty
 import json
 import datetime
 import six
-from quandl.model.dataset import Dataset
-from quandl.model.database import Database
+from datalink.model.dataset import Dataset
+from datalink.model.database import Database
 from mock import patch, call
 from test.factories.dataset import DatasetFactory
 from test.factories.meta import MetaFactory
@@ -30,7 +30,7 @@ class GetDatasetTest(unittest.TestCase):
         httpretty.disable()
         httpretty.reset()
 
-    @patch('quandl.connection.Connection.request')
+    @patch('datalink.connection.Connection.request')
     def test_dataset_calls_connection(self, mock):
         d = Dataset('NSE/OIL')
         d.data_fields()
@@ -56,7 +56,7 @@ class GetDatasetTest(unittest.TestCase):
         database = self.dataset_instance.database()
         self.assertIsInstance(database, Database)
 
-    @patch('quandl.model.data.Data.all')
+    @patch('datalink.model.data.Data.all')
     def test_dataset_data_calls_data_all(self, mock):
         self.dataset_instance.data(
             params={'start_date': '2015-07-01', 'end_date': '2015-07-10'})
@@ -84,7 +84,7 @@ class ListDatasetsTest(unittest.TestCase):
         httpretty.disable()
         httpretty.reset()
 
-    @patch('quandl.connection.Connection.request')
+    @patch('datalink.connection.Connection.request')
     def test_datasets_calls_connection(self, mock):
         Dataset.all()
         expected = call('get', 'datasets', params={})

@@ -1,5 +1,5 @@
-from quandl.operations.data_list import DataListOperation
-from quandl.util import Util
+from datalink.operations.data_list import DataListOperation
+from datalink.util import Util
 from .model_base import ModelBase
 from .data_mixin import DataMixin
 

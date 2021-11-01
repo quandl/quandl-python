@@ -2,7 +2,7 @@
 
 from .api_config import ApiConfig, save_key, read_key
 
-from .errors.quandl_error import *
+from .errors.datalink_error import *
 
 from .model.database import Database
 from .model.dataset import Dataset

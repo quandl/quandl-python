@@ -1,25 +1,21 @@
-# Quandl Python Client
+# Nasdaq Data Link Python Client
 [![Build Status](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiZUtvUFNYREloNE4vV0xWWEUxVS81S0toZjdQbzQrWXhQZ1BUbE1mZ1FMVXdSZXQ2K1ZLQ1ducmtqYTVWa2xBZXhRMWVGemVKWitzVm5MNXI4cGZYb21RPSIsIml2UGFyYW1ldGVyU3BlYyI6Im0vdUljcjBjdmpGVU9XdXUiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)]()
 [![PyPI version](https://badge.fury.io/py/Quandl.svg)](https://badge.fury.io/py/Quandl)
 
-This is the official documentation for Quandl's Python Package. The package can be used to interact with the latest version of the [Quandl RESTful API](https://www.quandl.com/docs/api). This package is compatible with python v2.7.x and v3.x+.
-
-## Deprecation of old package
-
-Please see this readme for more information and upgrade instructions: [2.x series transition notes](./2_SERIES_UPGRADE.md)
+This is the official documentation for Nasdaq Data Link's Python Package. The package can be used to interact with the latest version of the [Nasdaq Data Link's RESTful API](https://docs.data.nasdaq.com/docs). This package is compatible with python v2.7.x and v3.x+.
 
 ## Installation
 
 The installation process varies depending on your python version and system used. However in most cases the following should work:
 
 ```shell
-pip install quandl
+pip install nasdaq-data-link
 ```
 
 Alternatively on some systems python3 may use a different pip executable and may need to be installed via an alternate pip command. For example:
 
 ```shell
-pip3 install quandl
+pip3 install nasdaq-data-link
 ```
 
 ## Configuration
@@ -34,50 +30,50 @@ pip3 install quandl
 | retry_status_codes | A list of HTTP status codes which will trigger a retry to occur. Only used if `use_retries` is True| [429, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511]
 
 ```python
-import quandl
-quandl.ApiConfig.api_key = 'tEsTkEy123456789'
+import datalink
+datalink.ApiConfig.api_key = 'tEsTkEy123456789'
 ```
 By default, SSL verification is enabled. To bypass SSL verification
 ```python
-quandl.ApiConfig.verify_ssl = False
+datalink.ApiConfig.verify_ssl = False
 ```
 
 ### Local API Key file
-Save local key to `$HOME/.quandl_apikey` file
+Save local key to `$HOME/.datalink_apikey` file
 ```
-import quandl
-quandl.save_key("supersecret")
-print(quandl.ApiConfig.api_key)
+import datalink
+datalink.save_key("supersecret")
+print(datalink.ApiConfig.api_key)
 ```
 
 Load the API Key without exposing the key in the script or notebook
 ```
-import quandl
-quandl.read_key()
-print(quandl.ApiConfig.api_key)
+import datalink
+datalink.read_key()
+print(datalink.ApiConfig.api_key)
 ```
 
 Set a custom location for the API key file, e.g. store the externally outside a docker container
 ```
-import quandl
-quandl.save_key("ourcorporateapikey", filename="/srv/data/somecontainer/.corporatequandlapikey")
+import datalink
+datalink.save_key("ourcorporateapikey", filename="/srv/data/somecontainer/.corporatenasdaqdatalinkapikey")
 ```
 and call within the docker container with mount point at `/data`
 ```
-import quandl
-quandl.read_key(filepath="/data/.corporatequandlapikey")
+import datalink
+datalink.read_key(filepath="/data/.corporatenasdaqdatalinkapikey")
 ```
 
 
 ## Retrieving Data
 
-There are two methods for retrieving data in Python: the Quick method and the Detailed method. The latter is more suitable to application programming. Both methods work with Quandl's two types of data structures: time-series (dataset) data and non-time series (datatable).
+There are two methods for retrieving data in Python: the Quick method and the Detailed method. The latter is more suitable to application programming. Both methods work with Nasdaq Data Link's two types of data structures: time-series (dataset) data and non-time series (datatable).
 
 The following quick call can be used to retrieve a dataset:
 
 ```python
-import quandl
-data = quandl.get('NSE/OIL')
+import datalink
+data = datalink.get('NSE/OIL')
 ```
 
 This example finds all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with data.head().
@@ -85,8 +81,8 @@ This example finds all data points for the dataset `NSE/OIL` and stores them in 
 A similar quick call can be used to retrieve a datatable:
 
 ```python
-import quandl
-data = quandl.get_table('ZACKS/FC', ticker='AAPL')
+import datalink
+data = datalink.get_table('ZACKS/FC', ticker='AAPL')
 ```
 
 This example retrieves all rows for `ZACKS/FC` where `ticker='AAPL'` and stores them in a pandas dataframe. Similarly you can then view the dataframe with data.head().
@@ -95,19 +91,19 @@ Note that in both examples if an `api_key` has not been set you may receive limi
 
 ### Logging
 
-Currently, Quandl debug logging is limited in scope.  However, to enable debug
+Currently, Nasdaq Data Link debug logging is limited in scope.  However, to enable debug
 logs you can use the following snippet.
 
 ```python
-import quandl
+import datalink
 import logging
 
 logging.basicConfig()
 # logging.getLogger().setLevel(logging.DEBUG)  # optionally set level for
 everything.  Useful to see dependency debug info as well.
 
-quandl_log = logging.getLogger("quandl")
-quandl_log.setLevel(logging.DEBUG)
+data_link_log = logging.getLogger("datalink")
+data_link_log.setLevel(logging.DEBUG)
 ```
 
 
@@ -173,9 +169,9 @@ To release the package, you can follow the instructions on this [page](https://p
 
 ## Additional Links
 
-* [Quandl](https://www.quandl.com)
-* [Quandl Tools](https://www.quandl.com/tools/api)
-* [API Docs](https://www.quandl.com/docs/api)
+* [Nasdaq Data Link](https://data.nasdaq.com)
+* [Nasdaq Data Link Tools](https://data.nasdaq.com/tools/full-list)
+* [API Docs](https://docs.data.nasdaq.com/docs)
 
 ## License
 

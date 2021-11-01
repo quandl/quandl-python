@@ -1,5 +1,5 @@
 import pandas as pd
-from quandl.errors.quandl_error import ColumnNotFound
+from datalink.errors.datalink_error import ColumnNotFound
 
 
 class DataMixin(object):

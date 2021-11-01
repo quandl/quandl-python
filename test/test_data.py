@@ -6,10 +6,10 @@ import datetime
 import pandas
 import numpy
 import six
-from quandl.model.data import Data
+from datalink.model.data import Data
 from mock import patch, call
 from test.factories.dataset_data import DatasetDataFactory
-from quandl.errors.quandl_error import InvalidDataError
+from datalink.errors.datalink_error import InvalidDataError
 
 
 class DataTest(unittest.TestCase):
@@ -77,7 +77,7 @@ class ListDataTest(unittest.TestCase):
         httpretty.disable()
         httpretty.reset()
 
-    @patch('quandl.connection.Connection.request')
+    @patch('datalink.connection.Connection.request')
     def test_data_calls_connection(self, mock):
         Data.all(params={'database_code': 'NSE', 'dataset_code': 'OIL'})
         expected = call('get', 'datasets/NSE/OIL/data', params={})

@@ -1,4 +1,4 @@
-from quandl.errors.quandl_error import InvalidRequestError
+from datalink.errors.datalink_error import InvalidRequestError
 from .utils.api_key_util import ApiKeyUtil
 from .model.datatable import Datatable
 from .message import Message

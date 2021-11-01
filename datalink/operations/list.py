@@ -1,8 +1,8 @@
 from .operation import Operation
-from quandl.connection import Connection
-from quandl.util import Util
-from quandl.model.paginated_list import PaginatedList
-from quandl.utils.request_type_util import RequestType
+from datalink.connection import Connection
+from datalink.util import Util
+from datalink.model.paginated_list import PaginatedList
+from datalink.utils.request_type_util import RequestType
 
 
 class ListOperation(Operation):

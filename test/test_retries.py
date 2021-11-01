@@ -1,11 +1,11 @@
 import unittest
 import json
 
-from quandl.connection import Connection
-from quandl.api_config import ApiConfig
+from datalink.connection import Connection
+from datalink.api_config import ApiConfig
 from test.factories.datatable import DatatableFactory
 from test.helpers.httpretty_extension import httpretty
-from quandl.errors.quandl_error import InternalServerError
+from datalink.errors.datalink_error import InternalServerError
 
 
 class ModifyRetrySettingsTestCase(unittest.TestCase):
@@ -38,7 +38,7 @@ class TestRetries(ModifyRetrySettingsTestCase):
             datatable_code='FC')}
 
         cls.error_response = httpretty.Response(
-            body=json.dumps({'quandl_error': {'code': 'QEMx01',
+            body=json.dumps({'datalink_error': {'code': 'QEMx01',
                                               'message': 'something went wrong'}}),
             status=500)
         cls.success_response = httpretty.Response(body=json.dumps(cls.datatable), status=200)

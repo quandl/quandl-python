@@ -18,7 +18,7 @@ class ApiConfig:
 
 def save_key(apikey, filename=None):
     if filename is None:
-        filename = os.path.join(os.path.expanduser('~'), '.quandl_apikey')
+        filename = os.path.join(os.path.expanduser('~'), '.datalink_apikey')
 
     fileptr = open(filename, 'w')
     fileptr.write(apikey)
@@ -28,7 +28,7 @@ def save_key(apikey, filename=None):
 
 def read_key(filename=None):
     if filename is None:
-        filename = os.path.join(os.path.expanduser('~'), '.quandl_apikey')
+        filename = os.path.join(os.path.expanduser('~'), '.datalink_apikey')
 
     with open(filename, 'r') as f:
         apikey = f.read()

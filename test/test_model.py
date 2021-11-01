@@ -1,5 +1,5 @@
 import unittest
-from quandl.model.model_base import ModelBase
+from datalink.model.model_base import ModelBase
 
 import six
 

@@ -1,5 +1,5 @@
-from quandl.operations.get import GetOperation
-from quandl.operations.list import ListOperation
+from datalink.operations.get import GetOperation
+from datalink.operations.list import ListOperation
 from .data import Data
 from .model_base import ModelBase
 from datetime import date

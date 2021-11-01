@@ -1,8 +1,8 @@
-from quandl.model.point_in_time import PointInTime
-from quandl.errors.quandl_error import LimitExceededError
+from datalink.model.point_in_time import PointInTime
+from datalink.errors.datalink_error import LimitExceededError
 from .api_config import ApiConfig
 from .message import Message
-from quandl.errors.quandl_error import InvalidRequestError
+from datalink.errors.datalink_error import InvalidRequestError
 import warnings
 import copy
 

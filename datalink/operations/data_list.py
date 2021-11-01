@@ -1,7 +1,7 @@
-from quandl.model.data_list import DataList
+from datalink.model.data_list import DataList
 from .list import ListOperation
-from quandl.errors.quandl_error import (InvalidDataError, ColumnNotFound)
-from quandl.message import Message
+from datalink.errors.datalink_error import (InvalidDataError, ColumnNotFound)
+from datalink.message import Message
 
 
 class DataListOperation(ListOperation):

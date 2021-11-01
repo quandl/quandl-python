@@ -1,4 +1,4 @@
-from quandl.errors.quandl_error import InvalidRequestError
+from datalink.errors.datalink_error import InvalidRequestError
 from .utils.api_key_util import ApiKeyUtil
 from .model.database import Database
 from .message import Message
@@ -11,7 +11,7 @@ def bulkdownload(database, **kwargs):
     If not specified, will download to the current working directory
     :param str api_key: Most databases require api_key for bulk download
     :param str download_type: 'partial' or 'complete'. \
-    See: https://www.quandl.com/docs/api#database-metadata
+    See: https://docs.data.nasdaq.com/docs
     """
 
     # discourage users from using authtoken

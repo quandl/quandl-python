@@ -3,13 +3,13 @@ from time import sleep
 
 from six.moves.urllib.request import urlopen
 
-from quandl.connection import Connection
-from quandl.errors.quandl_error import QuandlError
-from quandl.message import Message
-from quandl.operations.get import GetOperation
-from quandl.operations.list import ListOperation
-from quandl.util import Util
-from quandl.utils.request_type_util import RequestType
+from datalink.connection import Connection
+from datalink.errors.datalink_error import DatalinkError
+from datalink.message import Message
+from datalink.operations.get import GetOperation
+from datalink.operations.list import ListOperation
+from datalink.util import Util
+from datalink.utils.request_type_util import RequestType
 from .data import Data
 from .model_base import ModelBase
 
@@ -32,7 +32,7 @@ class Datatable(GetOperation, ListOperation, ModelBase):
 
     def download_file(self, file_or_folder_path, **options):
         if not isinstance(file_or_folder_path, str):
-            raise QuandlError(Message.ERROR_FOLDER_ISSUE)
+            raise DatalinkError(Message.ERROR_FOLDER_ISSUE)
 
         file_is_ready = False
 

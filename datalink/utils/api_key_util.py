@@ -1,4 +1,4 @@
-from quandl.api_config import ApiConfig
+from datalink.api_config import ApiConfig
 
 
 class ApiKeyUtil(object):
