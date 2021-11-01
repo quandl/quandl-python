@@ -56,7 +56,7 @@ class ListDataTest(unittest.TestCase):
         dataset_data = {'dataset_data': DatasetDataFactory.build()}
         httpretty.register_uri(httpretty.GET,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/datasets*'),
+                                   'https://data.nasdaq.com/api/v3/datasets*'),
                                body=json.dumps(dataset_data))
         cls.expected_raw_data = [{'date': datetime.date(2015, 7, 11), 'column1': 444.3,
                                   'column2': 10, 'column3': 3},
@@ -150,6 +150,6 @@ class ListDataTest(unittest.TestCase):
             'dataset_data': DatasetDataFactory.build(column_names=['blah'])}
         httpretty.register_uri(httpretty.GET,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/datasets*'),
+                                   'https://data.nasdaq.com/api/v3/datasets*'),
                                body=json.dumps(dataset_data))
         self.assertRaises(InvalidDataError, lambda: Data.all())

@@ -64,12 +64,12 @@ class ListDatatableDataTest(unittest.TestCase):
         datatable_data.update(meta)
         httpretty.register_uri(httpretty.GET,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/datatables/*'),
+                                   'https://data.nasdaq.com/api/v3/datatables/*'),
                                body=json.dumps(datatable_data))
 
         httpretty.register_uri(httpretty.POST,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/datatables/*'),
+                                   'https://data.nasdaq.com/api/v3/datatables/*'),
                                body=json.dumps(datatable_data))
         cls.expected_raw_data = []
         cls.expected_list_values = []
