@@ -66,7 +66,7 @@ setup(
     author_email='connect@data.nasdaq.com',
     maintainer='Nasdaq Data Link Development Team',
     maintainer_email='connect@data.nasdaq.com',
-    url='https://github.com/quandl/quandl-python',
+    url='https://github.com/Nasdaq/data-link-python',
     license='MIT',
     classifiers=[
         "Intended Audience :: Developers",

@@ -1,5 +1,5 @@
 Official Nasdaq Data Link API Client for Python
-=========================================
+===============================================
 
 A Python library for Nasdaq Data Link's RESTful API.
 
