@@ -2,9 +2,9 @@ import re
 import jsondate as json
 import six
 
-from datalink.model.dataset import Dataset
-from datalink.model.data import Data
-from datalink.model.data_list import DataList
+from nasdaqdatalink.model.dataset import Dataset
+from nasdaqdatalink.model.data import Data
+from nasdaqdatalink.model.data_list import DataList
 from test.factories.dataset import DatasetFactory
 from test.factories.dataset_data import DatasetDataFactory
 

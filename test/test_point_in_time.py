@@ -4,9 +4,9 @@ import re
 import httpretty
 from mock import call, patch
 
-from datalink.model.point_in_time import PointInTime
+from nasdaqdatalink.model.point_in_time import PointInTime
 from test.test_retries import ModifyRetrySettingsTestCase
-from datalink.utils.request_type_util import RequestType
+from nasdaqdatalink.utils.request_type_util import RequestType
 
 
 class GetPointInTimeTest(ModifyRetrySettingsTestCase):
@@ -26,7 +26,7 @@ class GetPointInTimeTest(ModifyRetrySettingsTestCase):
     def tearDown(self):
         RequestType.USE_GET_REQUEST = True
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_asofdate_call_connection(self, mock):
         PointInTime(
             'ZACKS/FC',
@@ -38,7 +38,7 @@ class GetPointInTimeTest(ModifyRetrySettingsTestCase):
         expected = call('get', 'pit/ZACKS/FC/asofdate/2020-01-01', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_from_call_connection(self, mock):
         PointInTime(
             'ZACKS/FC',
@@ -51,7 +51,7 @@ class GetPointInTimeTest(ModifyRetrySettingsTestCase):
         expected = call('get', 'pit/ZACKS/FC/from/2020-01-01/to/2020-01-02', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_between_call_connection(self, mock):
         PointInTime(
             'ZACKS/FC',

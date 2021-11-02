@@ -9,8 +9,8 @@ In addition to the Quick methods for retrieving data, some additional commands m
 In each of the following sections it is assumed your Nasdaq Data LInk API key has been set via:
 
 ```python
-import datalink
-datalink.ApiConfig.api_key = 'tEsTkEy123456789'
+import nasdaqdatalink
+nasdaqdatalink.ApiConfig.api_key = 'tEsTkEy123456789'
 ```
 
 ## Retrieving Data
@@ -22,13 +22,13 @@ In the following sections, `params={}` represents optional query parameters that
 A dataset's data can be queried through the dataset object. For example:
 
 ```python
-data = datalink.Dataset('WIKI/AAPL').data()
+data = nasdaqdatalink.Dataset('WIKI/AAPL').data()
 ```
 
 A number of optional query parameters can be passed to `data()`:
 
 ```python
-dataset_data = datalink.Dataset('WIKI/AAPL').data(params={ 'start_date':'2001-01-01', 'end_date':'2010-01-01', 'collapse':'annual', 'transformation':'rdiff', 'rows':4 })
+dataset_data = nasdaqdatalink.Dataset('WIKI/AAPL').data(params={ 'start_date':'2001-01-01', 'end_date':'2010-01-01', 'collapse':'annual', 'transformation':'rdiff', 'rows':4 })
 ```
 
 You can access the data much like you would other lists. In addition all the data columns, fields are mapped to their column_names for convenience:
@@ -42,13 +42,13 @@ dataset_data[0].date
 A datatable's data can be retrieved in much the same was as a dataset. For example:
 
 ```python
-data = datalink.Datatable('ZACKS/FC').data()
+data = nasdaqdatalink.Datatable('ZACKS/FC').data()
 ```
 
 Note that unlike a dataset, datatables information may be paginated. If the data object returned back contains a `cursor_id` you will need to make another call appending that `cursor_id` to the datatables parameters.
 
 ```python
-data2 = datalink.Datatable('ZACKS/FC').data(params={'qopts': {'cursor_id': data.meta['next_cursor_id']}})
+data2 = nasdaqdatalink.Datatable('ZACKS/FC').data(params={'qopts': {'cursor_id': data.meta['next_cursor_id']}})
 ```
 
 Note that all parameter options are given under the kwarg `params`. These parameters will be passed through the API call. You can see a complete list of parameters [here](https://docs.data.nasdaq.com/docs).
@@ -56,7 +56,7 @@ Note that all parameter options are given under the kwarg `params`. These parame
 We also recommend using filters. This can help to reduce the number of pages returned in the result set. For example:
 
 ```python
-data = datalink.Datatable('ZACKS/FC').data(params={'ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': '2015-01-01'}, 'qopts': {'columns': ['ticker', 'comp_name']}}, qopts={'columns':['ticker', 'per_end_date']})
+data = nasdaqdatalink.Datatable('ZACKS/FC').data(params={'ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': '2015-01-01'}, 'qopts': {'columns': ['ticker', 'comp_name']}}, qopts={'columns':['ticker', 'per_end_date']})
 ```
 
 This however may still result in multiple pages so be sure to check for a resulting `cursor_id`. An example code that retrieves all pages of data with a filter may look something like:
@@ -65,7 +65,7 @@ This however may still result in multiple pages so be sure to check for a result
 data_list = []
 cursor_id = None
 while True:
-    data = datalink.Datatable('ZACKS/FC').data(params={'ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': '2015-01-01'}, 'qopts': {'columns': ['ticker', 'comp_name'], 'cursor_id': cursor_id}})
+    data = nasdaqdatalink.Datatable('ZACKS/FC').data(params={'ticker': ['AAPL','MSFT'], 'per_end_date': {'gte': '2015-01-01'}, 'qopts': {'columns': ['ticker', 'comp_name'], 'cursor_id': cursor_id}})
     cursor_id = data.meta['next_cursor_id']
     data_list.append(data)
     if cursor_id is None:
@@ -75,15 +75,15 @@ while True:
 Download table data as a zip file. You can download all the table data in a data table in a single call. The following will download the entire F1 table data as a zip file to your current working directory:
 
 ```python
-import datalink
-data = datalink.export_table('MER/F1')
+import nasdaqdatalink
+data = nasdaqdatalink.export_table('MER/F1')
 ```
 
 You can also specify where to download the zip file:
 
 ```python
-import datalink
-data = datalink.export_table('MER/F1', filename='/my/path/db.zip')
+import nasdaqdatalink
+data = nasdaqdatalink.export_table('MER/F1', filename='/my/path/db.zip')
 ```
 
 Note that if you are downloading the whole table, it will take longer to generate the zip file.
@@ -91,8 +91,8 @@ Note that if you are downloading the whole table, it will take longer to generat
 You can also specify what data you want to download with filters and parameters.(`cursor_id` and `paginate` are not supported for exporting table zip file):
 
 ```python
-import datalink
-datalink.export_table('ZACKS/FC',  ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}, qopts={'columns':['ticker', 'per_end_date']})
+import nasdaqdatalink
+nasdaqdatalink.export_table('ZACKS/FC',  ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}, qopts={'columns':['ticker', 'per_end_date']})
 ```
 
 After the download is finished, the filename of the downloaded zip file will be printed.
@@ -104,14 +104,14 @@ Sometimes it takes a while to generate the zip file, you'll get a message while 
 To get the url for downloading all dataset data in a database:
 
 ```python
-datalink.Database('ZEA').bulk_download_url()
+nasdaqdatalink.Database('ZEA').bulk_download_url()
 => "https://data.nasdaq.com/api/v3/databases/ZEA/data?api_key=tEsTkEy123456789"
 ```
 
 To bulk download all dataset data in a database:
 
 ```python
-datalink.Database('ZEA').bulk_download_to_file('/path/to/destination/folder_or_file_path')
+nasdaqdatalink.Database('ZEA').bulk_download_to_file('/path/to/destination/folder_or_file_path')
 ```
 
 For bulk download of premium databases, please ensure that a valid `api_key` is set, as authentication is required.
@@ -119,7 +119,7 @@ For bulk download of premium databases, please ensure that a valid `api_key` is 
 For both `bulk_download_url` and `bulk_download_to_file`, an optional `download_type` query parameter can be passed in:
 
 ```python
-datalink.Database('ZEA').bulk_download_to_file('.', params={'download_type': 'partial'})
+nasdaqdatalink.Database('ZEA').bulk_download_to_file('.', params={'download_type': 'partial'})
 ```
 
 If `download_type` is not specified, a `complete` bulk download will be performed. Please see the [API Documentation](https://docs.data.nasdaq.com/docs) for more detail.
@@ -129,7 +129,7 @@ If `download_type` is not specified, a `complete` bulk download will be performe
 You can get a merged representation of multiple datasets.
 
 ```python
-merged_dataset = datalink.MergedDataset([('WIKI/AAPL', {'column_index': [11]}),
+merged_dataset = nasdaqdatalink.MergedDataset([('WIKI/AAPL', {'column_index': [11]}),
                                            ('WIKI/MSFT', {'column_index': [9,11]}), 'WIKI/TWTR'])
 ```
 
@@ -185,10 +185,10 @@ See the `pandas` and `NumPy` documentation for a wealth of options on data manip
 Point in time data can be retrieved in much the same was as a datatable. For example:
 
 ```python
-data = datalink.PointInTime('DATATABLE/CODE', pit={'interval': 'asofdate', 'date': '2020-01-01'}).data().to_list()
-data = datalink.PointInTime('DATATABLE/CODE', pit={'interval': 'asofdate', 'date': '2020-01-01'}).data().to_pandas()
+data = nasdaqdatalink.PointInTime('DATATABLE/CODE', pit={'interval': 'asofdate', 'date': '2020-01-01'}).data().to_list()
+data = nasdaqdatalink.PointInTime('DATATABLE/CODE', pit={'interval': 'asofdate', 'date': '2020-01-01'}).data().to_pandas()
 # or
-data = datalink.PointInTime('DATATABLE/CODE', pit={'interval': 'from', 'start_date': '2020-01-01', 'end_date': '2020-01-15'}).data()
+data = nasdaqdatalink.PointInTime('DATATABLE/CODE', pit={'interval': 'from', 'start_date': '2020-01-01', 'end_date': '2020-01-15'}).data()
 ```
 
 For more options please check [this table](FOR_ANALYSTS.md#point-in-time)
@@ -200,13 +200,13 @@ For more options please check [this table](FOR_ANALYSTS.md#point-in-time)
 To retrieve metadata about a dataset simply instantiate its object using its Nasdaq Data Link's code:
 
 ```python
-datalink.Dataset('WIKI/AAPL')
+nasdaqdatalink.Dataset('WIKI/AAPL')
 ```
 
 Once instantiated you can then make data or metadata calls on the object. A metadata call looks like:
 
 ```python
-datalink.Dataset('WIKI/AAPL').data_fields()
+nasdaqdatalink.Dataset('WIKI/AAPL').data_fields()
 => ['premium', 'name', 'frequency', 'description', 'column_names', 'database_code', 'type', 'refreshed_at', 'newest_available_date', 'dataset_code', 'oldest_available_date', 'database_id', 'id']
 ```
 
@@ -217,21 +217,21 @@ Note that a call to any attribute such as `name` will trigger an API metadata ca
 To retrieve metadata about a database simply instantiate its object with a database code and then call a metadata method on it:
 
 ```python
-db = datalink.Database('WIKI')
+db = nasdaqdatalink.Database('WIKI')
 db.name
 ```
 
 You can also get data through other objects such as a dataset:
 
 ```python
-dataset = datalink.Dataset('WIKI/AAPL')
+dataset = nasdaqdatalink.Dataset('WIKI/AAPL')
 dataset.database()
 ```
 
 Retrieve a list of databases by using:
 
 ```python
-datalink.Database.all()
+nasdaqdatalink.Database.all()
 ```
 
 By default, each list query will return page 1 of the first 100 results (please see the official [API Documentation](https://docs.data.nasdaq.com/docs) for more detail).
@@ -239,7 +239,7 @@ By default, each list query will return page 1 of the first 100 results (please 
 Retrieve the dataset through the database by using the helper method.
 
 ```python
-datalink.Database('WIKI').datasets()
+nasdaqdatalink.Database('WIKI').datasets()
 ```
 
 ### Datatable
@@ -247,7 +247,7 @@ datalink.Database('WIKI').datasets()
 Much like databases and datasets you can retrieve datatable metadata via its Nasdaq Data Link code:
 
 ```python
-dt = datalink.Datatable('ZACKS/FC')
+dt = nasdaqdatalink.Datatable('ZACKS/FC')
 dt.data_fields()
 ```
 
@@ -258,7 +258,7 @@ dt.data_fields()
 All data once retrieved is abstracted into custom classes. You can get a list of the fields in each class by using the `data_fields` method.
 
 ```python
-database = datalink.Database('WIKI')
+database = nasdaqdatalink.Database('WIKI')
 database.data_fields()
 => ['name', 'downloads', 'id', 'premium', 'description', 'datasets_count', 'database_code', 'image']
 ```
@@ -266,7 +266,7 @@ database.data_fields()
 You can then uses these methods in your code. Additionally you can access the data by using the hash equalivalent lookup:
 
 ```python
-database = datalink.Database('WIKI')
+database = nasdaqdatalink.Database('WIKI')
 database.database_code
 => 'WIKI'
 database['database_code']
@@ -276,7 +276,7 @@ database['database_code']
 In some cases the names of the fields returned by the API may not be compatible with the Python language syntax. These will be converted into compatible field names.
 
 ```python
-data = datalink.Dataset('WIKI/AAPL').data(params={ 'limit': 1 })[0]
+data = nasdaqdatalink.Dataset('WIKI/AAPL').data(params={ 'limit': 1 })[0]
 
 data.column_names
 => ["Date", "Open", "High", "Low", "Close", "Volume", "Ex-Dividend", "Split Ratio", "Adj. Open", "Adj. High", "Adj. Low", "Adj. Close", "Adj. Volume"]
@@ -292,45 +292,45 @@ All list queries will return an object inherited from ModelList.
 To get the values of a list:
 
 ```python
-databases = datalink.Database.all()
+databases = nasdaqdatalink.Database.all()
 databases.values
 ```
 
 To get the metadata of a list:
 
 ```python
-databases = datalink.Database.all()
+databases = nasdaqdatalink.Database.all()
 databases.meta
 ```
 
 To get the raw data of a list:
 
 ```python
-databases = datalink.Database.all()
+databases = nasdaqdatalink.Database.all()
 databases.to_list()
 ```
 
 `Database.all()` and `Dataset.all()` will return a paginated list of results in the form of a PaginatedList object. You can check whether the PaginatedList has more data by using the `has_more_results()` method. By default, each list query will return page 1 of the first 100 results (please see the official [API Documentation](https://docs.data.nasdaq.com/docs) for more detail). Depending on the list query results, you can pass additional parameters to filter the data:
 
 ```python
-databases = datalink.Database.all()
+databases = nasdaqdatalink.Database.all()
 => ... results ...
 databases.has_more_results()
 => true
-datalink.Database.all(params={ 'page': 2 })
+nasdaqdatalink.Database.all(params={ 'page': 2 })
 => ... more results ...
 ```
 
 Lists also function as arrays and can be iterated through. Note however that using these features will only work on the current page of data you have locally. You will need to continue to fetch results and iterate again to loop through the full result set.
 
 ```python
-databases = datalink.Database.all()
+databases = nasdaqdatalink.Database.all()
 for database in databases:
     print(database.database_code)
 => ... print database codes ...
 databases.has_more_results()
 => true
-more_databases = datalink.Database.all(params={ 'page': 2 })
+more_databases = nasdaqdatalink.Database.all(params={ 'page': 2 })
 for database in more_databases:
     print(database.database_code)
 => ... print more database codes ...
@@ -339,8 +339,8 @@ for database in more_databases:
 Lists also return metadata associated with the request. This can include things like the current page, total results, etc. Each of these fields can be accessed through a hash or convenience method.
 
 ```python
-datalink.Database.all().current_page
+nasdaqdatalink.Database.all().current_page
 => 1
-datalink.Database.all()['current_page']
+nasdaqdatalink.Database.all()['current_page']
 => 1
 ```

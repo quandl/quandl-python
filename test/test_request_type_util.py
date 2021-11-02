@@ -1,5 +1,5 @@
 import unittest
-from datalink.utils.request_type_util import RequestType
+from nasdaqdatalink.utils.request_type_util import RequestType
 from test.helpers.random_data_helper import generate_random_dictionary
 
 

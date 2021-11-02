@@ -1,4 +1,4 @@
-from datalink.errors.datalink_error import InvalidRequestError
+from nasdaqdatalink.errors.data_link_error import InvalidRequestError
 from .utils.api_key_util import ApiKeyUtil
 from .model.datatable import Datatable
 from .message import Message

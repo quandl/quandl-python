@@ -22,8 +22,8 @@ except ImportError:
 with open('LONG_DESCRIPTION.rst') as f:
     LONG_DESCRIPTION = f.read()
 
-# Don't import datalink module here, since deps may not be installed
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'datalink'))
+# Don't import nasdaqdatalink module here, since deps may not be installed
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'nasdaqdatalink'))
 # can only import VERSION successfully after the above line
 # ignore flake8 warning that requires imports to be at the top
 from version import VERSION  # NOQA
@@ -49,17 +49,17 @@ TEST_REQUIRES = [
 ]
 
 PACKAGES = [
-    'datalink',
-    'datalink.errors',
-    'datalink.model',
-    'datalink.operations',
-    'datalink.utils'
+    'nasdaqdatalink',
+    'nasdaqdatalink.errors',
+    'nasdaqdatalink.model',
+    'nasdaqdatalink.operations',
+    'nasdaqdatalink.utils'
 ]
 
 setup(
     name='Nasdaq Data Link',
     description='Package for Nasdaq Data Link API access',
-    keywords=['nasdaq', 'datalink', 'API', 'data', 'financial', 'economic'],
+    keywords=['nasdaq data link', 'nasdaq', 'datalink', 'API', 'data', 'financial', 'economic'],
     long_description=LONG_DESCRIPTION,
     version=VERSION,
     author='Nasdaq Data Link',

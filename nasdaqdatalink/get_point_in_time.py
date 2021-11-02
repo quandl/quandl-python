@@ -1,8 +1,8 @@
-from datalink.model.point_in_time import PointInTime
-from datalink.errors.datalink_error import LimitExceededError
+from nasdaqdatalink.model.point_in_time import PointInTime
+from nasdaqdatalink.errors.data_link_error import LimitExceededError
 from .api_config import ApiConfig
 from .message import Message
-from datalink.errors.datalink_error import InvalidRequestError
+from nasdaqdatalink.errors.data_link_error import InvalidRequestError
 import warnings
 import copy
 

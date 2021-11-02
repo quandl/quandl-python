@@ -3,12 +3,12 @@ from test.helpers.httpretty_extension import httpretty
 import six
 import datetime
 import pandas
-from datalink.model.dataset import Dataset
-from datalink.model.data import Data
-from datalink.model.merged_data_list import MergedDataList
-from datalink.model.merged_dataset import MergedDataset
+from nasdaqdatalink.model.dataset import Dataset
+from nasdaqdatalink.model.data import Data
+from nasdaqdatalink.model.merged_data_list import MergedDataList
+from nasdaqdatalink.model.merged_dataset import MergedDataset
 from mock import patch, call
-from datalink.errors.datalink_error import ColumnNotFound
+from nasdaqdatalink.errors.data_link_error import ColumnNotFound
 from test.helpers.merged_datasets_helper import setupDatasetsTest
 
 
@@ -23,7 +23,7 @@ class GetMergedDatasetTest(unittest.TestCase):
         httpretty.disable()
         httpretty.reset()
 
-    @patch('datalink.model.merged_dataset.MergedDataset._build_dataset_object')
+    @patch('nasdaqdatalink.model.merged_dataset.MergedDataset._build_dataset_object')
     def test_merged_dataset_calls_merged_dataset_get_dataset(self, mock):
         mock.return_value = self.oil_obj
         md = MergedDataset(
@@ -41,7 +41,7 @@ class GetMergedDatasetTest(unittest.TestCase):
         for index, expected in enumerate(expected_calls):
             self.assertEqual(mock.mock_calls[index], expected)
 
-    @patch('datalink.model.merged_dataset.MergedDataset._build_dataset_object')
+    @patch('nasdaqdatalink.model.merged_dataset.MergedDataset._build_dataset_object')
     def test_removes_column_index_query_param(self, mock):
         self.oil_obj.requested_column_indexes = []
         mock.return_value = self.oil_obj

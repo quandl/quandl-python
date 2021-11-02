@@ -1,8 +1,8 @@
 from inflection import singularize
 
 from .operation import Operation
-from datalink.connection import Connection
-from datalink.util import Util
+from nasdaqdatalink.connection import Connection
+from nasdaqdatalink.util import Util
 
 
 class GetOperation(Operation):

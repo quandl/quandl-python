@@ -4,11 +4,11 @@ This quick guide offers convenient ways to retrieve individual datasets or datat
 
 ## Retrieving Data
 
-Retrieving data can be achieved easily using these methods `datalink.get` for datasets, `datalink.get_table` for datatables and `datalink.get_point_in_time` for point in time data. In all cases we strongly recommend that you set your api key via:
+Retrieving data can be achieved easily using these methods `nasdaqdatalink.get` for datasets, `nasdaqdatalink.get_table` for datatables and `nasdaqdatalink.get_point_in_time` for point in time data. In all cases we strongly recommend that you set your api key via:
 
  ```python
-import datalink
-datalink.ApiConfig.api_key = 'tEsTkEy123456789'
+import nasdaqdatalink
+nasdaqdatalink.ApiConfig.api_key = 'tEsTkEy123456789'
 ```
 
 ### Datasets
@@ -16,8 +16,8 @@ datalink.ApiConfig.api_key = 'tEsTkEy123456789'
 To retrieve a Nasdaq Data Link dataset you can make the following call:
 
 ```python
-import datalink
-data = datalink.get('NSE/OIL')
+import nasdaqdatalink
+data = nasdaqdatalink.get('NSE/OIL')
 ```
 
 This finds all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with:
@@ -29,8 +29,8 @@ data.head()
 However we recommend applying filters to streamline the results. To do this you may want to specify some additional filters and transformations.
 
 ```python
-import datalink
-data = datalink.get('NSE/OIL', start_date='2010-01-01', end_date='2014-01-01',
+import nasdaqdatalink
+data = nasdaqdatalink.get('NSE/OIL', start_date='2010-01-01', end_date='2014-01-01',
                   collapse='annual', transformation='rdiff',
                   rows=4)
 ```
@@ -43,7 +43,7 @@ The following additional parameters can be specified for a dataset call:
 
 | Option | Explanation | Example | Description |
 |--------|-------------|---------|-------------|
-| api_key | Your access key | `api_key='tEsTkEy123456789'` | Used to identify who you are and provide more access. Only required if not set via `datalink.ApiConfig.api_key=` |
+| api_key | Your access key | `api_key='tEsTkEy123456789'` | Used to identify who you are and provide more access. Only required if not set via `nasdaqdatalink.ApiConfig.api_key=` |
 | \<filter / transformation parameter\> | A parameter which filters or transforms the resulting data | `start_date='2010-01-01` | For a full list see our [api docs](https://docs.data.nasdaq.com/docs) |
 
 For more information on how to use and manipulate the resulting data see the [pandas documentation](http://pandas.pydata.org/).
@@ -53,24 +53,24 @@ For more information on how to use and manipulate the resulting data see the [pa
 You can download all the data in a database in a single call. The following will download the entire EOD database as a zip file to your current working directory:
 
 ```python
-import datalink
-datalink.bulkdownload('EOD')
+import nasdaqdatalink
+nasdaqdatalink.bulkdownload('EOD')
 ```
 
-After the download is finished, the `datalink.bulkdownload` will return the filename of the downloaded zip file.
+After the download is finished, the `nasdaqdatalink.bulkdownload` will return the filename of the downloaded zip file.
 
 To download database data from the previous day, use the download_type option:
 
 ```python
-import datalink
-datalink.bulkdownload('EOD', download_type='partial')
+import nasdaqdatalink
+nasdaqdatalink.bulkdownload('EOD', download_type='partial')
 ```
 
 You can also change the filename of the downloaded zip file by using the filename option:
 
 ```python
-import datalink
-datalink.bulkdownload('EOD', filename='/my/path/EOD_DB.zip')
+import nasdaqdatalink
+nasdaqdatalink.bulkdownload('EOD', filename='/my/path/EOD_DB.zip')
 ```
 
 #### Download Multiple Codes
@@ -91,7 +91,7 @@ If you want to get multiple codes at once, delimit the codes with ',', and put t
 
 For example:
 ```python
-data = datalink.get(['WIKI/AAPL.11','WIKI/MSFT.11'])
+data = nasdaqdatalink.get(['WIKI/AAPL.11','WIKI/MSFT.11'])
 ```
 
 Which outputs:
@@ -115,22 +115,22 @@ Date
 Datatables work similarly to datasets but provide more flexibility when it comes to filtering. For example a simple way to retrieve datatable information would be:
 
 ```python
-import datalink
-data = datalink.get_table('ZACKS/FC')
+import nasdaqdatalink
+data = nasdaqdatalink.get_table('ZACKS/FC')
 ```
 
 Given the volume of data stored in datatables, this call will retrieve the first page of the `ZACKS/FC` datatable. You may turn on pagination to return more data by using:
 
 ```python
-import datalink
-data = datalink.get_table('ZACKS/FC', paginate=True)
+import nasdaqdatalink
+data = nasdaqdatalink.get_table('ZACKS/FC', paginate=True)
 ```
 
 This will retrieve multiple pages of data and merge them together as if they were one large page. In some cases, however, you will still exceed the request limit. In this case we recommend you filter your data using the available query parameters, as in the following example:
 
 ```python
-import datalink
-data = datalink.get_table('ZACKS/FC', paginate=True, ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}, qopts={'columns':['ticker', 'per_end_date']})
+import nasdaqdatalink
+data = nasdaqdatalink.get_table('ZACKS/FC', paginate=True, ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}, qopts={'columns':['ticker', 'per_end_date']})
 ```
 
 In this query we are asking for more pages of data, `ticker` values of either `AAPL` or `MSFT` and a `per_end_date` that is greater than or equal to `2015-01-01`. We are also filtering the returned columns on `ticker`, `per_end_date` and `comp_name` rather than all available columns. The output format is `pandas`.
@@ -138,15 +138,15 @@ In this query we are asking for more pages of data, `ticker` values of either `A
 Download table data as a zip file. You can download all the table data in a data table in a single call. The following will download the entire F1 table data as a zip file to your current working directory:
 
 ```python
-import datalink
-data = datalink.export_table('MER/F1')
+import nasdaqdatalink
+data = nasdaqdatalink.export_table('MER/F1')
 ```
 
 You can also specify where to download the zip file:
 
 ```python
-import datalink
-data = datalink.export_table('MER/F1', filename='/my/path/db.zip')
+import nasdaqdatalink
+data = nasdaqdatalink.export_table('MER/F1', filename='/my/path/db.zip')
 ```
 
 Note that if you are downloading the whole table, it will take longer to generate the zip file.
@@ -154,8 +154,8 @@ Note that if you are downloading the whole table, it will take longer to generat
 You can also specify what data you want to download with filters and parameters.(`cursor_id` and `paginate` are not supported for exporting table zip file):
 
 ```python
-import datalink
-datalink.export_table('ZACKS/FC',  ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}, qopts={'columns':['ticker', 'per_end_date']})
+import nasdaqdatalink
+nasdaqdatalink.export_table('ZACKS/FC',  ticker=['AAPL', 'MSFT'], per_end_date={'gte': '2015-01-01'}, qopts={'columns':['ticker', 'per_end_date']})
 ```
 
 After the download is finished, the filename of the downloaded zip file will be printed.
@@ -168,7 +168,7 @@ The following additional parameters can be specified for a datatable call:
 
 | Option | Explanation | Example | Description |
 |---|---|---|---|
-| api_key | Your access key | `api_key='tEsTkEy123456789'` | Used to identify who you are and provide more access. Only required if not set via `datalink.ApiConfig.api_key=` |
+| api_key | Your access key | `api_key='tEsTkEy123456789'` | Used to identify who you are and provide more access. Only required if not set via `nasdaqdatalink.ApiConfig.api_key=` |
 | \<filter / transformation parameter\> | A parameter which filters or transforms the resulting data | `start_date='2010-01-01'` | For a full list see our [api docs](https://docs.data.nasdaq.com/docs) |
 | paginate | Wether to autoamtically paginate data | `paginate=True` | Will paginate through the first few pages of data automatically and merge them together in a larger output format. |
 
@@ -186,8 +186,8 @@ For more information on how to use and manipulate the resulting data see the [pa
 PointInTime works similarly to datatables but filtering the data based on dates. For example, a simple way to retrieve datatable information for a specific date would be:
 
 ```python
-import datalink
-data = datalink.get_point_in_time('DATABASE/CODE', interval='asofdate', date='2020-01-01')
+import nasdaqdatalink
+data = nasdaqdatalink.get_point_in_time('DATABASE/CODE', interval='asofdate', date='2020-01-01')
 ```
 
 #### Date Format
@@ -207,9 +207,9 @@ While the following are invalid:
 
 | Interval | Explanation | Required params | Example |
 |----------|-------------|-----------------|---------|
-| asofdate | Returns data as of a specific date | date | `datalink.get_point_in_time('DATABASE/CODE', interval='asofdate', date='2020-01-01')` |
-| from | Returns data from `start` up to but excluding `end`; [start, end)  | start_date, end_date  | `datalink.get_point_in_time('DATABASE/CODE', interval='from', start_date='2020-01-01', end_date='2020-02-01')` |
-| between | Returns data inclusively between dates; [start, end] | start_end, end_date  | `datalink.get_point_in_time('DATABASE/CODE', interval='between', start_date='2020-01-01', end_date='2020-01-31')` |
+| asofdate | Returns data as of a specific date | date | `nasdaqdatalink.get_point_in_time('DATABASE/CODE', interval='asofdate', date='2020-01-01')` |
+| from | Returns data from `start` up to but excluding `end`; [start, end)  | start_date, end_date  | `nasdaqdatalink.get_point_in_time('DATABASE/CODE', interval='from', start_date='2020-01-01', end_date='2020-02-01')` |
+| between | Returns data inclusively between dates; [start, end] | start_end, end_date  | `nasdaqdatalink.get_point_in_time('DATABASE/CODE', interval='between', start_date='2020-01-01', end_date='2020-01-31')` |
 
 ## More usages
 

@@ -4,9 +4,9 @@ import httpretty
 import json
 import pandas
 from mock import patch, call
-import datalink
-from datalink.utils.request_type_util import RequestType
-from datalink.errors.datalink_error import InvalidRequestError
+import nasdaqdatalink
+from nasdaqdatalink.utils.request_type_util import RequestType
+from nasdaqdatalink.errors.data_link_error import InvalidRequestError
 from datetime import date
 
 
@@ -27,32 +27,32 @@ class GetPointInTimeTest(unittest.TestCase):
     def tearDown(self):
         RequestType.USE_GET_REQUEST = True
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_get_point_in_time_returns_data_frame_object(self, mock):
-        df = datalink.get_point_in_time('ZACKS/FC', interval='asofdate', date='2020-01-01')
+        df = nasdaqdatalink.get_point_in_time('ZACKS/FC', interval='asofdate', date='2020-01-01')
         self.assertIsInstance(df, pandas.core.frame.DataFrame)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_asofdate_call_connection(self, mock):
-        datalink.get_point_in_time('ZACKS/FC', interval='asofdate', date='2020-01-01')
+        nasdaqdatalink.get_point_in_time('ZACKS/FC', interval='asofdate', date='2020-01-01')
         expected = call('get', 'pit/ZACKS/FC/asofdate/2020-01-01', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_asofdate_call_connection_with_datetimes(self, mock):
-        datalink.get_point_in_time('ZACKS/FC', interval='asofdate', date='2020-01-01T12:55')
+        nasdaqdatalink.get_point_in_time('ZACKS/FC', interval='asofdate', date='2020-01-01T12:55')
         expected = call('get', 'pit/ZACKS/FC/asofdate/2020-01-01T12:55', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_asofdate_call_without_date(self, mock):
-        datalink.get_point_in_time('ZACKS/FC', interval='asofdate')
+        nasdaqdatalink.get_point_in_time('ZACKS/FC', interval='asofdate')
         expected = call('get', "pit/ZACKS/FC/asofdate/%s" % date.today(), params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_from_call_connection(self, mock):
-        datalink.get_point_in_time(
+        nasdaqdatalink.get_point_in_time(
             'ZACKS/FC',
             interval='from',
             start_date='2020-01-01',
@@ -61,9 +61,9 @@ class GetPointInTimeTest(unittest.TestCase):
         expected = call('get', 'pit/ZACKS/FC/from/2020-01-01/to/2020-01-02', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_from_call_connection_with_datetimes(self, mock):
-        datalink.get_point_in_time(
+        nasdaqdatalink.get_point_in_time(
             'ZACKS/FC',
             interval='from',
             start_date='2020-01-01T12:00',
@@ -72,9 +72,9 @@ class GetPointInTimeTest(unittest.TestCase):
         expected = call('get', 'pit/ZACKS/FC/from/2020-01-01T12:00/to/2020-01-02T14:00', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_between_call_connection(self, mock):
-        datalink.get_point_in_time(
+        nasdaqdatalink.get_point_in_time(
             'ZACKS/FC',
             interval='between',
             start_date='2020-01-01',
@@ -83,9 +83,9 @@ class GetPointInTimeTest(unittest.TestCase):
         expected = call('get', 'pit/ZACKS/FC/between/2020-01-01/2020-01-02', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_between_call_connection_with_datetimes(self, mock):
-        datalink.get_point_in_time(
+        nasdaqdatalink.get_point_in_time(
             'ZACKS/FC',
             interval='between',
             start_date='2020-01-01T12:00',
@@ -94,38 +94,42 @@ class GetPointInTimeTest(unittest.TestCase):
         expected = call('get', 'pit/ZACKS/FC/between/2020-01-01T12:00/2020-01-02T14:00', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_invalid_interval_connection(self, mock):
-        self.assertRaises(InvalidRequestError, lambda: datalink.get_point_in_time('ZACKS/FC'))
+        self.assertRaises(InvalidRequestError, lambda: nasdaqdatalink.get_point_in_time('ZACKS/FC'))
         self.assertRaises(
             InvalidRequestError,
-            lambda: datalink.get_point_in_time('ZACKS/FC', interval='datalink')
+            lambda: nasdaqdatalink.get_point_in_time('ZACKS/FC', interval='nasdaqdatalink')
         )
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_invalid_from_connection(self, mock):
         self.assertRaises(
             InvalidRequestError,
-            lambda: datalink.get_point_in_time('ZACKS/FC', interval='from')
+            lambda: nasdaqdatalink.get_point_in_time('ZACKS/FC', interval='from')
         )
         self.assertRaises(
             InvalidRequestError,
-            lambda: datalink.get_point_in_time('ZACKS/FC', interval='from', start_date='2020-01-01')
+            lambda: nasdaqdatalink.get_point_in_time(
+              'ZACKS/FC', interval='from', start_date='2020-01-01'
+            )
         )
         self.assertRaises(
             InvalidRequestError,
-            lambda: datalink.get_point_in_time('ZACKS/FC', interval='from', end_date='2020-01-02')
+            lambda: nasdaqdatalink.get_point_in_time(
+              'ZACKS/FC', interval='from', end_date='2020-01-02'
+            )
         )
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_invalid_between_connection(self, mock):
         self.assertRaises(
             InvalidRequestError,
-            lambda: datalink.get_point_in_time('ZACKS/FC', interval='between')
+            lambda: nasdaqdatalink.get_point_in_time('ZACKS/FC', interval='between')
         )
         self.assertRaises(
             InvalidRequestError,
-            lambda: datalink.get_point_in_time(
+            lambda: nasdaqdatalink.get_point_in_time(
                 'ZACKS/FC',
                 interval='between',
                 start_date='2020-01-01'
@@ -133,5 +137,7 @@ class GetPointInTimeTest(unittest.TestCase):
         )
         self.assertRaises(
             InvalidRequestError,
-            lambda: datalink.get_point_in_time('ZACKS/FC', interval='between', end_date='2020-01-02')
+            lambda: nasdaqdatalink.get_point_in_time(
+              'ZACKS/FC', interval='between', end_date='2020-01-02'
+            )
         )

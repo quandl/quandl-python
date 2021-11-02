@@ -30,38 +30,38 @@ pip3 install nasdaq-data-link
 | retry_status_codes | A list of HTTP status codes which will trigger a retry to occur. Only used if `use_retries` is True| [429, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511]
 
 ```python
-import datalink
-datalink.ApiConfig.api_key = 'tEsTkEy123456789'
+import nasdaqdatalink
+nasdaqdatalink.ApiConfig.api_key = 'tEsTkEy123456789'
 ```
 By default, SSL verification is enabled. To bypass SSL verification
 ```python
-datalink.ApiConfig.verify_ssl = False
+nasdaqdatalink.ApiConfig.verify_ssl = False
 ```
 
 ### Local API Key file
-Save local key to `$HOME/.datalink_apikey` file
+Save local key to `$HOME/.nasdaq_data_link_api_key` file
 ```
-import datalink
-datalink.save_key("supersecret")
-print(datalink.ApiConfig.api_key)
+import nasdaqdatalink
+nasdaqdatalink.save_key("supersecret")
+print(nasdaqdatalink.ApiConfig.api_key)
 ```
 
 Load the API Key without exposing the key in the script or notebook
 ```
-import datalink
-datalink.read_key()
-print(datalink.ApiConfig.api_key)
+import nasdaqdatalink
+nasdaqdatalink.read_key()
+print(nasdaqdatalink.ApiConfig.api_key)
 ```
 
 Set a custom location for the API key file, e.g. store the externally outside a docker container
 ```
-import datalink
-datalink.save_key("ourcorporateapikey", filename="/srv/data/somecontainer/.corporatenasdaqdatalinkapikey")
+import nasdaqdatalink
+nasdaqdatalink.save_key("ourcorporateapikey", filename="/srv/data/somecontainer/.corporatenasdaqdatalinkapikey")
 ```
 and call within the docker container with mount point at `/data`
 ```
-import datalink
-datalink.read_key(filepath="/data/.corporatenasdaqdatalinkapikey")
+import nasdaqdatalink
+nasdaqdatalink.read_key(filepath="/data/.corporatenasdaqdatalinkapikey")
 ```
 
 
@@ -72,8 +72,8 @@ There are two methods for retrieving data in Python: the Quick method and the De
 The following quick call can be used to retrieve a dataset:
 
 ```python
-import datalink
-data = datalink.get('NSE/OIL')
+import nasdaqdatalink
+data = nasdaqdatalink.get('NSE/OIL')
 ```
 
 This example finds all data points for the dataset `NSE/OIL` and stores them in a pandas dataframe. You can then view the dataframe with data.head().
@@ -81,8 +81,8 @@ This example finds all data points for the dataset `NSE/OIL` and stores them in 
 A similar quick call can be used to retrieve a datatable:
 
 ```python
-import datalink
-data = datalink.get_table('ZACKS/FC', ticker='AAPL')
+import nasdaqdatalink
+data = nasdaqdatalink.get_table('ZACKS/FC', ticker='AAPL')
 ```
 
 This example retrieves all rows for `ZACKS/FC` where `ticker='AAPL'` and stores them in a pandas dataframe. Similarly you can then view the dataframe with data.head().
@@ -95,14 +95,14 @@ Currently, Nasdaq Data Link debug logging is limited in scope.  However, to enab
 logs you can use the following snippet.
 
 ```python
-import datalink
+import nasdaqdatalink
 import logging
 
 logging.basicConfig()
 # logging.getLogger().setLevel(logging.DEBUG)  # optionally set level for
 everything.  Useful to see dependency debug info as well.
 
-data_link_log = logging.getLogger("datalink")
+data_link_log = logging.getLogger("nasdaqdatalink")
 data_link_log.setLevel(logging.DEBUG)
 ```
 

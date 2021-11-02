@@ -2,14 +2,14 @@ import re
 import unittest
 import httpretty
 import json
-from datalink.model.datatable import Datatable
+from nasdaqdatalink.model.datatable import Datatable
 import pandas
 from mock import patch, call
 from test.factories.datatable import DatatableFactory
 from test.factories.datatable_data import DatatableDataFactory
 from test.factories.datatable_meta import DatatableMetaFactory
-import datalink
-from datalink.utils.request_type_util import RequestType
+import nasdaqdatalink
+from nasdaqdatalink.utils.request_type_util import RequestType
 
 
 class GetDataTableTest(unittest.TestCase):
@@ -37,31 +37,31 @@ class GetDataTableTest(unittest.TestCase):
     def tearDown(self):
         RequestType.USE_GET_REQUEST = True
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_datatable_returns_datatable_object(self, mock):
-        df = datalink.get_table('ZACKS/FC', params={})
+        df = nasdaqdatalink.get_table('ZACKS/FC', params={})
         self.assertIsInstance(df, pandas.core.frame.DataFrame)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_datatable_with_code_returns_datatable_object(self, mock):
-        df = datalink.get_table('AR/MWCF', code="ICEP_WAC_Z2017_S")
+        df = nasdaqdatalink.get_table('AR/MWCF', code="ICEP_WAC_Z2017_S")
         self.assertIsInstance(df, pandas.core.frame.DataFrame)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_get_table_calls_connection_with_no_params_for_get_request(self, mock):
-        datalink.get_table('ZACKS/FC')
+        nasdaqdatalink.get_table('ZACKS/FC')
         expected = call('get', 'datatables/ZACKS/FC', params={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_get_table_calls_connection_with_no_params_for_post_request(self, mock):
         RequestType.USE_GET_REQUEST = False
 
-        datalink.get_table('ZACKS/FC')
+        nasdaqdatalink.get_table('ZACKS/FC')
         expected = call('post', 'datatables/ZACKS/FC', json={})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_get_table_calls_connection_with_params_for_get_request(self, mock):
         params = {'ticker': ['AAPL', 'MSFT'],
                   'per_end_date': {'gte': '2015-01-01'},
@@ -77,11 +77,11 @@ class GetDataTableTest(unittest.TestCase):
                            'baz': 4
                            }
 
-        datalink.get_table('ZACKS/FC', **params)
+        nasdaqdatalink.get_table('ZACKS/FC', **params)
         expected = call('get', 'datatables/ZACKS/FC', params=expected_params)
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_get_table_calls_connection_with_params_for_post_request(self, mock):
         RequestType.USE_GET_REQUEST = False
         params = {'ticker': ['AAPL', 'MSFT'],
@@ -98,6 +98,6 @@ class GetDataTableTest(unittest.TestCase):
                            'baz': 4
                            }
 
-        datalink.get_table('ZACKS/FC', **params)
+        nasdaqdatalink.get_table('ZACKS/FC', **params)
         expected = call('post', 'datatables/ZACKS/FC', json=expected_params)
         self.assertEqual(mock.call_args, expected)

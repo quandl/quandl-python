@@ -4,11 +4,11 @@ from test.helpers.merged_datasets_helper import setupDatasetsTest
 import pandas
 import numpy
 from mock import patch, call, Mock
-from datalink.model.dataset import Dataset
-from datalink.model.merged_dataset import MergedDataset
-from datalink.get import get
-from datalink.api_config import ApiConfig
-from datalink.connection import Connection
+from nasdaqdatalink.model.dataset import Dataset
+from nasdaqdatalink.model.merged_dataset import MergedDataset
+from nasdaqdatalink.get import get
+from nasdaqdatalink.api_config import ApiConfig
+from nasdaqdatalink.connection import Connection
 
 
 class GetSingleDatasetTest(unittest.TestCase):
@@ -37,7 +37,7 @@ class GetSingleDatasetTest(unittest.TestCase):
 
     def test_setting_api_key_config(self):
         mock_connection = Mock(wraps=Connection)
-        with patch('datalink.connection.Connection.execute_request',
+        with patch('nasdaqdatalink.connection.Connection.execute_request',
                    new=mock_connection.execute_request) as mock:
             ApiConfig.api_key = 'api_key_configured'
             get('NSE/OIL')
@@ -77,7 +77,7 @@ class GetSingleDatasetTest(unittest.TestCase):
                                       'collapse': 'annual', 'transform': 'rdiff',
                                       'rows': 4, 'order': 'desc'}))
 
-    @patch('datalink.model.data.Data.all')
+    @patch('nasdaqdatalink.model.data.Data.all')
     def test_code_is_parsed(self, mock):
         get('NSE/OIL')
         expected = call(
@@ -92,7 +92,7 @@ class GetSingleDatasetTest(unittest.TestCase):
         self.assertEqual(mock_method.mock_calls[0],
                          call(handle_column_not_found=True, params={'column_index': 1}))
 
-    @patch('datalink.model.data.Data.all')
+    @patch('nasdaqdatalink.model.data.Data.all')
     def test_code_and_column_is_parsed_and_used(self, mock):
         get('NSE/OIL.1')
         expected = call(
@@ -116,7 +116,7 @@ class GetMultipleDatasetsTest(unittest.TestCase):
         httpretty.disable()
         httpretty.reset()
 
-    @patch('datalink.model.merged_dataset.MergedDataset._build_dataset_object')
+    @patch('nasdaqdatalink.model.merged_dataset.MergedDataset._build_dataset_object')
     def test_multiple_datasets_args_formed(self, mock):
         # requested_column_indexes is a dynamically added attribute
         self.oil_obj.requested_column_indexes = []

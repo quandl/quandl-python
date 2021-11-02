@@ -5,9 +5,9 @@ import json
 import pandas
 import numpy
 import six
-from datalink.model.data import Data
-from datalink.model.datatable import Datatable
-from datalink.utils.request_type_util import RequestType
+from nasdaqdatalink.model.data import Data
+from nasdaqdatalink.model.datatable import Datatable
+from nasdaqdatalink.utils.request_type_util import RequestType
 from mock import patch, call
 from test.factories.datatable_data import DatatableDataFactory
 from test.factories.datatable_meta import DatatableMetaFactory
@@ -82,7 +82,7 @@ class ListDatatableDataTest(unittest.TestCase):
     def tearDown(self):
         RequestType.USE_GET_REQUEST = True
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_data_calls_connection_get(self, mock):
         datatable = Datatable('ZACKS/FC')
         Data.page(datatable, params={'ticker': ['AAPL', 'MSFT'],
@@ -94,7 +94,7 @@ class ListDatatableDataTest(unittest.TestCase):
                                 'qopts.columns[]': ['ticker', 'per_end_date']})
         self.assertEqual(mock.call_args, expected)
 
-    @patch('datalink.connection.Connection.request')
+    @patch('nasdaqdatalink.connection.Connection.request')
     def test_data_calls_connection_post(self, mock):
         RequestType.USE_GET_REQUEST = False
         datatable = Datatable('ZACKS/FC')

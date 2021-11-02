@@ -1,5 +1,5 @@
-from datalink.operations.get import GetOperation
-from datalink.operations.list import ListOperation
+from nasdaqdatalink.operations.get import GetOperation
+from nasdaqdatalink.operations.list import ListOperation
 from .data import Data
 from .model_base import ModelBase
 from datetime import date

@@ -1,4 +1,4 @@
-from datalink.util import Util
+from nasdaqdatalink.util import Util
 
 
 class ModelList(object):

@@ -1,13 +1,13 @@
-from datalink.operations.get import GetOperation
-from datalink.operations.list import ListOperation
-from datalink.util import Util
+from nasdaqdatalink.operations.get import GetOperation
+from nasdaqdatalink.operations.list import ListOperation
+from nasdaqdatalink.util import Util
 from .model_base import ModelBase
 from .data import Data
 from .data_list import DataList
-import datalink.model.database
+import nasdaqdatalink.model.database
 import six
-from datalink.errors.datalink_error import (NotFoundError, ColumnNotFound)
-from datalink.message import Message
+from nasdaqdatalink.errors.data_link_error import (NotFoundError, ColumnNotFound)
+from nasdaqdatalink.message import Message
 
 
 class Dataset(GetOperation, ListOperation, ModelBase):
@@ -55,4 +55,4 @@ class Dataset(GetOperation, ListOperation, ModelBase):
             raise
 
     def database(self):
-        return datalink.model.database.Database(self.database_code)
+        return nasdaqdatalink.model.database.Database(self.database_code)

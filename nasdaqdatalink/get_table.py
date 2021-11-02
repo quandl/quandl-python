@@ -1,5 +1,5 @@
-from datalink.model.datatable import Datatable
-from datalink.errors.datalink_error import LimitExceededError
+from nasdaqdatalink.model.datatable import Datatable
+from nasdaqdatalink.errors.data_link_error import LimitExceededError
 from .api_config import ApiConfig
 from .message import Message
 import warnings

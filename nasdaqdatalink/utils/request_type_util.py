@@ -3,7 +3,7 @@ try:
 except ImportError:
     from urllib.parse import urlencode
 
-from datalink.api_config import ApiConfig
+from nasdaqdatalink.api_config import ApiConfig
 
 
 class RequestType(object):

@@ -1,4 +1,4 @@
-from datalink.errors.datalink_error import InvalidRequestError
+from nasdaqdatalink.errors.data_link_error import InvalidRequestError
 from .model.dataset import Dataset
 from .model.merged_dataset import MergedDataset
 from .utils.api_key_util import ApiKeyUtil

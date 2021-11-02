@@ -1,7 +1,7 @@
-from datalink.model.data_list import DataList
+from nasdaqdatalink.model.data_list import DataList
 from .list import ListOperation
-from datalink.errors.datalink_error import (InvalidDataError, ColumnNotFound)
-from datalink.message import Message
+from nasdaqdatalink.errors.data_link_error import (InvalidDataError, ColumnNotFound)
+from nasdaqdatalink.message import Message
 
 
 class DataListOperation(ListOperation):

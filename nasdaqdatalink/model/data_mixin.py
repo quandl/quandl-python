@@ -1,5 +1,5 @@
 import pandas as pd
-from datalink.errors.datalink_error import ColumnNotFound
+from nasdaqdatalink.errors.data_link_error import ColumnNotFound
 
 
 class DataMixin(object):

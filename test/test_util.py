@@ -2,7 +2,7 @@ import unittest
 import datetime
 import six
 import pandas
-from datalink.util import Util
+from nasdaqdatalink.util import Util
 
 
 # use this function just for test This function is define in python 2 but not at python 3

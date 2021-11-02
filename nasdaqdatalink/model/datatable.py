@@ -3,13 +3,13 @@ from time import sleep
 
 from six.moves.urllib.request import urlopen
 
-from datalink.connection import Connection
-from datalink.errors.datalink_error import DatalinkError
-from datalink.message import Message
-from datalink.operations.get import GetOperation
-from datalink.operations.list import ListOperation
-from datalink.util import Util
-from datalink.utils.request_type_util import RequestType
+from nasdaqdatalink.connection import Connection
+from nasdaqdatalink.errors.data_link_error import DataLinkError
+from nasdaqdatalink.message import Message
+from nasdaqdatalink.operations.get import GetOperation
+from nasdaqdatalink.operations.list import ListOperation
+from nasdaqdatalink.util import Util
+from nasdaqdatalink.utils.request_type_util import RequestType
 from .data import Data
 from .model_base import ModelBase
 
@@ -32,7 +32,7 @@ class Datatable(GetOperation, ListOperation, ModelBase):
 
     def download_file(self, file_or_folder_path, **options):
         if not isinstance(file_or_folder_path, str):
-            raise DatalinkError(Message.ERROR_FOLDER_ISSUE)
+            raise DataLinkError(Message.ERROR_FOLDER_ISSUE)
 
         file_is_ready = False
 

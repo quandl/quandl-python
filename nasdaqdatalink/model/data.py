@@ -1,5 +1,5 @@
-from datalink.operations.data_list import DataListOperation
-from datalink.util import Util
+from nasdaqdatalink.operations.data_list import DataListOperation
+from nasdaqdatalink.util import Util
 from .model_base import ModelBase
 from .data_mixin import DataMixin
 

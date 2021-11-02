@@ -1,4 +1,4 @@
-from datalink.api_config import ApiConfig
+from nasdaqdatalink.api_config import ApiConfig
 
 
 class ApiKeyUtil(object):

@@ -1,14 +1,15 @@
 import re
 
 import requests
+
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
 
 from .util import Util
 from .version import VERSION
 from .api_config import ApiConfig
-from datalink.errors.datalink_error import (
-    DatalinkError, LimitExceededError, InternalServerError,
+from nasdaqdatalink.errors.data_link_error import (
+    DataLinkError, LimitExceededError, InternalServerError,
     AuthenticationError, ForbiddenError, InvalidRequestError,
     NotFoundError, ServiceUnavailableError)
 
@@ -83,19 +84,19 @@ class Connection:
         try:
             return response.json()
         except ValueError:
-            raise DatalinkError(http_status=response.status_code, http_body=response.text)
+            raise DataLinkError(http_status=response.status_code, http_body=response.text)
 
     @classmethod
     def handle_api_error(cls, resp):
         error_body = cls.parse(resp)
 
-        # if our app does not form a proper datalink_error response
+        # if our app does not form a proper data_link_error response
         # throw generic error
-        if 'datalink_error' not in error_body:
-            raise DatalinkError(http_status=resp.status_code, http_body=resp.text)
+        if 'error' not in error_body:
+            raise DataLinkError(http_status=resp.status_code, http_body=resp.text)
 
-        code = error_body['datalink_error']['code']
-        message = error_body['datalink_error']['message']
+        code = error_body['error']['code']
+        message = error_body['error']['message']
         prog = re.compile('^QE([a-zA-Z])x')
         if prog.match(code):
             code_letter = prog.match(code).group(1)
@@ -109,6 +110,6 @@ class Connection:
             'C': NotFoundError,
             'X': ServiceUnavailableError
         }
-        klass = d_klass.get(code_letter, DatalinkError)
+        klass = d_klass.get(code_letter, DataLinkError)
 
         raise klass(message, resp.status_code, resp.text, resp.headers, code)

@@ -22,13 +22,14 @@ class Message:
         minimum index is 1 and the maximum index is %s'
     ERROR_REQUESTED_COLUMN_NOT_EXIST = 'Requested column index %s does not exist'
 
-    WARN_DATA_LIMIT_EXCEEDED = 'This call exceeds the amount of data that datalink.get_table() allows. \
-        Please use the following link in your browser, which will download the full results as \
-        a CSV file: https://data.nasdaq.com.com/api/v3/datatables/%s?qopts.export=true&api_key=%s . See \
-        our API documentation for more info: \
+    WARN_DATA_LIMIT_EXCEEDED = 'This call exceeds the amount of data that nasdaqdatalink.get_table() \
+        allows. Please use the following link in your browser, which will download the full \
+        results as a CSV file: \
+        https://data.nasdaq.com.com/api/v3/datatables/%s?qopts.export=true&api_key=%s . \
+        See our API documentation for more info: \
         https://docs.data.nasdaq.com/docs'
     WARN_PAGE_LIMIT_EXCEEDED = 'To request more pages, please set paginate=True in your \
-        datalink.get_table() call. For more information see our documentation: \
+        nasdaqdatalink.get_table() call. For more information see our documentation: \
         https://github.com/quandl/quandl-python/blob/master/FOR_ANALYSTS.md#things-to-note'
     WARN_PARAMS_NOT_SUPPORTED = '%s will no longer supported. Please use %s instead'
     LONG_GENERATION_TIME = 'We are generating the zip file now, please wait...'

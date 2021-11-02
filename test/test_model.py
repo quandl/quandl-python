@@ -1,5 +1,5 @@
 import unittest
-from datalink.model.model_base import ModelBase
+from nasdaqdatalink.model.model_base import ModelBase
 
 import six
 

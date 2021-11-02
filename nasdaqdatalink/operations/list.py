@@ -1,8 +1,8 @@
 from .operation import Operation
-from datalink.connection import Connection
-from datalink.util import Util
-from datalink.model.paginated_list import PaginatedList
-from datalink.utils.request_type_util import RequestType
+from nasdaqdatalink.connection import Connection
+from nasdaqdatalink.util import Util
+from nasdaqdatalink.model.paginated_list import PaginatedList
+from nasdaqdatalink.utils.request_type_util import RequestType
 
 
 class ListOperation(Operation):
