@@ -48,23 +48,23 @@ def setupDatasetsTest(unit_test, httpretty):
 
     httpretty.register_uri(httpretty.GET,
                            re.compile(
-                               'https://www.quandl.com/api/v3/datasets/.*/metadata'),
+                               'https://data.nasdaq.com/api/v3/datasets/.*/metadata'),
                            responses=[httpretty.Response(body=json.dumps(dataset))
                                       for dataset in
                                       [unit_test.nse_oil, unit_test.wiki_aapl,
                                        unit_test.wiki_msft]])
     # mock our query param column_index request
     httpretty.register_uri(httpretty.GET,
-                           "https://www.quandl.com/api/v3/datasets/SINGLE/COLUMN/data",
+                           "https://data.nasdaq.com/api/v3/datasets/SINGLE/COLUMN/data",
                            body=json.dumps(unit_test.single_dataset_data))
     httpretty.register_uri(httpretty.GET,
-                           "https://www.quandl.com/api/v3/datasets/WIKI/AAPL/data",
+                           "https://data.nasdaq.com/api/v3/datasets/WIKI/AAPL/data",
                            body=json.dumps(unit_test.dataset_data))
     httpretty.register_uri(httpretty.GET,
                            re.compile(
-                               'https://www.quandl.com/api/v3/datasets/NSE/OIL/data'),
+                               'https://data.nasdaq.com/api/v3/datasets/NSE/OIL/data'),
                            body=json.dumps(unit_test.dataset_data))
     httpretty.register_uri(httpretty.GET,
                            re.compile(
-                               'https://www.quandl.com/api/v3/datasets/WIKI/MSFT/data'),
+                               'https://data.nasdaq.com/api/v3/datasets/WIKI/MSFT/data'),
                            body=json.dumps(unit_test.dataset_data))

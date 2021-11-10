@@ -33,7 +33,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
                          ('QEZx02', 400, QuandlError)]
 
         httpretty.register_uri(getattr(httpretty, request_method),
-                               "https://www.quandl.com/api/v3/databases",
+                               "https://data.nasdaq.com/api/v3/databases",
                                responses=[httpretty.Response(body=json.dumps(
                                    {'quandl_error':
                                     {'code': x[0], 'message': 'something went wrong'}}),
@@ -48,7 +48,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
     def test_parse_error(self, request_method):
         ApiConfig.retry_backoff_factor = 0
         httpretty.register_uri(getattr(httpretty, request_method),
-                               "https://www.quandl.com/api/v3/databases",
+                               "https://data.nasdaq.com/api/v3/databases",
                                body="not json", status=500)
         self.assertRaises(
             QuandlError, lambda: Connection.request(request_method, 'databases'))
@@ -57,7 +57,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
     def test_non_quandl_error(self, request_method):
         ApiConfig.retry_backoff_factor = 0
         httpretty.register_uri(getattr(httpretty, request_method),
-                               "https://www.quandl.com/api/v3/databases",
+                               "https://data.nasdaq.com/api/v3/databases",
                                body=json.dumps(
                                 {'foobar':
                                  {'code': 'blah', 'message': 'something went wrong'}}), status=500)
@@ -72,7 +72,7 @@ class ConnectionTest(ModifyRetrySettingsTestCase):
         params = {'per_page': 10, 'page': 2}
         headers = {'x-custom-header': 'header value'}
         Connection.request(request_method, 'databases', headers=headers, params=params)
-        expected = call(request_method, 'https://www.quandl.com/api/v3/databases',
+        expected = call(request_method, 'https://data.nasdaq.com/api/v3/databases',
                         headers={'x-custom-header': 'header value',
                                  'x-api-token': 'api_token',
                                  'accept': ('application/json, '
