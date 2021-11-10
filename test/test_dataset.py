@@ -20,7 +20,7 @@ class GetDatasetTest(unittest.TestCase):
             database_code='NSE', dataset_code='OIL')}
         httpretty.register_uri(httpretty.GET,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/datasets/*'),
+                                   'https://data.nasdaq.com/api/v3/datasets/*'),
                                body=json.dumps(dataset))
         dataset_code = Dataset.get_code_from_meta(dataset['dataset'])
         cls.dataset_instance = Dataset(dataset_code, dataset['dataset'])
@@ -76,7 +76,7 @@ class ListDatasetsTest(unittest.TestCase):
         datasets.update(meta)
         httpretty.register_uri(httpretty.GET,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/datasets*'),
+                                   'https://data.nasdaq.com/api/v3/datasets*'),
                                body=json.dumps(datasets))
 
     @classmethod

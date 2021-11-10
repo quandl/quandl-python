@@ -25,7 +25,7 @@ class GetDataTableTest(unittest.TestCase):
         datatable.update(meta)
         httpretty.register_uri(httpretty.GET,
                                re.compile(
-                                   'https://www.quandl.com/api/v3/datatables*'),
+                                   'https://data.nasdaq.com/api/v3/datatables*'),
                                body=json.dumps(datatable))
         cls.datatable_instance = Datatable(datatable['datatable'])
 
