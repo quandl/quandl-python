@@ -1,3 +1,9 @@
+### 3.7.0 - 2021-11-10
+
+* Drop Python 3.5 support
+* Update documentation
+* Removes unused test directory
+
 ### 3.6.2 - 2021-11-01
 
 * Switch base URL from www.quandl.com to data.nasdaq.com
