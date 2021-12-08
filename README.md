@@ -1,6 +1,8 @@
 # Quandl is now Nasdaq Data Link
 
-We are excited to announce that the Quandl technology platform is being transformed into a new global solution: Nasdaq Data Link. This development is the first step toward realizing a single, unified data discovery and delivery experience with Nasdaq.  In accordance with this change Nasdaq Data Link has released a new version of this Python Client which can be found [here](https://github.com/Nasdaq/data-link-python).
+We are excited to announce that the Quandl technology platform is being transformed into a new global solution: Nasdaq Data Link. This development is the first step toward realizing a single, unified data discovery and delivery experience with Nasdaq.
+
+In accordance with this change Nasdaq Data Link has released a new version of this Python Client.  Moving forward, we are encouraging user to use this [VERSION](https://github.com/Nasdaq/data-link-python) in order to take advantage of new features.
 
 # Quandl Python Client
 [![Build Status](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiZUtvUFNYREloNE4vV0xWWEUxVS81S0toZjdQbzQrWXhQZ1BUbE1mZ1FMVXdSZXQ2K1ZLQ1ducmtqYTVWa2xBZXhRMWVGemVKWitzVm5MNXI4cGZYb21RPSIsIml2UGFyYW1ldGVyU3BlYyI6Im0vdUljcjBjdmpGVU9XdXUiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)]()
