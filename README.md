@@ -71,7 +71,7 @@ quandl.save_key("ourcorporateapikey", filename="/srv/data/somecontainer/.corpora
 and call within the docker container with mount point at `/data`
 ```
 import quandl
-quandl.read_key(filepath="/data/.corporatequandlapikey")
+quandl.read_key(filename="/data/.corporatequandlapikey")
 ```
 
 
